@@ -1,0 +1,988 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/detail/qos_parameters.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2020 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__DETAIL__QOS_PARAMETERS_HPP_
+        -:   16:#define RCLCPP__DETAIL__QOS_PARAMETERS_HPP_
+        -:   17:
+        -:   18:#include <algorithm>
+        -:   19:#include <array>
+        -:   20:#include <functional>
+        -:   21:#include <initializer_list>
+        -:   22:#include <map>
+        -:   23:#include <string>
+        -:   24:#include <type_traits>
+        -:   25:#include <vector>
+        -:   26:
+        -:   27:#include "rcl_interfaces/msg/parameter_descriptor.hpp"
+        -:   28:#include "rcpputils/pointer_traits.hpp"
+        -:   29:#include "rmw/qos_string_conversions.h"
+        -:   30:
+        -:   31:#include "rclcpp/duration.hpp"
+        -:   32:#include "rclcpp/node_interfaces/get_node_parameters_interface.hpp"
+        -:   33:#include "rclcpp/node_interfaces/node_parameters_interface.hpp"
+        -:   34:#include "rclcpp/qos_overriding_options.hpp"
+        -:   35:
+        -:   36:namespace rclcpp
+        -:   37:{
+        -:   38:namespace detail
+        -:   39:{
+        -:   40:
+        -:   41:/// \internal Trait used to specialize `declare_qos_parameters()` for publishers.
+        -:   42:struct PublisherQosParametersTraits
+        -:   43:{
+function _ZN6rclcpp6detail28PublisherQosParametersTraits11entity_typeEv called 0 returned 0% blocks executed 0%
+    #####:   44:  static constexpr const char * entity_type() {return "publisher";}
+    %%%%%:   44-block  0
+        -:   45:  static constexpr auto allowed_policies()
+        -:   46:  {
+        -:   47:    return std::array<::rclcpp::QosPolicyKind, 9> {
+        -:   48:      QosPolicyKind::AvoidRosNamespaceConventions,
+        -:   49:      QosPolicyKind::Deadline,
+        -:   50:      QosPolicyKind::Durability,
+        -:   51:      QosPolicyKind::History,
+        -:   52:      QosPolicyKind::Depth,
+        -:   53:      QosPolicyKind::Lifespan,
+        -:   54:      QosPolicyKind::Liveliness,
+        -:   55:      QosPolicyKind::LivelinessLeaseDuration,
+        -:   56:      QosPolicyKind::Reliability,
+        -:   57:    };
+        -:   58:  }
+        -:   59:};
+        -:   60:
+        -:   61:/// \internal Trait used to specialize `declare_qos_parameters()` for subscriptions.
+        -:   62:struct SubscriptionQosParametersTraits
+        -:   63:{
+        -:   64:  static constexpr const char * entity_type() {return "subscription";}
+        -:   65:  static constexpr auto allowed_policies()
+        -:   66:  {
+        -:   67:    return std::array<::rclcpp::QosPolicyKind, 8> {
+        -:   68:      QosPolicyKind::AvoidRosNamespaceConventions,
+        -:   69:      QosPolicyKind::Deadline,
+        -:   70:      QosPolicyKind::Durability,
+        -:   71:      QosPolicyKind::History,
+        -:   72:      QosPolicyKind::Depth,
+        -:   73:      QosPolicyKind::Liveliness,
+        -:   74:      QosPolicyKind::LivelinessLeaseDuration,
+        -:   75:      QosPolicyKind::Reliability,
+        -:   76:    };
+        -:   77:  }
+        -:   78:};
+        -:   79:
+        -:   80:/// \internal Returns the given `policy` of the profile `qos` converted to a parameter value.
+        -:   81:inline
+        -:   82:::rclcpp::ParameterValue
+        -:   83:get_default_qos_param_value(rclcpp::QosPolicyKind policy, const rclcpp::QoS & qos);
+        -:   84:
+        -:   85:/// \internal Modify the given `policy` in `qos` to be `value`.
+        -:   86:inline
+        -:   87:void
+        -:   88:apply_qos_override(
+        -:   89:  rclcpp::QosPolicyKind policy, rclcpp::ParameterValue value, rclcpp::QoS & qos);
+        -:   90:
+        -:   91:inline
+        -:   92:rclcpp::ParameterValue
+function _ZN6rclcpp6detail24declare_parameter_or_getERNS_15node_interfaces23NodeParametersInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS_14ParameterValueEN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEE called 0 returned 0% blocks executed 0%
+    #####:   93:declare_parameter_or_get(
+        -:   94:  rclcpp::node_interfaces::NodeParametersInterface & parameters_interface,
+        -:   95:  const std::string & param_name,
+        -:   96:  rclcpp::ParameterValue param_value,
+        -:   97:  rcl_interfaces::msg::ParameterDescriptor descriptor)
+        -:   98:{
+        -:   99:  try {
+    #####:  100:    return parameters_interface.declare_parameter(
+    #####:  101:      param_name, param_value, descriptor);
+    %%%%%:  101-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  101-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    =====:  102:  } catch (const rclcpp::exceptions::ParameterAlreadyDeclaredException &) {
+    $$$$$:  102-block  0
+branch  0 never executed
+branch  1 never executed
+    $$$$$:  102-block  1
+call    2 never executed
+    =====:  103:    return parameters_interface.get_parameter(param_name).get_parameter_value();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    $$$$$:  103-block  0
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:  103-block  1
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    $$$$$:  103-block  2
+call    9 never executed
+    $$$$$:  103-block  3
+call   10 never executed
+    $$$$$:  103-block  4
+    =====:  104:  }
+call    0 never executed
+    $$$$$:  104-block  0
+call    1 never executed
+        -:  105:}
+        -:  106:
+        -:  107:#ifdef DOXYGEN_ONLY
+        -:  108:/// \internal Declare QoS parameters for the given entity.
+        -:  109:/**
+        -:  110: * \tparam NodeT Node pointer or reference type.
+        -:  111: * \tparam EntityQosParametersTraits A class with two static methods: `entity_type()` and
+        -:  112: *  `allowed_policies()`. See `PublisherQosParametersTraits` and `SubscriptionQosParametersTraits`.
+        -:  113: * \param options User provided options that indicate if QoS parameter overrides should be
+        -:  114: *  declared or not, which policy can have overrides, and optionally a callback to validate the profile.
+        -:  115: * \param node Parameters will be declared using this node.
+        -:  116: * \param topic_name Name of the topic of the entity.
+        -:  117: * \param default_qos User provided qos. It will be used as a default for the parameters declared.
+        -:  118: * \return qos profile based on the user provided parameter overrides.
+        -:  119: */
+        -:  120:template<typename NodeT, typename EntityQosParametersTraits>
+        -:  121:rclcpp::QoS
+        -:  122:  declare_qos_parameters(
+        -:  123:  const ::rclcpp::QosOverridingOptions & options,
+        -:  124:  NodeT & node,
+        -:  125:  const std::string & topic_name,
+        -:  126:  const ::rclcpp::QoS & default_qos,
+        -:  127:  EntityQosParametersTraits);
+        -:  128:
+        -:  129:#else
+        -:  130:
+        -:  131:template<typename NodeT, typename EntityQosParametersTraits>
+        -:  132:std::enable_if_t<
+        -:  133:  (rclcpp::node_interfaces::has_node_parameters_interface<
+        -:  134:    decltype(std::declval<typename rcpputils::remove_pointer<NodeT>::type>())>::value ||
+        -:  135:  std::is_same<typename std::decay_t<NodeT>,
+        -:  136:  rclcpp::node_interfaces::NodeParametersInterface::SharedPtr>::value),
+        -:  137:  rclcpp::QoS>
+function _ZN6rclcpp6detail22declare_qos_parametersINS_4NodeENS0_28PublisherQosParametersTraitsEEENSt9enable_ifIXoosrNS_15node_interfaces29has_node_parameters_interfaceIDTcl7declvalIN9rcpputils14remove_pointerIT_E4typeEEEEvEE5valuesrSt7is_sameINSt5decayIS9_E4typeESt10shared_ptrINS5_23NodeParametersInterfaceEEE5valueENS_3QoSEE4typeERKNS_20QosOverridingOptionsERS9_RKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKSM_T0_ called 0 returned 0% blocks executed 0%
+    #####:  138:declare_qos_parameters(
+        -:  139:  const ::rclcpp::QosOverridingOptions & options,
+        -:  140:  NodeT & node,
+        -:  141:  const std::string & topic_name,
+        -:  142:  const ::rclcpp::QoS & default_qos,
+        -:  143:  EntityQosParametersTraits)
+        -:  144:{
+    #####:  145:  auto & parameters_interface = *rclcpp::node_interfaces::get_node_parameters_interface(node);
+    %%%%%:  145-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  145-block  1
+call    3 never executed
+call    4 never executed
+    #####:  146:  std::string param_prefix;
+call    0 never executed
+    #####:  147:  const auto & id = options.get_id();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  148:  {
+    #####:  149:    std::ostringstream oss{"qos_overrides.", std::ios::ate};
+    %%%%%:  149-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  149-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+call    7 never executed
+    $$$$$:  149-block  2
+    $$$$$:  149-block  3
+    #####:  150:    oss << topic_name << "." << EntityQosParametersTraits::entity_type();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  150-block  0
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  150-block  1
+call    6 never executed
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    #####:  151:    if (!id.empty()) {
+    %%%%%:  151-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  152:      oss << "_" << id;
+    %%%%%:  152-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  152-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  153:    }
+    #####:  154:    oss << ".";
+    %%%%%:  154-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  155:    param_prefix = oss.str();
+    %%%%%:  155-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  155-block  1
+call    3 never executed
+call    4 never executed
+    #####:  156:  }
+call    0 never executed
+    $$$$$:  156-block  0
+call    1 never executed
+    #####:  157:  std::string param_description_suffix;
+call    0 never executed
+        -:  158:  {
+    #####:  159:    std::ostringstream oss{"} for ", std::ios::ate};
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  159-block  0
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+call    7 never executed
+    $$$$$:  159-block  1
+    $$$$$:  159-block  2
+    #####:  160:    oss << EntityQosParametersTraits::entity_type() << " {" << topic_name << "}";
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  160-block  0
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  160-block  1
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  160-block  2
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    #####:  161:    if (!id.empty()) {
+    %%%%%:  161-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  162:      oss << " with id {" << id << "}";
+    %%%%%:  162-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  162-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  162-block  2
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+        -:  163:    }
+    #####:  164:    param_description_suffix = oss.str();
+    %%%%%:  164-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  164-block  1
+call    3 never executed
+call    4 never executed
+    #####:  165:  }
+call    0 never executed
+    $$$$$:  165-block  0
+call    1 never executed
+    #####:  166:  rclcpp::QoS qos = default_qos;
+    #####:  167:  for (auto policy : EntityQosParametersTraits::allowed_policies()) {
+call    0 never executed
+call    1 never executed
+    %%%%%:  167-block  0
+    %%%%%:  167-block  1
+branch  2 never executed
+branch  3 never executed
+    #####:  168:    if (
+    #####:  169:      std::count(options.get_policy_kinds().begin(), options.get_policy_kinds().end(), policy))
+    %%%%%:  169-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  169-block  1
+call    3 never executed
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  169-block  2
+call    7 never executed
+call    8 never executed
+branch  9 never executed
+branch 10 never executed
+    %%%%%:  169-block  3
+branch 11 never executed
+branch 12 never executed
+        -:  170:    {
+    #####:  171:      std::ostringstream param_name{param_prefix, std::ios::ate};
+    %%%%%:  171-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  172:      param_name << qos_policy_kind_to_cstr(policy);
+    %%%%%:  172-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  172-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    #####:  173:      std::ostringstream param_desciption{"qos policy {", std::ios::ate};
+    %%%%%:  173-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  173-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+call    7 never executed
+    $$$$$:  173-block  2
+    $$$$$:  173-block  3
+    #####:  174:      param_desciption << qos_policy_kind_to_cstr(policy) << param_description_suffix;
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  174-block  0
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  174-block  1
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    #####:  175:      rcl_interfaces::msg::ParameterDescriptor descriptor{};
+    %%%%%:  175-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  176:      descriptor.description = param_desciption.str();
+    %%%%%:  176-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  176-block  1
+call    3 never executed
+call    4 never executed
+    #####:  177:      descriptor.read_only = true;
+    #####:  178:      auto value = declare_parameter_or_get(
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  178-block  0
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  178-block  1
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    %%%%%:  178-block  2
+call    9 never executed
+branch 10 never executed
+branch 11 never executed
+call   12 never executed
+call   13 never executed
+    $$$$$:  178-block  3
+    $$$$$:  178-block  4
+    $$$$$:  178-block  5
+        -:  179:        parameters_interface, param_name.str(),
+        -:  180:        get_default_qos_param_value(policy, qos), descriptor);
+    #####:  181:      ::rclcpp::detail::apply_qos_override(policy, value, qos);
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  181-block  0
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  181-block  1
+call    6 never executed
+    $$$$$:  181-block  2
+call    7 never executed
+    $$$$$:  181-block  3
+    #####:  182:    }
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+    $$$$$:  182-block  0
+call    4 never executed
+    $$$$$:  182-block  1
+call    5 never executed
+    $$$$$:  182-block  2
+call    6 never executed
+    $$$$$:  182-block  3
+call    7 never executed
+        -:  183:  }
+    #####:  184:  const auto & validation_callback = options.get_validation_callback();
+    %%%%%:  184-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  185:  if (validation_callback) {
+    %%%%%:  185-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  186:    auto result = validation_callback(qos);
+    %%%%%:  186-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  187:    if (!result.successful) {
+    %%%%%:  187-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  188:      throw rclcpp::exceptions::InvalidQosOverridesException{
+    %%%%%:  188-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  188-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  188-block  2
+call    7 never executed
+call    8 never executed
+    $$$$$:  188-block  3
+call    9 never executed
+    $$$$$:  188-block  4
+    $$$$$:  188-block  5
+call   10 never executed
+        -:  189:              "validation callback failed: " + result.reason};
+        -:  190:    }
+    #####:  191:  }
+    %%%%%:  191-block  0
+call    0 never executed
+    $$$$$:  191-block  1
+call    1 never executed
+    #####:  192:  return qos;
+    %%%%%:  192-block  0
+    %%%%%:  192-block  1
+    #####:  193:}
+    %%%%%:  193-block  0
+call    0 never executed
+call    1 never executed
+    $$$$$:  193-block  1
+call    2 never executed
+    $$$$$:  193-block  2
+call    3 never executed
+        -:  194:
+        -:  195:// TODO(ivanpauno): This overload cannot declare the QoS parameters, as a node parameters interface
+        -:  196:// was not provided.
+        -:  197:template<typename NodeT, typename EntityQosParametersTraits>
+        -:  198:std::enable_if_t<
+        -:  199:  !(rclcpp::node_interfaces::has_node_parameters_interface<
+        -:  200:    decltype(std::declval<typename rcpputils::remove_pointer<NodeT>::type>())>::value ||
+        -:  201:  std::is_same<typename std::decay_t<NodeT>,
+        -:  202:  rclcpp::node_interfaces::NodeParametersInterface::SharedPtr>::value),
+        -:  203:  rclcpp::QoS>
+        -:  204:declare_qos_parameters(
+        -:  205:  const ::rclcpp::QosOverridingOptions & options,
+        -:  206:  NodeT &,
+        -:  207:  const std::string &,
+        -:  208:  const ::rclcpp::QoS & default_qos,
+        -:  209:  EntityQosParametersTraits)
+        -:  210:{
+        -:  211:  if (options.get_policy_kinds().size()) {
+        -:  212:    std::runtime_error exc{
+        -:  213:      "passed non-default qos overriding options without providing a parameters interface"};
+        -:  214:    throw exc;
+        -:  215:  }
+        -:  216:  return default_qos;
+        -:  217:}
+        -:  218:
+        -:  219:#endif
+        -:  220:
+        -:  221:/// \internal Helper function to get a rmw qos policy value from a string.
+        -:  222:#define RCLCPP_DETAIL_APPLY_QOS_OVERRIDE_FROM_PARAMETER_STRING( \
+        -:  223:    kind_lower, kind_upper, parameter_value, rclcpp_qos) \
+        -:  224:  do { \
+        -:  225:    auto policy_string = (parameter_value).get<std::string>(); \
+        -:  226:    auto policy_value = rmw_qos_ ## kind_lower ## _policy_from_str(policy_string.c_str()); \
+        -:  227:    if (RMW_QOS_POLICY_ ## kind_upper ## _UNKNOWN == policy_value) { \
+        -:  228:      throw std::invalid_argument{"unknown QoS policy " #kind_lower " value: " + policy_string}; \
+        -:  229:    } \
+        -:  230:    ((rclcpp_qos).kind_lower)(policy_value); \
+        -:  231:  } while (0)
+        -:  232:
+        -:  233:inline
+        -:  234:void
+function _ZN6rclcpp6detail18apply_qos_overrideENS_13QosPolicyKindENS_14ParameterValueERNS_3QoSE called 0 returned 0% blocks executed 0%
+    #####:  235:apply_qos_override(
+        -:  236:  rclcpp::QosPolicyKind policy, rclcpp::ParameterValue value, rclcpp::QoS & qos)
+        -:  237:{
+    #####:  238:  switch (policy) {
+    %%%%%:  238-block  0
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+branch  8 never executed
+branch  9 never executed
+    #####:  239:    case QosPolicyKind::AvoidRosNamespaceConventions:
+    #####:  240:      qos.avoid_ros_namespace_conventions(value.get<bool>());
+    %%%%%:  240-block  0
+call    0 never executed
+call    1 never executed
+    #####:  241:      break;
+    #####:  242:    case QosPolicyKind::Deadline:
+    #####:  243:      qos.deadline(::rclcpp::Duration::from_nanoseconds(value.get<int64_t>()));
+    %%%%%:  243-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  243-block  1
+call    5 never executed
+    $$$$$:  243-block  2
+call    6 never executed
+    $$$$$:  243-block  3
+call    7 never executed
+    #####:  244:      break;
+    #####:  245:    case QosPolicyKind::Durability:
+    #####:  246:      RCLCPP_DETAIL_APPLY_QOS_OVERRIDE_FROM_PARAMETER_STRING(
+    %%%%%:  246-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  246-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  246-block  2
+call    6 never executed
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  246-block  3
+branch 10 never executed
+branch 11 never executed
+    %%%%%:  246-block  4
+call   12 never executed
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  246-block  5
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  246-block  6
+call   19 never executed
+call   20 never executed
+    %%%%%:  246-block  7
+call   21 never executed
+branch 22 never executed
+branch 23 never executed
+    %%%%%:  246-block  8
+call   24 never executed
+    $$$$$:  246-block  9
+call   25 never executed
+    $$$$$:  246-block 10
+    $$$$$:  246-block 11
+call   26 never executed
+    $$$$$:  246-block 12
+call   27 never executed
+        -:  247:        durability, DURABILITY, value, qos);
+    #####:  248:      break;
+    #####:  249:    case QosPolicyKind::History:
+    #####:  250:      RCLCPP_DETAIL_APPLY_QOS_OVERRIDE_FROM_PARAMETER_STRING(
+    %%%%%:  250-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  250-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  250-block  2
+call    6 never executed
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  250-block  3
+branch 10 never executed
+branch 11 never executed
+    %%%%%:  250-block  4
+call   12 never executed
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  250-block  5
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  250-block  6
+call   19 never executed
+call   20 never executed
+    %%%%%:  250-block  7
+call   21 never executed
+branch 22 never executed
+branch 23 never executed
+    %%%%%:  250-block  8
+call   24 never executed
+    $$$$$:  250-block  9
+call   25 never executed
+    $$$$$:  250-block 10
+    $$$$$:  250-block 11
+call   26 never executed
+    $$$$$:  250-block 12
+call   27 never executed
+        -:  251:        history, HISTORY, value, qos);
+    #####:  252:      break;
+    #####:  253:    case QosPolicyKind::Depth:
+    #####:  254:      qos.get_rmw_qos_profile().depth = static_cast<size_t>(value.get<int64_t>());
+    %%%%%:  254-block  0
+call    0 never executed
+call    1 never executed
+    #####:  255:      break;
+    #####:  256:    case QosPolicyKind::Lifespan:
+    #####:  257:      qos.lifespan(::rclcpp::Duration::from_nanoseconds(value.get<int64_t>()));
+    %%%%%:  257-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  257-block  1
+call    5 never executed
+    $$$$$:  257-block  2
+call    6 never executed
+    $$$$$:  257-block  3
+call    7 never executed
+    #####:  258:      break;
+    #####:  259:    case QosPolicyKind::Liveliness:
+    #####:  260:      RCLCPP_DETAIL_APPLY_QOS_OVERRIDE_FROM_PARAMETER_STRING(
+    %%%%%:  260-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  260-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  260-block  2
+call    6 never executed
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  260-block  3
+branch 10 never executed
+branch 11 never executed
+    %%%%%:  260-block  4
+call   12 never executed
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  260-block  5
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  260-block  6
+call   19 never executed
+call   20 never executed
+    %%%%%:  260-block  7
+call   21 never executed
+branch 22 never executed
+branch 23 never executed
+    %%%%%:  260-block  8
+call   24 never executed
+    $$$$$:  260-block  9
+call   25 never executed
+    $$$$$:  260-block 10
+    $$$$$:  260-block 11
+call   26 never executed
+    $$$$$:  260-block 12
+call   27 never executed
+        -:  261:        liveliness, LIVELINESS, value, qos);
+    #####:  262:      break;
+    #####:  263:    case QosPolicyKind::LivelinessLeaseDuration:
+    #####:  264:      qos.liveliness_lease_duration(::rclcpp::Duration::from_nanoseconds(value.get<int64_t>()));
+    %%%%%:  264-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  264-block  1
+call    5 never executed
+    $$$$$:  264-block  2
+call    6 never executed
+    $$$$$:  264-block  3
+call    7 never executed
+    #####:  265:      break;
+    #####:  266:    case QosPolicyKind::Reliability:
+    #####:  267:      RCLCPP_DETAIL_APPLY_QOS_OVERRIDE_FROM_PARAMETER_STRING(
+    %%%%%:  267-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  267-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  267-block  2
+call    6 never executed
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  267-block  3
+branch 10 never executed
+branch 11 never executed
+    %%%%%:  267-block  4
+call   12 never executed
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  267-block  5
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  267-block  6
+call   19 never executed
+call   20 never executed
+    %%%%%:  267-block  7
+call   21 never executed
+branch 22 never executed
+branch 23 never executed
+    %%%%%:  267-block  8
+call   24 never executed
+    $$$$$:  267-block  9
+call   25 never executed
+    $$$$$:  267-block 10
+    $$$$$:  267-block 11
+call   26 never executed
+    $$$$$:  267-block 12
+call   27 never executed
+        -:  268:        reliability, RELIABILITY, value, qos);
+    #####:  269:      break;
+    #####:  270:    default:
+    #####:  271:      throw std::invalid_argument{"unknown QosPolicyKind"};
+    %%%%%:  271-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  271-block  1
+call    4 never executed
+    $$$$$:  271-block  2
+call    5 never executed
+        -:  272:  }
+    #####:  273:}
+    %%%%%:  273-block  0
+        -:  274:
+        -:  275:/// Convert `rmw_time_t` to `int64_t` that can be used as a parameter value.
+        -:  276:inline
+        -:  277:int64_t
+function _ZN6rclcpp6detail23rmw_duration_to_int64_tE10rmw_time_s called 0 returned 0% blocks executed 0%
+    #####:  278:rmw_duration_to_int64_t(rmw_time_t rmw_duration)
+        -:  279:{
+    #####:  280:  return ::rclcpp::Duration(
+    %%%%%:  280-block  0
+call    0 never executed
+    $$$$$:  280-block  1
+call    1 never executed
+    #####:  281:    static_cast<int32_t>(rmw_duration.sec),
+    #####:  282:    static_cast<uint32_t>(rmw_duration.nsec)
+    %%%%%:  282-block  0
+call    0 never executed
+    #####:  283:  ).nanoseconds();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  283-block  0
+    %%%%%:  283-block  1
+        -:  284:}
+        -:  285:
+        -:  286:/// \internal Throw an exception if `policy_value_stringified` is NULL.
+        -:  287:inline
+        -:  288:const char *
+function _ZN6rclcpp6detail35check_if_stringified_policy_is_nullEPKcNS_13QosPolicyKindE called 0 returned 0% blocks executed 0%
+    #####:  289:check_if_stringified_policy_is_null(const char * policy_value_stringified, QosPolicyKind kind)
+        -:  290:{
+    #####:  291:  if (!policy_value_stringified) {
+    %%%%%:  291-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  292:    std::ostringstream oss{"unknown value for policy kind {", std::ios::ate};
+    %%%%%:  292-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  292-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+call    7 never executed
+    $$$$$:  292-block  2
+    $$$$$:  292-block  3
+    #####:  293:    oss << kind << "}";
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  293-block  0
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    #####:  294:    throw std::invalid_argument{oss.str()};
+    %%%%%:  294-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  294-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  294-block  2
+call    7 never executed
+call    8 never executed
+    $$$$$:  294-block  3
+call    9 never executed
+    $$$$$:  294-block  4
+    $$$$$:  294-block  5
+call   10 never executed
+    =====:  295:  }
+    $$$$$:  295-block  0
+call    0 never executed
+    #####:  296:  return policy_value_stringified;
+    %%%%%:  296-block  0
+    %%%%%:  296-block  1
+        -:  297:}
+        -:  298:
+        -:  299:inline
+        -:  300:::rclcpp::ParameterValue
+function _ZN6rclcpp6detail27get_default_qos_param_valueENS_13QosPolicyKindERKNS_3QoSE called 0 returned 0% blocks executed 0%
+    #####:  301:get_default_qos_param_value(rclcpp::QosPolicyKind kind, const rclcpp::QoS & qos)
+        -:  302:{
+        -:  303:  using ParameterValue = ::rclcpp::ParameterValue;
+    #####:  304:  const auto & rmw_qos = qos.get_rmw_qos_profile();
+    %%%%%:  304-block  0
+call    0 never executed
+    #####:  305:  switch (kind) {
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+branch  8 never executed
+branch  9 never executed
+    #####:  306:    case QosPolicyKind::AvoidRosNamespaceConventions:
+    #####:  307:      return ParameterValue(rmw_qos.avoid_ros_namespace_conventions);
+    %%%%%:  307-block  0
+call    0 never executed
+    #####:  308:    case QosPolicyKind::Deadline:
+    #####:  309:      return ParameterValue(rmw_duration_to_int64_t(rmw_qos.deadline));
+    %%%%%:  309-block  0
+call    0 never executed
+call    1 never executed
+    #####:  310:    case QosPolicyKind::Durability:
+        -:  311:      return ParameterValue(
+        -:  312:        check_if_stringified_policy_is_null(
+    #####:  313:          rmw_qos_durability_policy_to_str(rmw_qos.durability), kind));
+    %%%%%:  313-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+    #####:  314:    case QosPolicyKind::History:
+        -:  315:      return ParameterValue(
+        -:  316:        check_if_stringified_policy_is_null(
+    #####:  317:          rmw_qos_history_policy_to_str(rmw_qos.history), kind));
+    %%%%%:  317-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+    #####:  318:    case QosPolicyKind::Depth:
+    #####:  319:      return ParameterValue(static_cast<int64_t>(rmw_qos.depth));
+    %%%%%:  319-block  0
+call    0 never executed
+    #####:  320:    case QosPolicyKind::Lifespan:
+    #####:  321:      return ParameterValue(rmw_duration_to_int64_t(rmw_qos.lifespan));
+    %%%%%:  321-block  0
+call    0 never executed
+call    1 never executed
+    #####:  322:    case QosPolicyKind::Liveliness:
+        -:  323:      return ParameterValue(
+        -:  324:        check_if_stringified_policy_is_null(
+    #####:  325:          rmw_qos_liveliness_policy_to_str(rmw_qos.liveliness), kind));
+    %%%%%:  325-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+    #####:  326:    case QosPolicyKind::LivelinessLeaseDuration:
+    #####:  327:      return ParameterValue(rmw_duration_to_int64_t(rmw_qos.liveliness_lease_duration));
+    %%%%%:  327-block  0
+call    0 never executed
+call    1 never executed
+    #####:  328:    case QosPolicyKind::Reliability:
+        -:  329:      return ParameterValue(
+        -:  330:        check_if_stringified_policy_is_null(
+    #####:  331:          rmw_qos_reliability_policy_to_str(rmw_qos.reliability), kind));
+    %%%%%:  331-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+    #####:  332:    default:
+    #####:  333:      throw std::invalid_argument{"unknown QoS policy kind"};
+    %%%%%:  333-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  333-block  1
+call    4 never executed
+    $$$$$:  333-block  2
+call    5 never executed
+        -:  334:  }
+        -:  335:}
+        -:  336:
+        -:  337:}  // namespace detail
+        -:  338:}  // namespace rclcpp
+        -:  339:
+        -:  340:#endif  // RCLCPP__DETAIL__QOS_PARAMETERS_HPP_

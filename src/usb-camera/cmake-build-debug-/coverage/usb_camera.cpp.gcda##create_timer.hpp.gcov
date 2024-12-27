@@ -1,0 +1,251 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/create_timer.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2019 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__CREATE_TIMER_HPP_
+        -:   16:#define RCLCPP__CREATE_TIMER_HPP_
+        -:   17:
+        -:   18:#include <chrono>
+        -:   19:#include <exception>
+        -:   20:#include <memory>
+        -:   21:#include <string>
+        -:   22:#include <utility>
+        -:   23:
+        -:   24:#include "rclcpp/duration.hpp"
+        -:   25:#include "rclcpp/node_interfaces/get_node_base_interface.hpp"
+        -:   26:#include "rclcpp/node_interfaces/get_node_timers_interface.hpp"
+        -:   27:#include "rclcpp/node_interfaces/node_base_interface.hpp"
+        -:   28:#include "rclcpp/node_interfaces/node_timers_interface.hpp"
+        -:   29:
+        -:   30:namespace rclcpp
+        -:   31:{
+        -:   32:/// Create a timer with a given clock
+        -:   33:/// \internal
+        -:   34:template<typename CallbackT>
+        -:   35:typename rclcpp::TimerBase::SharedPtr
+        -:   36:create_timer(
+        -:   37:  std::shared_ptr<node_interfaces::NodeBaseInterface> node_base,
+        -:   38:  std::shared_ptr<node_interfaces::NodeTimersInterface> node_timers,
+        -:   39:  rclcpp::Clock::SharedPtr clock,
+        -:   40:  rclcpp::Duration period,
+        -:   41:  CallbackT && callback,
+        -:   42:  rclcpp::CallbackGroup::SharedPtr group = nullptr)
+        -:   43:{
+        -:   44:  auto timer = rclcpp::GenericTimer<CallbackT>::make_shared(
+        -:   45:    clock,
+        -:   46:    period.to_chrono<std::chrono::nanoseconds>(),
+        -:   47:    std::forward<CallbackT>(callback),
+        -:   48:    node_base->get_context());
+        -:   49:
+        -:   50:  node_timers->add_timer(timer, group);
+        -:   51:  return timer;
+        -:   52:}
+        -:   53:
+        -:   54:/// Create a timer with a given clock
+        -:   55:template<typename NodeT, typename CallbackT>
+        -:   56:typename rclcpp::TimerBase::SharedPtr
+        -:   57:create_timer(
+        -:   58:  NodeT node,
+        -:   59:  rclcpp::Clock::SharedPtr clock,
+        -:   60:  rclcpp::Duration period,
+        -:   61:  CallbackT && callback,
+        -:   62:  rclcpp::CallbackGroup::SharedPtr group = nullptr)
+        -:   63:{
+        -:   64:  return create_timer(
+        -:   65:    rclcpp::node_interfaces::get_node_base_interface(node),
+        -:   66:    rclcpp::node_interfaces::get_node_timers_interface(node),
+        -:   67:    clock,
+        -:   68:    period,
+        -:   69:    std::forward<CallbackT>(callback),
+        -:   70:    group);
+        -:   71:}
+        -:   72:
+        -:   73:/// Convenience method to create a timer with node resources.
+        -:   74:/**
+        -:   75: *
+        -:   76: * \tparam DurationRepT
+        -:   77: * \tparam DurationT
+        -:   78: * \tparam CallbackT
+        -:   79: * \param period period to execute callback. This duration must be 0 <= period < nanoseconds::max()
+        -:   80: * \param callback callback to execute via the timer period
+        -:   81: * \param group
+        -:   82: * \param node_base
+        -:   83: * \param node_timers
+        -:   84: * \return
+        -:   85: * \throws std::invalid argument if either node_base or node_timers
+        -:   86: * are null, or period is negative or too large
+        -:   87: */
+        -:   88:template<typename DurationRepT, typename DurationT, typename CallbackT>
+        -:   89:typename rclcpp::WallTimer<CallbackT>::SharedPtr
+function _ZN6rclcpp17create_wall_timerIdSt5ratioILl1ELl1EESt5_BindIFM10usb_cameraFvvEPS4_EEEENS_9WallTimerIT1_XLDnEEE9SharedPtrENSt6chrono8durationIT_T0_EESB_St10shared_ptrINS_13CallbackGroupEEPNS_15node_interfaces17NodeBaseInterfaceEPNSM_19NodeTimersInterfaceE called 1 returned 100% blocks executed 39%
+        1:   90:create_wall_timer(
+        -:   91:  std::chrono::duration<DurationRepT, DurationT> period,
+        -:   92:  CallbackT callback,
+        -:   93:  rclcpp::CallbackGroup::SharedPtr group,
+        -:   94:  node_interfaces::NodeBaseInterface * node_base,
+        -:   95:  node_interfaces::NodeTimersInterface * node_timers)
+        -:   96:{
+        1:   97:  if (node_base == nullptr) {
+        1:   97-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 1
+    #####:   98:    throw std::invalid_argument{"input node_base cannot be null"};
+    %%%%%:   98-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:   98-block  1
+call    4 never executed
+    $$$$$:   98-block  2
+call    5 never executed
+        -:   99:  }
+        -:  100:
+        1:  101:  if (node_timers == nullptr) {
+        1:  101-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 1
+    #####:  102:    throw std::invalid_argument{"input node_timers cannot be null"};
+    %%%%%:  102-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  102-block  1
+call    4 never executed
+    $$$$$:  102-block  2
+call    5 never executed
+        -:  103:  }
+        -:  104:
+        1:  105:  if (period < std::chrono::duration<DurationRepT, DurationT>::zero()) {
+        1:  105-block  0
+call    0 returned 1
+call    1 returned 1
+branch  2 taken 0 (fallthrough)
+branch  3 taken 1
+    #####:  106:    throw std::invalid_argument{"timer period cannot be negative"};
+    %%%%%:  106-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  106-block  1
+call    4 never executed
+    $$$$$:  106-block  2
+call    5 never executed
+        -:  107:  }
+        -:  108:
+        -:  109:  // Casting to a double representation might lose precision and allow the check below to succeed
+        -:  110:  // but the actual cast to nanoseconds fail. Using 1 DurationT worth of nanoseconds less than max.
+        1:  111:  constexpr auto maximum_safe_cast_ns =
+        -:  112:    std::chrono::nanoseconds::max() - std::chrono::duration<DurationRepT, DurationT>(1);
+        -:  113:
+        -:  114:  // If period is greater than nanoseconds::max(), the duration_cast to nanoseconds will overflow
+        -:  115:  // a signed integer, which is undefined behavior. Checking whether any std::chrono::duration is
+        -:  116:  // greater than nanoseconds::max() is a difficult general problem. This is a more conservative
+        -:  117:  // version of Howard Hinnant's (the <chrono> guy>) response here:
+        -:  118:  // https://stackoverflow.com/a/44637334/2089061
+        -:  119:  // However, this doesn't solve the issue for all possible duration types of period.
+        -:  120:  // Follow-up issue: https://github.com/ros2/rclcpp/issues/1177
+        1:  121:  constexpr auto ns_max_as_double =
+        -:  122:    std::chrono::duration_cast<std::chrono::duration<double, std::chrono::nanoseconds::period>>(
+        -:  123:    maximum_safe_cast_ns);
+        1:  124:  if (period > ns_max_as_double) {
+        1:  124-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  124-block  1
+branch  3 taken 0 (fallthrough)
+branch  4 taken 1
+    #####:  125:    throw std::invalid_argument{
+    %%%%%:  125-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  125-block  1
+call    4 never executed
+    $$$$$:  125-block  2
+call    5 never executed
+        -:  126:            "timer period must be less than std::chrono::nanoseconds::max()"};
+        -:  127:  }
+        -:  128:
+        1:  129:  const auto period_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(period);
+        1:  129-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  130:  if (period_ns < std::chrono::nanoseconds::zero()) {
+        1:  130-block  0
+call    0 returned 1
+call    1 returned 1
+branch  2 taken 1 (fallthrough)
+branch  3 taken 0 (throw)
+        1:  130-block  1
+branch  4 taken 0 (fallthrough)
+branch  5 taken 1
+    $$$$$:  130-block  2
+    #####:  131:    throw std::runtime_error{
+    %%%%%:  131-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  131-block  1
+call    4 never executed
+    $$$$$:  131-block  2
+call    5 never executed
+        -:  132:            "Casting timer period to nanoseconds resulted in integer overflow."};
+        -:  133:  }
+        -:  134:
+        1:  135:  auto timer = rclcpp::WallTimer<CallbackT>::make_shared(
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+    $$$$$:  135-block  0
+        1:  136:    period_ns, std::move(callback), node_base->get_context());
+        1:  136-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  136-block  1
+call    3 returned 1
+        1:  137:  node_timers->add_timer(timer, group);
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+branch  3 taken 1 (fallthrough)
+branch  4 taken 0 (throw)
+        1:  137-block  0
+call    5 returned 1
+call    6 returned 1
+    $$$$$:  137-block  1
+call    7 never executed
+    $$$$$:  137-block  2
+    $$$$$:  137-block  3
+call    8 never executed
+    $$$$$:  137-block  4
+        2:  138:  return timer;
+        1:  138-block  0
+    =====:  139:}
+    $$$$$:  139-block  0
+call    0 never executed
+        -:  140:
+        -:  141:}  // namespace rclcpp
+        -:  142:
+        -:  143:#endif  // RCLCPP__CREATE_TIMER_HPP_

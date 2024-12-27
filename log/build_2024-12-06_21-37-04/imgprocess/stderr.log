@@ -1,0 +1,4 @@
+gmake[2]: *** 正在删除文件“imgprocess”
+gmake[2]: *** [CMakeFiles/imgprocess.dir/build.make:291: imgprocess] 中断
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/imgprocess.dir/all] 中断
+gmake: *** [Makefile:146: all] 中断

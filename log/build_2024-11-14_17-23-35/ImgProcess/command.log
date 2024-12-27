@@ -1,0 +1,4 @@
+Invoking command in '/home/dcy/ENG/ENG2025/build/ImgProcess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/ImgProcess -- -j16 -l16
+Invoked command in '/home/dcy/ENG/ENG2025/build/ImgProcess' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/ImgProcess -- -j16 -l16
+Invoking command in '/home/dcy/ENG/ENG2025/build/ImgProcess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG/ENG2025/build/ImgProcess
+Invoked command in '/home/dcy/ENG/ENG2025/build/ImgProcess' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG/ENG2025/build/ImgProcess

@@ -1,0 +1,26 @@
+[0.007s] Invoking command in '/home/dcy/ENG/ENG2025/build/imgprocess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG/ENG2025/src/ImgProcess -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG/ENG2025/install/imgprocess
+[0.042s] -- The C compiler identification is GNU 11.4.0
+[0.082s] -- The CXX compiler identification is GNU 11.4.0
+[0.089s] -- Detecting C compiler ABI info
+[0.132s] -- Detecting C compiler ABI info - done
+[0.138s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.138s] -- Detecting C compile features
+[0.138s] -- Detecting C compile features - done
+[0.140s] -- Detecting CXX compiler ABI info
+[0.191s] -- Detecting CXX compiler ABI info - done
+[0.197s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.198s] -- Detecting CXX compile features
+[0.198s] -- Detecting CXX compile features - done
+[0.199s] -- Found ament_cmake_auto: 1.3.9 (/opt/ros/humble/share/ament_cmake_auto/cmake)
+[0.404s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.498s] [31mCMake Error at /opt/ros/humble/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:53 (message):
+[0.498s]   ament_package_xml() package name 'imgprocess' in '/package.xml' does not
+[0.498s]   match current PROJECT_NAME 'ImgProcess'.  You must call project() with the
+[0.498s]   same package name before.
+[0.498s] Call Stack (most recent call first):
+[0.498s]   /opt/ros/humble/share/ament_cmake_auto/cmake/ament_auto_find_build_dependencies.cmake:42 (ament_package_xml)
+[0.498s]   CMakeLists.txt:10 (ament_auto_find_build_dependencies)
+[0.498s] 
+[0.498s] [0m
+[0.498s] -- Configuring incomplete, errors occurred!
+[0.501s] Invoked command in '/home/dcy/ENG/ENG2025/build/imgprocess' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG/ENG2025/src/ImgProcess -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG/ENG2025/install/imgprocess

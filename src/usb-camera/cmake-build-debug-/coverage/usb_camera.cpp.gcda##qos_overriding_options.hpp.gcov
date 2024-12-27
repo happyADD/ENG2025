@@ -1,0 +1,163 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/qos_overriding_options.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2020 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__QOS_OVERRIDING_OPTIONS_HPP_
+        -:   16:#define RCLCPP__QOS_OVERRIDING_OPTIONS_HPP_
+        -:   17:
+        -:   18:#include <functional>
+        -:   19:#include <initializer_list>
+        -:   20:#include <ostream>
+        -:   21:#include <string>
+        -:   22:#include <utility>
+        -:   23:#include <vector>
+        -:   24:
+        -:   25:#include "rclcpp/qos.hpp"
+        -:   26:#include "rclcpp/visibility_control.hpp"
+        -:   27:
+        -:   28:#include "rcl_interfaces/msg/set_parameters_result.hpp"
+        -:   29:#include "rmw/qos_policy_kind.h"
+        -:   30:
+        -:   31:namespace rclcpp
+        -:   32:{
+        -:   33:
+        -:   34:enum class RCLCPP_PUBLIC_TYPE QosPolicyKind
+        -:   35:{
+        -:   36:  AvoidRosNamespaceConventions = RMW_QOS_POLICY_AVOID_ROS_NAMESPACE_CONVENTIONS,
+        -:   37:  Deadline = RMW_QOS_POLICY_DEADLINE,
+        -:   38:  Depth = RMW_QOS_POLICY_DEPTH,
+        -:   39:  Durability = RMW_QOS_POLICY_DURABILITY,
+        -:   40:  History = RMW_QOS_POLICY_HISTORY,
+        -:   41:  Lifespan = RMW_QOS_POLICY_LIFESPAN,
+        -:   42:  Liveliness = RMW_QOS_POLICY_LIVELINESS,
+        -:   43:  LivelinessLeaseDuration = RMW_QOS_POLICY_LIVELINESS_LEASE_DURATION,
+        -:   44:  Reliability = RMW_QOS_POLICY_RELIABILITY,
+        -:   45:  Invalid = RMW_QOS_POLICY_INVALID,
+        -:   46:};
+        -:   47:
+        -:   48:RCLCPP_PUBLIC
+        -:   49:const char *
+        -:   50:qos_policy_kind_to_cstr(const QosPolicyKind & qpk);
+        -:   51:
+        -:   52:RCLCPP_PUBLIC
+        -:   53:std::ostream &
+        -:   54:operator<<(std::ostream & os, const QosPolicyKind & qpk);
+        -:   55:
+        -:   56:using QosCallbackResult = rcl_interfaces::msg::SetParametersResult;
+        -:   57:using QosCallback = std::function<QosCallbackResult(const rclcpp::QoS &)>;
+        -:   58:
+        -:   59:namespace detail
+        -:   60:{
+        -:   61:// forward declare
+        -:   62:template<typename T>
+        -:   63:class QosParameters;
+        -:   64:}
+        -:   65:
+        -:   66:/// Options that are passed in subscription/publisher constructor to specify QoSConfigurability.
+        -:   67:/**
+        -:   68: * This options struct allows configuring:
+        -:   69: * - Which policy kinds will have declared parameters.
+        -:   70: * - An optional callback, that will be called to validate the final qos profile.
+        -:   71: * - An optional id. In the case that different qos are desired for two publishers/subscriptions in
+        -:   72: *   the same topic, this id will allow disambiguating them.
+        -:   73: *
+        -:   74: * Example parameter file:
+        -:   75: *
+        -:   76: * ```yaml
+        -:   77: * my_node_name:
+        -:   78: *  ros__parameters:
+        -:   79: *    qos_overrides:
+        -:   80: *      /my/topic/name:
+        -:   81: *        publisher:  # publisher without provided id
+        -:   82: *          reliability: reliable
+        -:   83: *          depth: 100
+        -:   84: *        publisher_my_id:  # publisher with `id="my_id"
+        -:   85: *          reliability: reliable
+        -:   86: *          depth: 10
+        -:   87: * ```
+        -:   88: */
+        -:   89:class QosOverridingOptions
+        -:   90:{
+        -:   91:public:
+        -:   92:  /// Default constructor, no overrides allowed.
+        -:   93:  RCLCPP_PUBLIC
+function _ZN6rclcpp20QosOverridingOptionsC2Ev called 2 returned 100% blocks executed 100%
+        2:   94:  QosOverridingOptions() = default;
+        2:   94-block  0
+call    0 returned 2
+call    1 returned 2
+call    2 returned 2
+        -:   95:
+        -:   96:  /// Construct passing a list of QoS policies and a verification callback.
+        -:   97:  /**
+        -:   98:   * This constructor is implicit, e.g.:
+        -:   99:   * ```cpp
+        -:  100:   * node->create_publisher(
+        -:  101:   *   "topic_name",
+        -:  102:   *   default_qos_profile,
+        -:  103:   *   {
+        -:  104:   *     {QosPolicyKind::Reliability},
+        -:  105:   *     [] (auto && qos) {return check_qos_validity(qos)},
+        -:  106:   *     "my_id"
+        -:  107:   *   });
+        -:  108:   * ```
+        -:  109:   * \param policy_kinds list of policy kinds that will be reconfigurable.
+        -:  110:   * \param validation_callback callbak that will be called to validate the validity of
+        -:  111:   *   the qos profile set by the user.
+        -:  112:   * \param id id of the entity.
+        -:  113:   */
+        -:  114:  RCLCPP_PUBLIC
+        -:  115:  QosOverridingOptions(
+        -:  116:    std::initializer_list<QosPolicyKind> policy_kinds,
+        -:  117:    QosCallback validation_callback = nullptr,
+        -:  118:    std::string id = {});
+        -:  119:
+        -:  120:  RCLCPP_PUBLIC
+        -:  121:  const std::string &
+        -:  122:  get_id() const;
+        -:  123:
+        -:  124:  RCLCPP_PUBLIC
+        -:  125:  const std::vector<QosPolicyKind> &
+        -:  126:  get_policy_kinds() const;
+        -:  127:
+        -:  128:  RCLCPP_PUBLIC
+        -:  129:  const QosCallback &
+        -:  130:  get_validation_callback() const;
+        -:  131:
+        -:  132:  /// Construct passing a list of QoS policies and a verification callback.
+        -:  133:  /**
+        -:  134:   * Same as `QosOverridingOptions` constructor, but only declares the default policies:
+        -:  135:   *
+        -:  136:   * History, Depth, Reliability.
+        -:  137:   */
+        -:  138:  RCLCPP_PUBLIC
+        -:  139:  static
+        -:  140:  QosOverridingOptions
+        -:  141:  with_default_policies(QosCallback validation_callback = nullptr, std::string id = {});
+        -:  142:
+        -:  143:private:
+        -:  144:  /// \internal Id of the entity requesting to create parameters.
+        -:  145:  std::string id_;
+        -:  146:  /// \internal Policy kinds that are allowed to be reconfigured.
+        -:  147:  std::vector<QosPolicyKind> policy_kinds_;
+        -:  148:  /// \internal Validation callback that will be called to verify the profile.
+        -:  149:  QosCallback validation_callback_;
+        -:  150:};
+        -:  151:
+        -:  152:}  // namespace rclcpp
+        -:  153:
+        -:  154:#endif  // RCLCPP__QOS_OVERRIDING_OPTIONS_HPP_

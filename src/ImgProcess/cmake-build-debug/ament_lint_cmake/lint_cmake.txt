@@ -1,0 +1,75 @@
+-- run_test.py: invoking following command in '/home/dcy/ENG/ENG2025/src/ImgProcess':
+ - /opt/ros/humble/bin/ament_lint_cmake --xunit-file /home/dcy/ENG/ENG2025/src/ImgProcess/cmake-build-debug/test_results/ImgProcess/lint_cmake.xunit.xml
+
+cmake-build-debug/CTestTestfile.cmake:1: Line ends in whitespace [whitespace/eol]
+cmake-build-debug/CTestTestfile.cmake:4: Line ends in whitespace [whitespace/eol]
+cmake-build-debug/CTestTestfile.cmake:5: Line ends in whitespace [whitespace/eol]
+cmake-build-debug/CTestTestfile.cmake:7: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CTestTestfile.cmake:8: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CTestTestfile.cmake:9: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CTestTestfile.cmake:10: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CTestTestfile.cmake:11: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CTestTestfile.cmake:12: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CTestTestfile.cmake:13: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CTestTestfile.cmake:14: Lines should be <= 140 characters long [linelength]
+
+cmake-build-debug/cmake_install.cmake:13: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:51: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:53: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:54: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:56: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:58: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:60: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:61: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:62: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:74: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:78: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:82: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:86: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:90: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:94: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:98: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:102: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:106: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:110: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:114: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:118: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:122: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:126: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/cmake_install.cmake:130: Mismatching spaces inside () after command [whitespace/mismatch]
+cmake-build-debug/cmake_install.cmake:147: Weird indentation; use 2 spaces [whitespace/indent]
+cmake-build-debug/cmake_install.cmake:149: Weird indentation; use 2 spaces [whitespace/indent]
+
+cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake:9: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake:71: Lines should be <= 140 characters long [linelength]
+
+cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:9: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:11: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:12: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:43: Extra spaces between 'foreach' and its () [whitespace/extra]
+cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:44: Extra spaces between 'if' and its () [whitespace/extra]
+cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:82: Lines should be <= 140 characters long [linelength]
+
+cmake-build-debug/ament_cmake_core/package.cmake:7: Mismatching spaces inside () after command [whitespace/mismatch]
+cmake-build-debug/ament_cmake_core/package.cmake:10: Mismatching spaces inside () after command [whitespace/mismatch]
+cmake-build-debug/ament_cmake_core/package.cmake:11: Mismatching spaces inside () after command [whitespace/mismatch]
+
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:1: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:2: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:4: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:5: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:6: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:8: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:9: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:10: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:11: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:12: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:13: Lines should be <= 140 characters long [linelength]
+cmake-build-debug/ament_cmake_package_templates/templates.cmake:14: Lines should be <= 140 characters long [linelength]
+
+
+60 errors
+
+
+-- run_test.py: return code 1
+-- run_test.py: verify result file '/home/dcy/ENG/ENG2025/src/ImgProcess/cmake-build-debug/test_results/ImgProcess/lint_cmake.xunit.xml'

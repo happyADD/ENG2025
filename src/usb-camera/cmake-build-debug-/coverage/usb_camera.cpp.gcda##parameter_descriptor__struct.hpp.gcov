@@ -1,0 +1,317 @@
+        -:    0:Source:/opt/ros/humble/include/rcl_interfaces/rcl_interfaces/msg/detail/parameter_descriptor__struct.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// generated from rosidl_generator_cpp/resource/idl__struct.hpp.em
+        -:    2:// with input from rcl_interfaces:msg/ParameterDescriptor.idl
+        -:    3:// generated code does not contain a copyright notice
+        -:    4:
+        -:    5:#ifndef RCL_INTERFACES__MSG__DETAIL__PARAMETER_DESCRIPTOR__STRUCT_HPP_
+        -:    6:#define RCL_INTERFACES__MSG__DETAIL__PARAMETER_DESCRIPTOR__STRUCT_HPP_
+        -:    7:
+        -:    8:#include <algorithm>
+        -:    9:#include <array>
+        -:   10:#include <memory>
+        -:   11:#include <string>
+        -:   12:#include <vector>
+        -:   13:
+        -:   14:#include "rosidl_runtime_cpp/bounded_vector.hpp"
+        -:   15:#include "rosidl_runtime_cpp/message_initialization.hpp"
+        -:   16:
+        -:   17:
+        -:   18:// Include directives for member types
+        -:   19:// Member 'floating_point_range'
+        -:   20:#include "rcl_interfaces/msg/detail/floating_point_range__struct.hpp"
+        -:   21:// Member 'integer_range'
+        -:   22:#include "rcl_interfaces/msg/detail/integer_range__struct.hpp"
+        -:   23:
+        -:   24:#ifndef _WIN32
+        -:   25:# define DEPRECATED__rcl_interfaces__msg__ParameterDescriptor __attribute__((deprecated))
+        -:   26:#else
+        -:   27:# define DEPRECATED__rcl_interfaces__msg__ParameterDescriptor __declspec(deprecated)
+        -:   28:#endif
+        -:   29:
+        -:   30:namespace rcl_interfaces
+        -:   31:{
+        -:   32:
+        -:   33:namespace msg
+        -:   34:{
+        -:   35:
+        -:   36:// message struct
+        -:   37:template<class ContainerAllocator>
+        -:   38:struct ParameterDescriptor_
+        -:   39:{
+        -:   40:  using Type = ParameterDescriptor_<ContainerAllocator>;
+        -:   41:
+function _ZN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEC2EN18rosidl_runtime_cpp21MessageInitializationE called 11 returned 100% blocks executed 45%
+       11:   42:  explicit ParameterDescriptor_(rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
+       11:   43:  {
+       11:   43-block  0
+call    0 returned 11
+call    1 returned 11
+call    2 returned 11
+call    3 returned 11
+call    4 returned 11
+      11*:   44:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+branch  0 taken 0 (fallthrough)
+branch  1 taken 11
+    %%%%%:   44-block  0
+branch  2 never executed
+branch  3 never executed
+        -:   45:      rosidl_runtime_cpp::MessageInitialization::DEFAULTS_ONLY == _init)
+        -:   46:    {
+       11:   47:      this->read_only = false;
+       11:   48:      this->dynamic_typing = false;
+       11:   48-block  0
+    #####:   49:    } else if (rosidl_runtime_cpp::MessageInitialization::ZERO == _init) {
+    %%%%%:   49-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:   50:      this->name = "";
+    %%%%%:   50-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:   51:      this->type = 0;
+    #####:   52:      this->description = "";
+    %%%%%:   52-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:   53:      this->additional_constraints = "";
+    %%%%%:   53-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:   54:      this->read_only = false;
+    #####:   55:      this->dynamic_typing = false;
+    %%%%%:   55-block  0
+        -:   56:    }
+      11*:   57:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+       11:   57-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 11
+    %%%%%:   57-block  1
+branch  2 never executed
+branch  3 never executed
+        -:   58:      rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
+        -:   59:    {
+       11:   60:      this->name = "";
+       11:   60-block  0
+call    0 returned 11
+branch  1 taken 11 (fallthrough)
+branch  2 taken 0 (throw)
+       11:   61:      this->type = 0;
+       11:   62:      this->description = "";
+       11:   62-block  0
+call    0 returned 11
+branch  1 taken 11 (fallthrough)
+branch  2 taken 0 (throw)
+       11:   63:      this->additional_constraints = "";
+       11:   63-block  0
+call    0 returned 11
+branch  1 taken 11 (fallthrough)
+branch  2 taken 0 (throw)
+        -:   64:    }
+       11:   65:  }
+       11:   65-block  0
+    $$$$$:   65-block  1
+call    0 never executed
+    $$$$$:   65-block  2
+call    1 never executed
+    $$$$$:   65-block  3
+call    2 never executed
+    $$$$$:   65-block  4
+call    3 never executed
+    $$$$$:   65-block  5
+call    4 never executed
+        -:   66:
+        -:   67:  explicit ParameterDescriptor_(const ContainerAllocator & _alloc, rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
+        -:   68:  : name(_alloc),
+        -:   69:    description(_alloc),
+        -:   70:    additional_constraints(_alloc)
+        -:   71:  {
+        -:   72:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+        -:   73:      rosidl_runtime_cpp::MessageInitialization::DEFAULTS_ONLY == _init)
+        -:   74:    {
+        -:   75:      this->read_only = false;
+        -:   76:      this->dynamic_typing = false;
+        -:   77:    } else if (rosidl_runtime_cpp::MessageInitialization::ZERO == _init) {
+        -:   78:      this->name = "";
+        -:   79:      this->type = 0;
+        -:   80:      this->description = "";
+        -:   81:      this->additional_constraints = "";
+        -:   82:      this->read_only = false;
+        -:   83:      this->dynamic_typing = false;
+        -:   84:    }
+        -:   85:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+        -:   86:      rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
+        -:   87:    {
+        -:   88:      this->name = "";
+        -:   89:      this->type = 0;
+        -:   90:      this->description = "";
+        -:   91:      this->additional_constraints = "";
+        -:   92:    }
+        -:   93:  }
+        -:   94:
+        -:   95:  // field types and members
+        -:   96:  using _name_type =
+        -:   97:    std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>;
+        -:   98:  _name_type name;
+        -:   99:  using _type_type =
+        -:  100:    uint8_t;
+        -:  101:  _type_type type;
+        -:  102:  using _description_type =
+        -:  103:    std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>;
+        -:  104:  _description_type description;
+        -:  105:  using _additional_constraints_type =
+        -:  106:    std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>;
+        -:  107:  _additional_constraints_type additional_constraints;
+        -:  108:  using _read_only_type =
+        -:  109:    bool;
+        -:  110:  _read_only_type read_only;
+        -:  111:  using _dynamic_typing_type =
+        -:  112:    bool;
+        -:  113:  _dynamic_typing_type dynamic_typing;
+        -:  114:  using _floating_point_range_type =
+        -:  115:    rosidl_runtime_cpp::BoundedVector<rcl_interfaces::msg::FloatingPointRange_<ContainerAllocator>, 1, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<rcl_interfaces::msg::FloatingPointRange_<ContainerAllocator>>>;
+        -:  116:  _floating_point_range_type floating_point_range;
+        -:  117:  using _integer_range_type =
+        -:  118:    rosidl_runtime_cpp::BoundedVector<rcl_interfaces::msg::IntegerRange_<ContainerAllocator>, 1, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<rcl_interfaces::msg::IntegerRange_<ContainerAllocator>>>;
+        -:  119:  _integer_range_type integer_range;
+        -:  120:
+        -:  121:  // setters for named parameter idiom
+        -:  122:  Type & set__name(
+        -:  123:    const std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> & _arg)
+        -:  124:  {
+        -:  125:    this->name = _arg;
+        -:  126:    return *this;
+        -:  127:  }
+        -:  128:  Type & set__type(
+        -:  129:    const uint8_t & _arg)
+        -:  130:  {
+        -:  131:    this->type = _arg;
+        -:  132:    return *this;
+        -:  133:  }
+        -:  134:  Type & set__description(
+        -:  135:    const std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> & _arg)
+        -:  136:  {
+        -:  137:    this->description = _arg;
+        -:  138:    return *this;
+        -:  139:  }
+        -:  140:  Type & set__additional_constraints(
+        -:  141:    const std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> & _arg)
+        -:  142:  {
+        -:  143:    this->additional_constraints = _arg;
+        -:  144:    return *this;
+        -:  145:  }
+        -:  146:  Type & set__read_only(
+        -:  147:    const bool & _arg)
+        -:  148:  {
+        -:  149:    this->read_only = _arg;
+        -:  150:    return *this;
+        -:  151:  }
+        -:  152:  Type & set__dynamic_typing(
+        -:  153:    const bool & _arg)
+        -:  154:  {
+        -:  155:    this->dynamic_typing = _arg;
+        -:  156:    return *this;
+        -:  157:  }
+        -:  158:  Type & set__floating_point_range(
+        -:  159:    const rosidl_runtime_cpp::BoundedVector<rcl_interfaces::msg::FloatingPointRange_<ContainerAllocator>, 1, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<rcl_interfaces::msg::FloatingPointRange_<ContainerAllocator>>> & _arg)
+        -:  160:  {
+        -:  161:    this->floating_point_range = _arg;
+        -:  162:    return *this;
+        -:  163:  }
+        -:  164:  Type & set__integer_range(
+        -:  165:    const rosidl_runtime_cpp::BoundedVector<rcl_interfaces::msg::IntegerRange_<ContainerAllocator>, 1, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<rcl_interfaces::msg::IntegerRange_<ContainerAllocator>>> & _arg)
+        -:  166:  {
+        -:  167:    this->integer_range = _arg;
+        -:  168:    return *this;
+        -:  169:  }
+        -:  170:
+        -:  171:  // constant declarations
+        -:  172:
+        -:  173:  // pointer types
+        -:  174:  using RawPtr =
+        -:  175:    rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator> *;
+        -:  176:  using ConstRawPtr =
+        -:  177:    const rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator> *;
+        -:  178:  using SharedPtr =
+        -:  179:    std::shared_ptr<rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator>>;
+        -:  180:  using ConstSharedPtr =
+        -:  181:    std::shared_ptr<rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator> const>;
+        -:  182:
+        -:  183:  template<typename Deleter = std::default_delete<
+        -:  184:      rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator>>>
+        -:  185:  using UniquePtrWithDeleter =
+        -:  186:    std::unique_ptr<rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator>, Deleter>;
+        -:  187:
+        -:  188:  using UniquePtr = UniquePtrWithDeleter<>;
+        -:  189:
+        -:  190:  template<typename Deleter = std::default_delete<
+        -:  191:      rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator>>>
+        -:  192:  using ConstUniquePtrWithDeleter =
+        -:  193:    std::unique_ptr<rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator> const, Deleter>;
+        -:  194:  using ConstUniquePtr = ConstUniquePtrWithDeleter<>;
+        -:  195:
+        -:  196:  using WeakPtr =
+        -:  197:    std::weak_ptr<rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator>>;
+        -:  198:  using ConstWeakPtr =
+        -:  199:    std::weak_ptr<rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator> const>;
+        -:  200:
+        -:  201:  // pointer types similar to ROS 1, use SharedPtr / ConstSharedPtr instead
+        -:  202:  // NOTE: Can't use 'using' here because GNU C++ can't parse attributes properly
+        -:  203:  typedef DEPRECATED__rcl_interfaces__msg__ParameterDescriptor
+        -:  204:    std::shared_ptr<rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator>>
+        -:  205:    Ptr;
+        -:  206:  typedef DEPRECATED__rcl_interfaces__msg__ParameterDescriptor
+        -:  207:    std::shared_ptr<rcl_interfaces::msg::ParameterDescriptor_<ContainerAllocator> const>
+        -:  208:    ConstPtr;
+        -:  209:
+        -:  210:  // comparison operators
+        -:  211:  bool operator==(const ParameterDescriptor_ & other) const
+        -:  212:  {
+        -:  213:    if (this->name != other.name) {
+        -:  214:      return false;
+        -:  215:    }
+        -:  216:    if (this->type != other.type) {
+        -:  217:      return false;
+        -:  218:    }
+        -:  219:    if (this->description != other.description) {
+        -:  220:      return false;
+        -:  221:    }
+        -:  222:    if (this->additional_constraints != other.additional_constraints) {
+        -:  223:      return false;
+        -:  224:    }
+        -:  225:    if (this->read_only != other.read_only) {
+        -:  226:      return false;
+        -:  227:    }
+        -:  228:    if (this->dynamic_typing != other.dynamic_typing) {
+        -:  229:      return false;
+        -:  230:    }
+        -:  231:    if (this->floating_point_range != other.floating_point_range) {
+        -:  232:      return false;
+        -:  233:    }
+        -:  234:    if (this->integer_range != other.integer_range) {
+        -:  235:      return false;
+        -:  236:    }
+        -:  237:    return true;
+        -:  238:  }
+        -:  239:  bool operator!=(const ParameterDescriptor_ & other) const
+        -:  240:  {
+        -:  241:    return !this->operator==(other);
+        -:  242:  }
+        -:  243:};  // struct ParameterDescriptor_
+        -:  244:
+        -:  245:// alias to use template instance with default allocator
+        -:  246:using ParameterDescriptor =
+        -:  247:  rcl_interfaces::msg::ParameterDescriptor_<std::allocator<void>>;
+        -:  248:
+        -:  249:// constant definitions
+        -:  250:
+        -:  251:}  // namespace msg
+        -:  252:
+        -:  253:}  // namespace rcl_interfaces
+        -:  254:
+        -:  255:#endif  // RCL_INTERFACES__MSG__DETAIL__PARAMETER_DESCRIPTOR__STRUCT_HPP_

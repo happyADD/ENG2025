@@ -1,0 +1,61 @@
+[0.009s] Invoking command in '/home/dcy/ENG/ENG2025/build/imgprocess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/imgprocess -- -j16 -l16
+[0.047s] [ 20%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcessFuction/graphic.cpp.o[0m
+[0.048s] [ 40%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o[0m
+[0.812s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:[m[K In member function ‘[01m[Kint manager::calculateEdges()[m[K’:
+[0.812s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:342:23:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<triangle>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[0.812s]   342 |     for (int i = 0; [01;35m[Ki < triangles.size() - 1[m[K; i++)
+[0.813s]       |                     [01;35m[K~~^~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:344:31:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<triangle>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[0.813s]   344 |         for (int j = i + 1; [01;35m[Kj < triangles.size()[m[K; j++)
+[0.813s]       |                             [01;35m[K~~^~~~~~~~~~~~~~~~~~[m[K
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:[m[K In member function ‘[01m[Kint manager::calculateSquares()[m[K’:
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:362:23:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<edge>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[0.813s]   362 |     for (int i = 0; [01;35m[Ki < edges.size() - 1[m[K; i++)
+[0.813s]       |                     [01;35m[K~~^~~~~~~~~~~~~~~~~~[m[K
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:364:31:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<edge>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[0.813s]   364 |         for (int j = i + 1; [01;35m[Kj < edges.size()[m[K; j++)
+[0.813s]       |                             [01;35m[K~~^~~~~~~~~~~~~~[m[K
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:370:35:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<edge>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[0.813s]   370 |                 for (int k = 0; [01;35m[Kk < edges.size()[m[K; k++)
+[0.813s]       |                                 [01;35m[K~~^~~~~~~~~~~~~~[m[K
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:[m[K In member function ‘[01m[Kint manager::isSquareAux(int, cv::Point2d, float)[m[K’:
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:407:30:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ksid[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[0.813s]   407 | int manager::isSquareAux([01;35m[Kint sid[m[K, cv::Point2d point, float size)
+[0.813s]       |                          [01;35m[K~~~~^~~[m[K
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:407:47:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpoint[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[0.813s]   407 | int manager::isSquareAux(int sid, [01;35m[Kcv::Point2d point[m[K, float size)
+[0.813s]       |                                   [01;35m[K~~~~~~~~~~~~^~~~~[m[K
+[0.813s] [01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:407:60:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ksize[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[0.813s]   407 | int manager::isSquareAux(int sid, cv::Point2d point, [01;35m[Kfloat size[m[K)
+[0.814s]       |                                                      [01;35m[K~~~~~~^~~~[m[K
+[7.186s] [ 60%] [32m[1mLinking CXX executable imgprocess[0m
+[7.665s] [100%] Built target imgprocess
+[7.670s] Invoked command in '/home/dcy/ENG/ENG2025/build/imgprocess' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/imgprocess -- -j16 -l16
+[7.700s] Invoking command in '/home/dcy/ENG/ENG2025/build/imgprocess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG/ENG2025/build/imgprocess
+[7.701s] -- Install configuration: ""
+[7.702s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include
+[7.702s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction
+[7.702s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/utils.h
+[7.702s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/graphic.h
+[7.702s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/config.h
+[7.702s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcess.h
+[7.702s] -- Installing: /home/dcy/ENG/ENG2025/install/imgprocess/lib/imgprocess/imgprocess
+[7.708s] -- Set runtime path of "/home/dcy/ENG/ENG2025/install/imgprocess/lib/imgprocess/imgprocess" to ""
+[7.708s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/package_run_dependencies/imgprocess
+[7.708s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/parent_prefix_path/imgprocess
+[7.708s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/ament_prefix_path.sh
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/ament_prefix_path.dsv
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/path.sh
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/path.dsv
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.bash
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.sh
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.zsh
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.dsv
+[7.709s] -- Installing: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/package.dsv
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/packages/imgprocess
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/ament_cmake_export_dependencies-extras.cmake
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/ament_cmake_export_include_directories-extras.cmake
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/imgprocessConfig.cmake
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/imgprocessConfig-version.cmake
+[7.709s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/package.xml
+[7.710s] Invoked command in '/home/dcy/ENG/ENG2025/build/imgprocess' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG/ENG2025/build/imgprocess

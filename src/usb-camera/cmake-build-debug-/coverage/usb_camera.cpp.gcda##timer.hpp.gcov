@@ -1,0 +1,432 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/timer.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2014 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__TIMER_HPP_
+        -:   16:#define RCLCPP__TIMER_HPP_
+        -:   17:
+        -:   18:#include <atomic>
+        -:   19:#include <chrono>
+        -:   20:#include <functional>
+        -:   21:#include <memory>
+        -:   22:#include <sstream>
+        -:   23:#include <thread>
+        -:   24:#include <type_traits>
+        -:   25:#include <utility>
+        -:   26:
+        -:   27:#include "rclcpp/clock.hpp"
+        -:   28:#include "rclcpp/context.hpp"
+        -:   29:#include "rclcpp/function_traits.hpp"
+        -:   30:#include "rclcpp/macros.hpp"
+        -:   31:#include "rclcpp/rate.hpp"
+        -:   32:#include "rclcpp/utilities.hpp"
+        -:   33:#include "rclcpp/visibility_control.hpp"
+        -:   34:#include "tracetools/tracetools.h"
+        -:   35:#include "tracetools/utils.hpp"
+        -:   36:
+        -:   37:#include "rcl/error_handling.h"
+        -:   38:#include "rcl/timer.h"
+        -:   39:
+        -:   40:#include "rmw/error_handling.h"
+        -:   41:#include "rmw/rmw.h"
+        -:   42:
+        -:   43:namespace rclcpp
+        -:   44:{
+        -:   45:
+        -:   46:class TimerBase
+        -:   47:{
+        -:   48:public:
+        -:   49:  RCLCPP_SMART_PTR_DEFINITIONS_NOT_COPYABLE(TimerBase)
+        -:   50:
+        -:   51:  /// TimerBase constructor
+        -:   52:  /**
+        -:   53:   * \param clock A clock to use for time and sleeping
+        -:   54:   * \param period The interval at which the timer fires
+        -:   55:   * \param context node context
+        -:   56:   */
+        -:   57:  RCLCPP_PUBLIC
+        -:   58:  explicit TimerBase(
+        -:   59:    Clock::SharedPtr clock,
+        -:   60:    std::chrono::nanoseconds period,
+        -:   61:    rclcpp::Context::SharedPtr context);
+        -:   62:
+        -:   63:  /// TimerBase destructor
+        -:   64:  RCLCPP_PUBLIC
+        -:   65:  virtual
+        -:   66:  ~TimerBase();
+        -:   67:
+        -:   68:  /// Cancel the timer.
+        -:   69:  /**
+        -:   70:   * \throws std::runtime_error if the rcl_timer_cancel returns a failure
+        -:   71:   */
+        -:   72:  RCLCPP_PUBLIC
+        -:   73:  void
+        -:   74:  cancel();
+        -:   75:
+        -:   76:  /// Return the timer cancellation state.
+        -:   77:  /**
+        -:   78:   * \return true if the timer has been cancelled, false otherwise
+        -:   79:   * \throws std::runtime_error if the rcl_get_error_state returns 0
+        -:   80:   * \throws rclcpp::exceptions::RCLError some child class exception based on ret
+        -:   81:   */
+        -:   82:  RCLCPP_PUBLIC
+        -:   83:  bool
+        -:   84:  is_canceled();
+        -:   85:
+        -:   86:  /// Reset the timer.
+        -:   87:  /**
+        -:   88:   * \throws std::runtime_error if the rcl_timer_reset returns a failure
+        -:   89:   */
+        -:   90:  RCLCPP_PUBLIC
+        -:   91:  void
+        -:   92:  reset();
+        -:   93:
+        -:   94:  /// Indicate that we're about to execute the callback.
+        -:   95:  /**
+        -:   96:   * The multithreaded executor takes advantage of this to avoid scheduling
+        -:   97:   * the callback multiple times.
+        -:   98:   *
+        -:   99:   * \return `true` if the callback should be executed, `false` if the timer was canceled.
+        -:  100:   */
+        -:  101:  RCLCPP_PUBLIC
+        -:  102:  virtual bool
+        -:  103:  call() = 0;
+        -:  104:
+        -:  105:  /// Call the callback function when the timer signal is emitted.
+        -:  106:  RCLCPP_PUBLIC
+        -:  107:  virtual void
+        -:  108:  execute_callback() = 0;
+        -:  109:
+        -:  110:  RCLCPP_PUBLIC
+        -:  111:  std::shared_ptr<const rcl_timer_t>
+        -:  112:  get_timer_handle();
+        -:  113:
+        -:  114:  /// Check how long the timer has until its next scheduled callback.
+        -:  115:  /**
+        -:  116:   * \return A std::chrono::duration representing the relative time until the next callback
+        -:  117:   * or std::chrono::nanoseconds::max() if the timer is canceled.
+        -:  118:   * \throws std::runtime_error if the rcl_timer_get_time_until_next_call returns a failure
+        -:  119:   */
+        -:  120:  RCLCPP_PUBLIC
+        -:  121:  std::chrono::nanoseconds
+        -:  122:  time_until_trigger();
+        -:  123:
+        -:  124:  /// Is the clock steady (i.e. is the time between ticks constant?)
+        -:  125:  /** \return True if the clock used by this timer is steady. */
+        -:  126:  virtual bool is_steady() = 0;
+        -:  127:
+        -:  128:  /// Check if the timer is ready to trigger the callback.
+        -:  129:  /**
+        -:  130:   * This function expects its caller to immediately trigger the callback after this function,
+        -:  131:   * since it maintains the last time the callback was triggered.
+        -:  132:   * \return True if the timer needs to trigger.
+        -:  133:   * \throws std::runtime_error if it failed to check timer
+        -:  134:   */
+        -:  135:  RCLCPP_PUBLIC
+        -:  136:  bool is_ready();
+        -:  137:
+        -:  138:  /// Exchange the "in use by wait set" state for this timer.
+        -:  139:  /**
+        -:  140:   * This is used to ensure this timer is not used by multiple
+        -:  141:   * wait sets at the same time.
+        -:  142:   *
+        -:  143:   * \param[in] in_use_state the new state to exchange into the state, true
+        -:  144:   *   indicates it is now in use by a wait set, and false is that it is no
+        -:  145:   *   longer in use by a wait set.
+        -:  146:   * \returns the previous state.
+        -:  147:   */
+        -:  148:  RCLCPP_PUBLIC
+        -:  149:  bool
+        -:  150:  exchange_in_use_by_wait_set_state(bool in_use_state);
+        -:  151:
+        -:  152:protected:
+        -:  153:  Clock::SharedPtr clock_;
+        -:  154:  std::shared_ptr<rcl_timer_t> timer_handle_;
+        -:  155:
+        -:  156:  std::atomic<bool> in_use_by_wait_set_{false};
+        -:  157:};
+        -:  158:
+        -:  159:
+        -:  160:using VoidCallbackType = std::function<void ()>;
+        -:  161:using TimerCallbackType = std::function<void (TimerBase &)>;
+        -:  162:
+        -:  163:/// Generic timer. Periodically executes a user-specified callback.
+        -:  164:template<
+        -:  165:  typename FunctorT,
+        -:  166:  typename std::enable_if<
+        -:  167:    rclcpp::function_traits::same_arguments<FunctorT, VoidCallbackType>::value ||
+        -:  168:    rclcpp::function_traits::same_arguments<FunctorT, TimerCallbackType>::value
+        -:  169:  >::type * = nullptr
+        -:  170:>
+        -:  171:class GenericTimer : public TimerBase
+        -:  172:{
+        -:  173:public:
+        -:  174:  RCLCPP_SMART_PTR_DEFINITIONS(GenericTimer)
+        -:  175:
+        -:  176:  /// Default constructor.
+        -:  177:  /**
+        -:  178:   * \param[in] clock The clock providing the current time.
+        -:  179:   * \param[in] period The interval at which the timer fires.
+        -:  180:   * \param[in] callback User-specified callback function.
+        -:  181:   * \param[in] context custom context to be used.
+        -:  182:   */
+function _ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EEC2ESt10shared_ptrINS_5ClockEENSt6chrono8durationIlSt5ratioILl1ELl1000000000EEEEOS7_SA_INS_7ContextEE called 1 returned 100% blocks executed 60%
+        1:  183:  explicit GenericTimer(
+        -:  184:    Clock::SharedPtr clock, std::chrono::nanoseconds period, FunctorT && callback,
+        -:  185:    rclcpp::Context::SharedPtr context
+        -:  186:  )
+        1:  187:  : TimerBase(clock, period, context), callback_(std::forward<FunctorT>(callback))
+        1:  187-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+branch  3 taken 1 (fallthrough)
+branch  4 taken 0 (throw)
+        1:  187-block  1
+call    5 returned 1
+call    6 returned 1
+call    7 returned 1
+call    8 returned 1
+    $$$$$:  187-block  2
+call    9 never executed
+    $$$$$:  187-block  3
+    $$$$$:  187-block  4
+call   10 never executed
+    $$$$$:  187-block  5
+call   11 never executed
+        -:  188:  {
+        1:  189:    TRACEPOINT(
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  189-block  0
+call    3 returned 1
+call    4 returned 1
+branch  5 taken 1 (fallthrough)
+branch  6 taken 0 (throw)
+        1:  189-block  1
+call    7 returned 1
+    $$$$$:  189-block  2
+call    8 never executed
+    $$$$$:  189-block  3
+        -:  190:      rclcpp_timer_callback_added,
+        -:  191:      static_cast<const void *>(get_timer_handle().get()),
+        -:  192:      static_cast<const void *>(&callback_));
+        1:  193:    TRACEPOINT(
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  193-block  0
+call    3 returned 1
+branch  4 taken 1 (fallthrough)
+branch  5 taken 0 (throw)
+        -:  194:      rclcpp_callback_register,
+        -:  195:      static_cast<const void *>(&callback_),
+        -:  196:      tracetools::get_symbol(callback_));
+        1:  197:  }
+        1:  197-block  0
+    $$$$$:  197-block  1
+call    0 never executed
+        -:  198:
+        -:  199:  /// Default destructor.
+       1*:  200:  virtual ~GenericTimer()
+        -:  201:  {
+        -:  202:    // Stop the timer from running.
+        1:  203:    cancel();
+       1*:  204:  }
+------------------
+_ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EED0Ev:
+function _ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EED0Ev called 0 returned 0% blocks executed 0%
+    #####:  200:  virtual ~GenericTimer()
+        -:  201:  {
+        -:  202:    // Stop the timer from running.
+        -:  203:    cancel();
+    #####:  204:  }
+    %%%%%:  204-block  0
+call    0 never executed
+call    1 never executed
+------------------
+_ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EED2Ev:
+function _ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EED2Ev called 1 returned 100% blocks executed 100%
+        1:  200:  virtual ~GenericTimer()
+        -:  201:  {
+        -:  202:    // Stop the timer from running.
+        1:  203:    cancel();
+        1:  204:  }
+        1:  204-block  0
+call    0 returned 1
+call    1 returned 1
+------------------
+        -:  205:
+        -:  206:  /**
+        -:  207:   * \sa rclcpp::TimerBase::call
+        -:  208:   * \throws std::runtime_error if it failed to notify timer that callback will occurr
+        -:  209:   */
+        -:  210:  bool
+function _ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EE4callEv called 34 returned 100% blocks executed 58%
+       34:  211:  call() override
+        -:  212:  {
+       34:  213:    rcl_ret_t ret = rcl_timer_call(timer_handle_.get());
+       34:  213-block  0
+call    0 returned 34
+call    1 returned 34
+       34:  214:    if (ret == RCL_RET_TIMER_CANCELED) {
+branch  0 taken 0 (fallthrough)
+branch  1 taken 34
+    #####:  215:      return false;
+    %%%%%:  215-block  0
+        -:  216:    }
+       34:  217:    if (ret != RCL_RET_OK) {
+       34:  217-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 34
+    #####:  218:      throw std::runtime_error("Failed to notify timer that callback occurred");
+    %%%%%:  218-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  218-block  1
+call    4 never executed
+    $$$$$:  218-block  2
+call    5 never executed
+        -:  219:    }
+       34:  220:    return true;
+       34:  220-block  0
+        -:  221:  }
+        -:  222:
+        -:  223:  /**
+        -:  224:   * \sa rclcpp::TimerBase::execute_callback
+        -:  225:   */
+        -:  226:  void
+function _ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EE16execute_callbackEv called 34 returned 100% blocks executed 100%
+       34:  227:  execute_callback() override
+        -:  228:  {
+       34:  229:    TRACEPOINT(callback_start, static_cast<const void *>(&callback_), false);
+       34:  229-block  0
+call    0 returned 34
+       34:  230:    execute_callback_delegate<>();
+call    0 returned 34
+       34:  231:    TRACEPOINT(callback_end, static_cast<const void *>(&callback_));
+call    0 returned 34
+       34:  232:  }
+        -:  233:
+        -:  234:  // void specialization
+        -:  235:  template<
+        -:  236:    typename CallbackT = FunctorT,
+        -:  237:    typename std::enable_if<
+        -:  238:      rclcpp::function_traits::same_arguments<CallbackT, VoidCallbackType>::value
+        -:  239:    >::type * = nullptr
+        -:  240:  >
+        -:  241:  void
+function _ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EE25execute_callback_delegateIS7_LS8_0EEEvv called 34 returned 100% blocks executed 100%
+       34:  242:  execute_callback_delegate()
+        -:  243:  {
+       34:  244:    callback_();
+       34:  244-block  0
+call    0 returned 34
+       34:  245:  }
+        -:  246:
+        -:  247:  template<
+        -:  248:    typename CallbackT = FunctorT,
+        -:  249:    typename std::enable_if<
+        -:  250:      rclcpp::function_traits::same_arguments<CallbackT, TimerCallbackType>::value
+        -:  251:    >::type * = nullptr
+        -:  252:  >
+        -:  253:  void
+        -:  254:  execute_callback_delegate()
+        -:  255:  {
+        -:  256:    callback_(*this);
+        -:  257:  }
+        -:  258:
+        -:  259:  /// Is the clock steady (i.e. is the time between ticks constant?)
+        -:  260:  /** \return True if the clock used by this timer is steady. */
+        -:  261:  bool
+function _ZN6rclcpp12GenericTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EE9is_steadyEv called 0 returned 0% blocks executed 0%
+    #####:  262:  is_steady() override
+        -:  263:  {
+    #####:  264:    return clock_->get_clock_type() == RCL_STEADY_TIME;
+    %%%%%:  264-block  0
+call    0 never executed
+call    1 never executed
+        -:  265:  }
+        -:  266:
+        -:  267:protected:
+        -:  268:  RCLCPP_DISABLE_COPY(GenericTimer)
+        -:  269:
+        -:  270:  FunctorT callback_;
+        -:  271:};
+        -:  272:
+        -:  273:template<
+        -:  274:  typename FunctorT,
+        -:  275:  typename std::enable_if<
+        -:  276:    rclcpp::function_traits::same_arguments<FunctorT, VoidCallbackType>::value ||
+        -:  277:    rclcpp::function_traits::same_arguments<FunctorT, TimerCallbackType>::value
+        -:  278:  >::type * = nullptr
+        -:  279:>
+        -:  280:class WallTimer : public GenericTimer<FunctorT>
+        -:  281:{
+        -:  282:public:
+function _ZN6rclcpp9WallTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EE11make_sharedIJRKNSt6chrono8durationIlSt5ratioILl1ELl1000000000EEEES7_St10shared_ptrINS_7ContextEEEEESI_IS9_EDpOT_ called 1 returned 100% blocks executed 100%
+        1:  283:  RCLCPP_SMART_PTR_DEFINITIONS(WallTimer)
+        1:  283-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+call    3 returned 1
+        -:  284:
+        -:  285:  /// Wall timer constructor
+        -:  286:  /**
+        -:  287:   * \param period The interval at which the timer fires
+        -:  288:   * \param callback The callback function to execute every interval
+        -:  289:   * \param context node context
+        -:  290:   */
+function _ZN6rclcpp9WallTimerISt5_BindIFM10usb_cameraFvvEPS2_EELPv0EEC2ENSt6chrono8durationIlSt5ratioILl1ELl1000000000EEEEOS7_St10shared_ptrINS_7ContextEE called 1 returned 100% blocks executed 57%
+        1:  291:  WallTimer(
+        -:  292:    std::chrono::nanoseconds period,
+        -:  293:    FunctorT && callback,
+        -:  294:    rclcpp::Context::SharedPtr context)
+        -:  295:  : GenericTimer<FunctorT>(
+        1:  296:      std::make_shared<Clock>(RCL_STEADY_TIME), period, std::move(callback), context)
+        1:  296-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+branch  3 taken 1 (fallthrough)
+branch  4 taken 0 (throw)
+        1:  296-block  1
+call    5 returned 1
+branch  6 taken 1 (fallthrough)
+branch  7 taken 0 (throw)
+        1:  296-block  2
+call    8 returned 1
+call    9 returned 1
+    $$$$$:  296-block  3
+call   10 never executed
+    $$$$$:  296-block  4
+    $$$$$:  296-block  5
+    $$$$$:  296-block  6
+call   11 never executed
+        1:  297:  {}
+        -:  298:
+        -:  299:protected:
+        -:  300:  RCLCPP_DISABLE_COPY(WallTimer)
+        -:  301:};
+        -:  302:
+        -:  303:}  // namespace rclcpp
+        -:  304:
+        -:  305:#endif  // RCLCPP__TIMER_HPP_

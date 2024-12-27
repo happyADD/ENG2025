@@ -1,0 +1,1363 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/publisher.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2014 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__PUBLISHER_HPP_
+        -:   16:#define RCLCPP__PUBLISHER_HPP_
+        -:   17:
+        -:   18:#include <functional>
+        -:   19:#include <iostream>
+        -:   20:#include <memory>
+        -:   21:#include <sstream>
+        -:   22:#include <string>
+        -:   23:#include <type_traits>
+        -:   24:#include <utility>
+        -:   25:
+        -:   26:#include "rcl/error_handling.h"
+        -:   27:#include "rcl/publisher.h"
+        -:   28:#include "rmw/error_handling.h"
+        -:   29:#include "rmw/rmw.h"
+        -:   30:#include "rosidl_runtime_cpp/traits.hpp"
+        -:   31:
+        -:   32:#include "rclcpp/allocator/allocator_common.hpp"
+        -:   33:#include "rclcpp/allocator/allocator_deleter.hpp"
+        -:   34:#include "rclcpp/detail/resolve_use_intra_process.hpp"
+        -:   35:#include "rclcpp/experimental/intra_process_manager.hpp"
+        -:   36:#include "rclcpp/get_message_type_support_handle.hpp"
+        -:   37:#include "rclcpp/is_ros_compatible_type.hpp"
+        -:   38:#include "rclcpp/loaned_message.hpp"
+        -:   39:#include "rclcpp/macros.hpp"
+        -:   40:#include "rclcpp/node_interfaces/node_base_interface.hpp"
+        -:   41:#include "rclcpp/publisher_base.hpp"
+        -:   42:#include "rclcpp/publisher_options.hpp"
+        -:   43:#include "rclcpp/type_adapter.hpp"
+        -:   44:#include "rclcpp/type_support_decl.hpp"
+        -:   45:#include "rclcpp/visibility_control.hpp"
+        -:   46:
+        -:   47:#include "tracetools/tracetools.h"
+        -:   48:
+        -:   49:namespace rclcpp
+        -:   50:{
+        -:   51:
+        -:   52:template<typename MessageT, typename AllocatorT>
+        -:   53:class LoanedMessage;
+        -:   54:
+        -:   55:/// A publisher publishes messages of any type to a topic.
+        -:   56:/**
+        -:   57: * MessageT must be a:
+        -:   58: *
+        -:   59: * - ROS message type with its own type support (e.g. std_msgs::msgs::String), or a
+        -:   60: * - rclcpp::TypeAdapter<CustomType, ROSMessageType>
+        -:   61: *   (e.g. rclcpp::TypeAdapter<std::string, std_msgs::msg::String), or a
+        -:   62: * - custom type that has been setup as the implicit type for a ROS type using
+        -:   63: *   RCLCPP_USING_CUSTOM_TYPE_AS_ROS_MESSAGE_TYPE(custom_type, ros_message_type)
+        -:   64: *
+        -:   65: * In the case that MessageT is ROS message type (e.g. std_msgs::msg::String),
+        -:   66: * both PublishedType and ROSMessageType will be that type.
+        -:   67: * In the case that MessageT is a TypeAdapter<CustomType, ROSMessageType> type
+        -:   68: * (e.g. TypeAdapter<std::string, std_msgs::msg::String>), PublishedType will
+        -:   69: * be the custom type, and ROSMessageType will be the ros message type.
+        -:   70: *
+        -:   71: * This is achieved because of the "identity specialization" for TypeAdapter,
+        -:   72: * which returns itself if it is already a TypeAdapter, and the default
+        -:   73: * specialization which allows ROSMessageType to be void.
+        -:   74: * \sa rclcpp::TypeAdapter for more details.
+        -:   75: */
+        -:   76:template<typename MessageT, typename AllocatorT = std::allocator<void>>
+        -:   77:class Publisher : public PublisherBase
+        -:   78:{
+        -:   79:public:
+        -:   80:  static_assert(
+        -:   81:    rclcpp::is_ros_compatible_type<MessageT>::value,
+        -:   82:    "given message type is not compatible with ROS and cannot be used with a Publisher");
+        -:   83:
+        -:   84:  /// MessageT::custom_type if MessageT is a TypeAdapter, otherwise just MessageT.
+        -:   85:  using PublishedType = typename rclcpp::TypeAdapter<MessageT>::custom_type;
+        -:   86:  using ROSMessageType = typename rclcpp::TypeAdapter<MessageT>::ros_message_type;
+        -:   87:
+        -:   88:  using PublishedTypeAllocatorTraits = allocator::AllocRebind<PublishedType, AllocatorT>;
+        -:   89:  using PublishedTypeAllocator = typename PublishedTypeAllocatorTraits::allocator_type;
+        -:   90:  using PublishedTypeDeleter = allocator::Deleter<PublishedTypeAllocator, PublishedType>;
+        -:   91:
+        -:   92:  using ROSMessageTypeAllocatorTraits = allocator::AllocRebind<ROSMessageType, AllocatorT>;
+        -:   93:  using ROSMessageTypeAllocator = typename ROSMessageTypeAllocatorTraits::allocator_type;
+        -:   94:  using ROSMessageTypeDeleter = allocator::Deleter<ROSMessageTypeAllocator, ROSMessageType>;
+        -:   95:
+        -:   96:  using MessageAllocatorTraits
+        -:   97:  [[deprecated("use PublishedTypeAllocatorTraits")]] =
+        -:   98:    PublishedTypeAllocatorTraits;
+        -:   99:  using MessageAllocator
+        -:  100:  [[deprecated("use PublishedTypeAllocator")]] =
+        -:  101:    PublishedTypeAllocator;
+        -:  102:  using MessageDeleter
+        -:  103:  [[deprecated("use PublishedTypeDeleter")]] =
+        -:  104:    PublishedTypeDeleter;
+        -:  105:  using MessageUniquePtr
+        -:  106:  [[deprecated("use std::unique_ptr<PublishedType, PublishedTypeDeleter>")]] =
+        -:  107:    std::unique_ptr<PublishedType, PublishedTypeDeleter>;
+        -:  108:  using MessageSharedPtr
+        -:  109:  [[deprecated("use std::shared_ptr<const PublishedType>")]] =
+        -:  110:    std::shared_ptr<const PublishedType>;
+        -:  111:
+        -:  112:  RCLCPP_SMART_PTR_DEFINITIONS(Publisher<MessageT, AllocatorT>)
+        -:  113:
+        -:  114:  /// Default constructor.
+        -:  115:  /**
+        -:  116:   * The constructor for a Publisher is almost never called directly.
+        -:  117:   * Instead, subscriptions should be instantiated through the function
+        -:  118:   * rclcpp::create_publisher().
+        -:  119:   *
+        -:  120:   * \param[in] node_base NodeBaseInterface pointer that is used in part of the setup.
+        -:  121:   * \param[in] topic Name of the topic to publish to.
+        -:  122:   * \param[in] qos QoS profile for Subcription.
+        -:  123:   * \param[in] options Options for the subscription.
+        -:  124:   */
+        2:  125:  Publisher(
+        -:  126:    rclcpp::node_interfaces::NodeBaseInterface * node_base,
+        -:  127:    const std::string & topic,
+        -:  128:    const rclcpp::QoS & qos,
+        -:  129:    const rclcpp::PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:  130:  : PublisherBase(
+        -:  131:      node_base,
+        -:  132:      topic,
+        2:  133:      rclcpp::get_message_type_support_handle<MessageT>(),
+    #####:  134:      options.template to_rcl_publisher_options<MessageT>(qos)),
+        2:  135:    options_(options),
+        2:  136:    published_type_allocator_(*options.get_allocator()),
+        6:  137:    ros_message_type_allocator_(*options.get_allocator())
+        -:  138:  {
+        2:  139:    allocator::set_allocator_for_deleter(&published_type_deleter_, &published_type_allocator_);
+        2:  140:    allocator::set_allocator_for_deleter(&ros_message_type_deleter_, &ros_message_type_allocator_);
+        -:  141:
+        2:  142:    if (options_.event_callbacks.deadline_callback) {
+    #####:  143:      this->add_event_handler(
+    #####:  144:        options_.event_callbacks.deadline_callback,
+        -:  145:        RCL_PUBLISHER_OFFERED_DEADLINE_MISSED);
+        -:  146:    }
+        2:  147:    if (options_.event_callbacks.liveliness_callback) {
+    #####:  148:      this->add_event_handler(
+    #####:  149:        options_.event_callbacks.liveliness_callback,
+        -:  150:        RCL_PUBLISHER_LIVELINESS_LOST);
+        -:  151:    }
+        2:  152:    if (options_.event_callbacks.incompatible_qos_callback) {
+    #####:  153:      this->add_event_handler(
+    #####:  154:        options_.event_callbacks.incompatible_qos_callback,
+        -:  155:        RCL_PUBLISHER_OFFERED_INCOMPATIBLE_QOS);
+        2:  156:    } else if (options_.use_default_callbacks) {
+        -:  157:      // Register default callback when not specified
+        -:  158:      try {
+        2:  159:        this->add_event_handler(
+    #####:  160:          [this](QOSOfferedIncompatibleQoSInfo & info) {
+    #####:  161:            this->default_incompatible_qos_callback(info);
+    %%%%%:  161-block  0
+call    0 never executed
+    %%%%%:  161-block  1
+call    1 never executed
+        -:  162:          },
+        -:  163:          RCL_PUBLISHER_OFFERED_INCOMPATIBLE_QOS);
+    =====:  164:      } catch (UnsupportedEventTypeException & /*exc*/) {
+        -:  165:        // pass
+        -:  166:      }
+        -:  167:    }
+        -:  168:    // Setup continues in the post construction method, post_init_setup().
+        2:  169:  }
+------------------
+_ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_EC2EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS4_EE:
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_EC2EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS4_EE called 1 returned 100% blocks executed 61%
+        1:  125:  Publisher(
+        -:  126:    rclcpp::node_interfaces::NodeBaseInterface * node_base,
+        -:  127:    const std::string & topic,
+        -:  128:    const rclcpp::QoS & qos,
+        -:  129:    const rclcpp::PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:  130:  : PublisherBase(
+        -:  131:      node_base,
+        -:  132:      topic,
+        1:  133:      rclcpp::get_message_type_support_handle<MessageT>(),
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+    #####:  134:      options.template to_rcl_publisher_options<MessageT>(qos)),
+    $$$$$:  134-block  0
+call    0 never executed
+        1:  135:    options_(options),
+        1:  136:    published_type_allocator_(*options.get_allocator()),
+        1:  136-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  136-block  1
+call    3 returned 1
+call    4 returned 1
+call    5 returned 1
+        3:  137:    ros_message_type_allocator_(*options.get_allocator())
+        1:  137-block  0
+call    0 returned 1
+        1:  137-block  1
+call    1 returned 1
+branch  2 taken 1 (fallthrough)
+branch  3 taken 0 (throw)
+        1:  137-block  2
+call    4 returned 1
+branch  5 taken 1 (fallthrough)
+branch  6 taken 0 (throw)
+call    7 returned 1
+branch  8 taken 1 (fallthrough)
+branch  9 taken 0 (throw)
+        1:  137-block  3
+call   10 returned 1
+call   11 returned 1
+call   12 returned 1
+        -:  138:  {
+        1:  139:    allocator::set_allocator_for_deleter(&published_type_deleter_, &published_type_allocator_);
+call    0 returned 1
+        1:  140:    allocator::set_allocator_for_deleter(&ros_message_type_deleter_, &ros_message_type_allocator_);
+call    0 returned 1
+        -:  141:
+        1:  142:    if (options_.event_callbacks.deadline_callback) {
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+    #####:  143:      this->add_event_handler(
+    #####:  144:        options_.event_callbacks.deadline_callback,
+    %%%%%:  144-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  145:        RCL_PUBLISHER_OFFERED_DEADLINE_MISSED);
+        -:  146:    }
+        1:  147:    if (options_.event_callbacks.liveliness_callback) {
+        1:  147-block  0
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+    #####:  148:      this->add_event_handler(
+    #####:  149:        options_.event_callbacks.liveliness_callback,
+    %%%%%:  149-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  150:        RCL_PUBLISHER_LIVELINESS_LOST);
+        -:  151:    }
+        1:  152:    if (options_.event_callbacks.incompatible_qos_callback) {
+        1:  152-block  0
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+    #####:  153:      this->add_event_handler(
+    #####:  154:        options_.event_callbacks.incompatible_qos_callback,
+    %%%%%:  154-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  155:        RCL_PUBLISHER_OFFERED_INCOMPATIBLE_QOS);
+        1:  156:    } else if (options_.use_default_callbacks) {
+        1:  156-block  0
+branch  0 taken 1 (fallthrough)
+branch  1 taken 0
+        -:  157:      // Register default callback when not specified
+        -:  158:      try {
+        1:  159:        this->add_event_handler(
+        1:  159-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  159-block  1
+    $$$$$:  159-block  2
+        -:  160:          [this](QOSOfferedIncompatibleQoSInfo & info) {
+        -:  161:            this->default_incompatible_qos_callback(info);
+        -:  162:          },
+        -:  163:          RCL_PUBLISHER_OFFERED_INCOMPATIBLE_QOS);
+    =====:  164:      } catch (UnsupportedEventTypeException & /*exc*/) {
+    $$$$$:  164-block  0
+branch  0 never executed
+branch  1 never executed
+    $$$$$:  164-block  1
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  165:        // pass
+        -:  166:      }
+        -:  167:    }
+        -:  168:    // Setup continues in the post construction method, post_init_setup().
+        1:  169:  }
+        1:  169-block  0
+    $$$$$:  169-block  1
+call    0 never executed
+    $$$$$:  169-block  2
+call    1 never executed
+    $$$$$:  169-block  3
+call    2 never executed
+    $$$$$:  169-block  4
+call    3 never executed
+------------------
+_ZN6rclcpp9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES4_EC2EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS4_EE:
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES4_EC2EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS4_EE called 1 returned 100% blocks executed 61%
+        1:  125:  Publisher(
+        -:  126:    rclcpp::node_interfaces::NodeBaseInterface * node_base,
+        -:  127:    const std::string & topic,
+        -:  128:    const rclcpp::QoS & qos,
+        -:  129:    const rclcpp::PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:  130:  : PublisherBase(
+        -:  131:      node_base,
+        -:  132:      topic,
+        1:  133:      rclcpp::get_message_type_support_handle<MessageT>(),
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+    #####:  134:      options.template to_rcl_publisher_options<MessageT>(qos)),
+    $$$$$:  134-block  0
+call    0 never executed
+        1:  135:    options_(options),
+        1:  136:    published_type_allocator_(*options.get_allocator()),
+        1:  136-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  136-block  1
+call    3 returned 1
+call    4 returned 1
+call    5 returned 1
+        3:  137:    ros_message_type_allocator_(*options.get_allocator())
+        1:  137-block  0
+call    0 returned 1
+        1:  137-block  1
+call    1 returned 1
+branch  2 taken 1 (fallthrough)
+branch  3 taken 0 (throw)
+        1:  137-block  2
+call    4 returned 1
+branch  5 taken 1 (fallthrough)
+branch  6 taken 0 (throw)
+call    7 returned 1
+branch  8 taken 1 (fallthrough)
+branch  9 taken 0 (throw)
+        1:  137-block  3
+call   10 returned 1
+call   11 returned 1
+call   12 returned 1
+        -:  138:  {
+        1:  139:    allocator::set_allocator_for_deleter(&published_type_deleter_, &published_type_allocator_);
+call    0 returned 1
+        1:  140:    allocator::set_allocator_for_deleter(&ros_message_type_deleter_, &ros_message_type_allocator_);
+call    0 returned 1
+        -:  141:
+        1:  142:    if (options_.event_callbacks.deadline_callback) {
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+    #####:  143:      this->add_event_handler(
+    #####:  144:        options_.event_callbacks.deadline_callback,
+    %%%%%:  144-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  145:        RCL_PUBLISHER_OFFERED_DEADLINE_MISSED);
+        -:  146:    }
+        1:  147:    if (options_.event_callbacks.liveliness_callback) {
+        1:  147-block  0
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+    #####:  148:      this->add_event_handler(
+    #####:  149:        options_.event_callbacks.liveliness_callback,
+    %%%%%:  149-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  150:        RCL_PUBLISHER_LIVELINESS_LOST);
+        -:  151:    }
+        1:  152:    if (options_.event_callbacks.incompatible_qos_callback) {
+        1:  152-block  0
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+    #####:  153:      this->add_event_handler(
+    #####:  154:        options_.event_callbacks.incompatible_qos_callback,
+    %%%%%:  154-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  155:        RCL_PUBLISHER_OFFERED_INCOMPATIBLE_QOS);
+        1:  156:    } else if (options_.use_default_callbacks) {
+        1:  156-block  0
+branch  0 taken 1 (fallthrough)
+branch  1 taken 0
+        -:  157:      // Register default callback when not specified
+        -:  158:      try {
+        1:  159:        this->add_event_handler(
+        1:  159-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  159-block  1
+    $$$$$:  159-block  2
+        -:  160:          [this](QOSOfferedIncompatibleQoSInfo & info) {
+        -:  161:            this->default_incompatible_qos_callback(info);
+        -:  162:          },
+        -:  163:          RCL_PUBLISHER_OFFERED_INCOMPATIBLE_QOS);
+    =====:  164:      } catch (UnsupportedEventTypeException & /*exc*/) {
+    $$$$$:  164-block  0
+branch  0 never executed
+branch  1 never executed
+    $$$$$:  164-block  1
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  165:        // pass
+        -:  166:      }
+        -:  167:    }
+        -:  168:    // Setup continues in the post construction method, post_init_setup().
+        1:  169:  }
+        1:  169-block  0
+    $$$$$:  169-block  1
+call    0 never executed
+    $$$$$:  169-block  2
+call    1 never executed
+    $$$$$:  169-block  3
+call    2 never executed
+    $$$$$:  169-block  4
+call    3 never executed
+------------------
+        -:  170:
+        -:  171:  /// Called post construction, so that construction may continue after shared_from_this() works.
+        -:  172:  virtual
+        -:  173:  void
+        2:  174:  post_init_setup(
+        -:  175:    rclcpp::node_interfaces::NodeBaseInterface * node_base,
+        -:  176:    const std::string & topic,
+        -:  177:    const rclcpp::QoS & qos,
+        -:  178:    const rclcpp::PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:  179:  {
+        -:  180:    // Topic is unused for now.
+        -:  181:    (void)topic;
+        -:  182:    (void)options;
+        -:  183:
+        -:  184:    // If needed, setup intra process communication.
+        2:  185:    if (rclcpp::detail::resolve_use_intra_process(options_, *node_base)) {
+    #####:  186:      auto context = node_base->get_context();
+        -:  187:      // Get the intra process manager instance for this context.
+    #####:  188:      auto ipm = context->get_sub_context<rclcpp::experimental::IntraProcessManager>();
+        -:  189:      // Register the publisher with the intra process manager.
+    #####:  190:      if (qos.history() != rclcpp::HistoryPolicy::KeepLast) {
+    #####:  191:        throw std::invalid_argument(
+        -:  192:                "intraprocess communication allowed only with keep last history qos policy");
+        -:  193:      }
+    #####:  194:      if (qos.depth() == 0) {
+    #####:  195:        throw std::invalid_argument(
+        -:  196:                "intraprocess communication is not allowed with a zero qos history depth value");
+        -:  197:      }
+    #####:  198:      if (qos.durability() != rclcpp::DurabilityPolicy::Volatile) {
+    #####:  199:        throw std::invalid_argument(
+        -:  200:                "intraprocess communication allowed only with volatile durability");
+        -:  201:      }
+    #####:  202:      uint64_t intra_process_publisher_id = ipm->add_publisher(this->shared_from_this());
+    #####:  203:      this->setup_intra_process(
+        -:  204:        intra_process_publisher_id,
+        -:  205:        ipm);
+    #####:  206:    }
+        2:  207:  }
+------------------
+_ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_E15post_init_setupEPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS4_EE:
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_E15post_init_setupEPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS4_EE called 1 returned 100% blocks executed 8%
+        1:  174:  post_init_setup(
+        -:  175:    rclcpp::node_interfaces::NodeBaseInterface * node_base,
+        -:  176:    const std::string & topic,
+        -:  177:    const rclcpp::QoS & qos,
+        -:  178:    const rclcpp::PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:  179:  {
+        -:  180:    // Topic is unused for now.
+        -:  181:    (void)topic;
+        -:  182:    (void)options;
+        -:  183:
+        -:  184:    // If needed, setup intra process communication.
+        1:  185:    if (rclcpp::detail::resolve_use_intra_process(options_, *node_base)) {
+        1:  185-block  0
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+    #####:  186:      auto context = node_base->get_context();
+    %%%%%:  186-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  187:      // Get the intra process manager instance for this context.
+    #####:  188:      auto ipm = context->get_sub_context<rclcpp::experimental::IntraProcessManager>();
+    %%%%%:  188-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  189:      // Register the publisher with the intra process manager.
+    #####:  190:      if (qos.history() != rclcpp::HistoryPolicy::KeepLast) {
+    %%%%%:  190-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  190-block  1
+branch  3 never executed
+branch  4 never executed
+    #####:  191:        throw std::invalid_argument(
+    %%%%%:  191-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  191-block  1
+call    4 never executed
+    $$$$$:  191-block  2
+call    5 never executed
+        -:  192:                "intraprocess communication allowed only with keep last history qos policy");
+        -:  193:      }
+    #####:  194:      if (qos.depth() == 0) {
+    %%%%%:  194-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  194-block  1
+branch  3 never executed
+branch  4 never executed
+    #####:  195:        throw std::invalid_argument(
+    %%%%%:  195-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  195-block  1
+call    4 never executed
+    $$$$$:  195-block  2
+call    5 never executed
+        -:  196:                "intraprocess communication is not allowed with a zero qos history depth value");
+        -:  197:      }
+    #####:  198:      if (qos.durability() != rclcpp::DurabilityPolicy::Volatile) {
+    %%%%%:  198-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  198-block  1
+branch  3 never executed
+branch  4 never executed
+    #####:  199:        throw std::invalid_argument(
+    %%%%%:  199-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  199-block  1
+call    4 never executed
+    $$$$$:  199-block  2
+call    5 never executed
+        -:  200:                "intraprocess communication allowed only with volatile durability");
+        -:  201:      }
+    #####:  202:      uint64_t intra_process_publisher_id = ipm->add_publisher(this->shared_from_this());
+    %%%%%:  202-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  202-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  202-block  2
+call    7 never executed
+    $$$$$:  202-block  3
+call    8 never executed
+    $$$$$:  202-block  4
+    #####:  203:      this->setup_intra_process(
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  203-block  0
+call    4 never executed
+    $$$$$:  203-block  1
+call    5 never executed
+    $$$$$:  203-block  2
+        -:  204:        intra_process_publisher_id,
+        -:  205:        ipm);
+    #####:  206:    }
+call    0 never executed
+call    1 never executed
+    $$$$$:  206-block  0
+call    2 never executed
+    $$$$$:  206-block  1
+call    3 never executed
+        1:  207:  }
+        1:  207-block  0
+------------------
+_ZN6rclcpp9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES4_E15post_init_setupEPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS4_EE:
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES4_E15post_init_setupEPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS4_EE called 1 returned 100% blocks executed 8%
+        1:  174:  post_init_setup(
+        -:  175:    rclcpp::node_interfaces::NodeBaseInterface * node_base,
+        -:  176:    const std::string & topic,
+        -:  177:    const rclcpp::QoS & qos,
+        -:  178:    const rclcpp::PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:  179:  {
+        -:  180:    // Topic is unused for now.
+        -:  181:    (void)topic;
+        -:  182:    (void)options;
+        -:  183:
+        -:  184:    // If needed, setup intra process communication.
+        1:  185:    if (rclcpp::detail::resolve_use_intra_process(options_, *node_base)) {
+        1:  185-block  0
+call    0 returned 1
+branch  1 taken 0 (fallthrough)
+branch  2 taken 1
+    #####:  186:      auto context = node_base->get_context();
+    %%%%%:  186-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  187:      // Get the intra process manager instance for this context.
+    #####:  188:      auto ipm = context->get_sub_context<rclcpp::experimental::IntraProcessManager>();
+    %%%%%:  188-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  189:      // Register the publisher with the intra process manager.
+    #####:  190:      if (qos.history() != rclcpp::HistoryPolicy::KeepLast) {
+    %%%%%:  190-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  190-block  1
+branch  3 never executed
+branch  4 never executed
+    #####:  191:        throw std::invalid_argument(
+    %%%%%:  191-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  191-block  1
+call    4 never executed
+    $$$$$:  191-block  2
+call    5 never executed
+        -:  192:                "intraprocess communication allowed only with keep last history qos policy");
+        -:  193:      }
+    #####:  194:      if (qos.depth() == 0) {
+    %%%%%:  194-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  194-block  1
+branch  3 never executed
+branch  4 never executed
+    #####:  195:        throw std::invalid_argument(
+    %%%%%:  195-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  195-block  1
+call    4 never executed
+    $$$$$:  195-block  2
+call    5 never executed
+        -:  196:                "intraprocess communication is not allowed with a zero qos history depth value");
+        -:  197:      }
+    #####:  198:      if (qos.durability() != rclcpp::DurabilityPolicy::Volatile) {
+    %%%%%:  198-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  198-block  1
+branch  3 never executed
+branch  4 never executed
+    #####:  199:        throw std::invalid_argument(
+    %%%%%:  199-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  199-block  1
+call    4 never executed
+    $$$$$:  199-block  2
+call    5 never executed
+        -:  200:                "intraprocess communication allowed only with volatile durability");
+        -:  201:      }
+    #####:  202:      uint64_t intra_process_publisher_id = ipm->add_publisher(this->shared_from_this());
+    %%%%%:  202-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  202-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  202-block  2
+call    7 never executed
+    $$$$$:  202-block  3
+call    8 never executed
+    $$$$$:  202-block  4
+    #####:  203:      this->setup_intra_process(
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  203-block  0
+call    4 never executed
+    $$$$$:  203-block  1
+call    5 never executed
+    $$$$$:  203-block  2
+        -:  204:        intra_process_publisher_id,
+        -:  205:        ipm);
+    #####:  206:    }
+call    0 never executed
+call    1 never executed
+    $$$$$:  206-block  0
+call    2 never executed
+    $$$$$:  206-block  1
+call    3 never executed
+        1:  207:  }
+        1:  207-block  0
+------------------
+        -:  208:
+       2*:  209:  virtual ~Publisher()
+       2*:  210:  {}
+------------------
+_ZN6rclcpp9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES4_ED0Ev:
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES4_ED0Ev called 0 returned 0% blocks executed 0%
+    #####:  209:  virtual ~Publisher()
+    #####:  210:  {}
+    %%%%%:  210-block  0
+call    0 never executed
+call    1 never executed
+------------------
+_ZN6rclcpp9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES4_ED2Ev:
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES4_ED2Ev called 1 returned 100% blocks executed 100%
+        1:  209:  virtual ~Publisher()
+        1:  210:  {}
+        1:  210-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+call    3 returned 1
+------------------
+_ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_ED0Ev:
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_ED0Ev called 0 returned 0% blocks executed 0%
+    #####:  209:  virtual ~Publisher()
+    #####:  210:  {}
+    %%%%%:  210-block  0
+call    0 never executed
+call    1 never executed
+------------------
+_ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_ED2Ev:
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_ED2Ev called 1 returned 100% blocks executed 100%
+        1:  209:  virtual ~Publisher()
+        1:  210:  {}
+        1:  210-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+call    3 returned 1
+------------------
+        -:  211:
+        -:  212:  /// Borrow a loaned ROS message from the middleware.
+        -:  213:  /**
+        -:  214:   * If the middleware is capable of loaning memory for a ROS message instance,
+        -:  215:   * the loaned message will be directly allocated in the middleware.
+        -:  216:   * If not, the message allocator of this rclcpp::Publisher instance is being used.
+        -:  217:   *
+        -:  218:   * With a call to \sa `publish` the LoanedMessage instance is being returned to the middleware
+        -:  219:   * or free'd accordingly to the allocator.
+        -:  220:   * If the message is not being published but processed differently, the destructor of this
+        -:  221:   * class will either return the message to the middleware or deallocate it via the internal
+        -:  222:   * allocator.
+        -:  223:   * \sa rclcpp::LoanedMessage for details of the LoanedMessage class.
+        -:  224:   *
+        -:  225:   * \return LoanedMessage containing memory for a ROS message of type ROSMessageType
+        -:  226:   */
+        -:  227:  rclcpp::LoanedMessage<ROSMessageType, AllocatorT>
+        -:  228:  borrow_loaned_message()
+        -:  229:  {
+        -:  230:    return rclcpp::LoanedMessage<ROSMessageType, AllocatorT>(
+        -:  231:      *this,
+        -:  232:      this->get_ros_message_type_allocator());
+        -:  233:  }
+        -:  234:
+        -:  235:  /// Publish a message on the topic.
+        -:  236:  /**
+        -:  237:   * This signature is enabled if the element_type of the std::unique_ptr is
+        -:  238:   * a ROS message type, as opposed to the custom_type of a TypeAdapter, and
+        -:  239:   * that type matches the type given when creating the publisher.
+        -:  240:   *
+        -:  241:   * This signature allows the user to give ownership of the message to rclcpp,
+        -:  242:   * allowing for more efficient intra-process communication optimizations.
+        -:  243:   *
+        -:  244:   * \param[in] msg A unique pointer to the message to send.
+        -:  245:   */
+        -:  246:  template<typename T>
+        -:  247:  typename std::enable_if_t<
+        -:  248:    rosidl_generator_traits::is_message<T>::value &&
+        -:  249:    std::is_same<T, ROSMessageType>::value
+        -:  250:  >
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_E7publishIS5_EENSt9enable_ifIXaasrN23rosidl_generator_traits10is_messageIT_EE5valuesrSt7is_sameISB_S5_E5valueEvE4typeESt10unique_ptrISB_St14default_deleteIS5_EE called 0 returned 0% blocks executed 0%
+    #####:  251:  publish(std::unique_ptr<T, ROSMessageTypeDeleter> msg)
+        -:  252:  {
+    #####:  253:    if (!intra_process_is_enabled_) {
+    %%%%%:  253-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  254:      this->do_inter_process_publish(*msg);
+    %%%%%:  254-block  0
+call    0 never executed
+call    1 never executed
+    #####:  255:      return;
+        -:  256:    }
+        -:  257:    // If an interprocess subscription exist, then the unique_ptr is promoted
+        -:  258:    // to a shared_ptr and published.
+        -:  259:    // This allows doing the intraprocess publish first and then doing the
+        -:  260:    // interprocess publish, resulting in lower publish-to-subscribe latency.
+        -:  261:    // It's not possible to do that with an unique_ptr,
+        -:  262:    // as do_intra_process_publish takes the ownership of the message.
+    #####:  263:    bool inter_process_publish_needed =
+    #####:  264:      get_subscription_count() > get_intra_process_subscription_count();
+    %%%%%:  264-block  0
+call    0 never executed
+call    1 never executed
+        -:  265:
+    #####:  266:    if (inter_process_publish_needed) {
+branch  0 never executed
+branch  1 never executed
+    #####:  267:      auto shared_msg =
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    $$$$$:  267-block  0
+    #####:  268:        this->do_intra_process_ros_message_publish_and_return_shared(std::move(msg));
+    %%%%%:  268-block  0
+call    0 never executed
+    #####:  269:      this->do_inter_process_publish(*shared_msg);
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  270:    } else {
+    %%%%%:  270-block  0
+call    0 never executed
+    $$$$$:  270-block  1
+call    1 never executed
+    #####:  271:      this->do_intra_process_ros_message_publish(std::move(msg));
+    %%%%%:  271-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  271-block  1
+call    5 never executed
+    $$$$$:  271-block  2
+call    6 never executed
+        -:  272:    }
+        -:  273:  }
+        -:  274:
+        -:  275:  /// Publish a message on the topic.
+        -:  276:  /**
+        -:  277:   * This signature is enabled if the object being published is
+        -:  278:   * a ROS message type, as opposed to the custom_type of a TypeAdapter, and
+        -:  279:   * that type matches the type given when creating the publisher.
+        -:  280:   *
+        -:  281:   * This signature allows the user to give a reference to a message, which is
+        -:  282:   * copied onto the heap without modification so that a copy can be owned by
+        -:  283:   * rclcpp and ownership of the copy can be moved later if needed.
+        -:  284:   *
+        -:  285:   * \param[in] msg A const reference to the message to send.
+        -:  286:   */
+        -:  287:  template<typename T>
+        -:  288:  typename std::enable_if_t<
+        -:  289:    rosidl_generator_traits::is_message<T>::value &&
+        -:  290:    std::is_same<T, ROSMessageType>::value
+        -:  291:  >
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_E7publishIS5_EENSt9enable_ifIXaasrN23rosidl_generator_traits10is_messageIT_EE5valuesrSt7is_sameISB_S5_E5valueEvE4typeERKSB_ called 34 returned 100% blocks executed 29%
+       34:  292:  publish(const T & msg)
+        -:  293:  {
+        -:  294:    // Avoid allocating when not using intra process.
+       34:  295:    if (!intra_process_is_enabled_) {
+       34:  295-block  0
+branch  0 taken 34 (fallthrough)
+branch  1 taken 0
+        -:  296:      // In this case we're not using intra process.
+       34:  297:      return this->do_inter_process_publish(msg);
+       34:  297-block  0
+call    0 returned 34
+branch  1 taken 34 (fallthrough)
+branch  2 taken 0 (throw)
+       34:  297-block  1
+        -:  298:    }
+        -:  299:    // Otherwise we have to allocate memory in a unique_ptr and pass it along.
+        -:  300:    // As the message is not const, a copy should be made.
+        -:  301:    // A shared_ptr<const MessageT> could also be constructed here.
+    #####:  302:    auto unique_msg = this->duplicate_ros_message_as_unique_ptr(msg);
+    %%%%%:  302-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  303:    this->publish(std::move(unique_msg));
+    %%%%%:  303-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  303-block  1
+call    5 never executed
+    $$$$$:  303-block  2
+call    6 never executed
+    $$$$$:  303-block  3
+    #####:  304:  }
+call    0 never executed
+    $$$$$:  304-block  0
+call    1 never executed
+        -:  305:
+        -:  306:  /// Publish a message on the topic.
+        -:  307:  /**
+        -:  308:   * This signature is enabled if this class was created with a TypeAdapter and
+        -:  309:   * the element_type of the std::unique_ptr matches the custom_type for the
+        -:  310:   * TypeAdapter used with this class.
+        -:  311:   *
+        -:  312:   * This signature allows the user to give ownership of the message to rclcpp,
+        -:  313:   * allowing for more efficient intra-process communication optimizations.
+        -:  314:   *
+        -:  315:   * \param[in] msg A unique pointer to the message to send.
+        -:  316:   */
+        -:  317:  template<typename T>
+        -:  318:  typename std::enable_if_t<
+        -:  319:    rclcpp::TypeAdapter<MessageT>::is_specialized::value &&
+        -:  320:    std::is_same<T, PublishedType>::value
+        -:  321:  >
+        -:  322:  publish(std::unique_ptr<T, PublishedTypeDeleter> msg)
+        -:  323:  {
+        -:  324:    // Avoid allocating when not using intra process.
+        -:  325:    if (!intra_process_is_enabled_) {
+        -:  326:      // In this case we're not using intra process.
+        -:  327:      ROSMessageType ros_msg;
+        -:  328:      rclcpp::TypeAdapter<MessageT>::convert_to_ros_message(*msg, ros_msg);
+        -:  329:      return this->do_inter_process_publish(ros_msg);
+        -:  330:    }
+        -:  331:
+        -:  332:    bool inter_process_publish_needed =
+        -:  333:      get_subscription_count() > get_intra_process_subscription_count();
+        -:  334:
+        -:  335:    if (inter_process_publish_needed) {
+        -:  336:      ROSMessageType ros_msg;
+        -:  337:      // TODO(clalancette): This is unnecessarily doing an additional conversion
+        -:  338:      // that may have already been done in do_intra_process_publish_and_return_shared().
+        -:  339:      // We should just reuse that effort.
+        -:  340:      rclcpp::TypeAdapter<MessageT>::convert_to_ros_message(*msg, ros_msg);
+        -:  341:      this->do_intra_process_publish(std::move(msg));
+        -:  342:      this->do_inter_process_publish(ros_msg);
+        -:  343:    } else {
+        -:  344:      this->do_intra_process_publish(std::move(msg));
+        -:  345:    }
+        -:  346:  }
+        -:  347:
+        -:  348:  /// Publish a message on the topic.
+        -:  349:  /**
+        -:  350:   * This signature is enabled if this class was created with a TypeAdapter and
+        -:  351:   * the given type matches the custom_type of the TypeAdapter.
+        -:  352:   *
+        -:  353:   * This signature allows the user to give a reference to a message, which is
+        -:  354:   * copied onto the heap without modification so that a copy can be owned by
+        -:  355:   * rclcpp and ownership of the copy can be moved later if needed.
+        -:  356:   *
+        -:  357:   * \param[in] msg A const reference to the message to send.
+        -:  358:   */
+        -:  359:  template<typename T>
+        -:  360:  typename std::enable_if_t<
+        -:  361:    rclcpp::TypeAdapter<MessageT>::is_specialized::value &&
+        -:  362:    std::is_same<T, PublishedType>::value
+        -:  363:  >
+        -:  364:  publish(const T & msg)
+        -:  365:  {
+        -:  366:    // Avoid double allocating when not using intra process.
+        -:  367:    if (!intra_process_is_enabled_) {
+        -:  368:      // Convert to the ROS message equivalent and publish it.
+        -:  369:      ROSMessageType ros_msg;
+        -:  370:      rclcpp::TypeAdapter<MessageT>::convert_to_ros_message(msg, ros_msg);
+        -:  371:      // In this case we're not using intra process.
+        -:  372:      return this->do_inter_process_publish(ros_msg);
+        -:  373:    }
+        -:  374:
+        -:  375:    // Otherwise we have to allocate memory in a unique_ptr and pass it along.
+        -:  376:    // As the message is not const, a copy should be made.
+        -:  377:    // A shared_ptr<const MessageT> could also be constructed here.
+        -:  378:    auto unique_msg = this->duplicate_type_adapt_message_as_unique_ptr(msg);
+        -:  379:    this->publish(std::move(unique_msg));
+        -:  380:  }
+        -:  381:
+        -:  382:  void
+        -:  383:  publish(const rcl_serialized_message_t & serialized_msg)
+        -:  384:  {
+        -:  385:    return this->do_serialized_publish(&serialized_msg);
+        -:  386:  }
+        -:  387:
+        -:  388:  void
+        -:  389:  publish(const SerializedMessage & serialized_msg)
+        -:  390:  {
+        -:  391:    return this->do_serialized_publish(&serialized_msg.get_rcl_serialized_message());
+        -:  392:  }
+        -:  393:
+        -:  394:  /// Publish an instance of a LoanedMessage.
+        -:  395:  /**
+        -:  396:   * When publishing a loaned message, the memory for this ROS message will be deallocated
+        -:  397:   * after being published.
+        -:  398:   * The instance of the loaned message is no longer valid after this call.
+        -:  399:   *
+        -:  400:   * \param loaned_msg The LoanedMessage instance to be published.
+        -:  401:   */
+        -:  402:  void
+        -:  403:  publish(rclcpp::LoanedMessage<ROSMessageType, AllocatorT> && loaned_msg)
+        -:  404:  {
+        -:  405:    if (!loaned_msg.is_valid()) {
+        -:  406:      throw std::runtime_error("loaned message is not valid");
+        -:  407:    }
+        -:  408:    if (intra_process_is_enabled_) {
+        -:  409:      // TODO(Karsten1987): support loaned message passed by intraprocess
+        -:  410:      throw std::runtime_error("storing loaned messages in intra process is not supported yet");
+        -:  411:    }
+        -:  412:
+        -:  413:    // verify that publisher supports loaned messages
+        -:  414:    // TODO(Karsten1987): This case separation has to be done in rclcpp
+        -:  415:    // otherwise we have to ensure that every middleware implements
+        -:  416:    // `rmw_publish_loaned_message` explicitly the same way as `rmw_publish`
+        -:  417:    // by taking a copy of the ros message.
+        -:  418:    if (this->can_loan_messages()) {
+        -:  419:      // we release the ownership from the rclpp::LoanedMessage instance
+        -:  420:      // and let the middleware clean up the memory.
+        -:  421:      this->do_loaned_message_publish(std::move(loaned_msg.release()));
+        -:  422:    } else {
+        -:  423:      // we don't release the ownership, let the middleware copy the ros message
+        -:  424:      // and thus the destructor of rclcpp::LoanedMessage cleans up the memory.
+        -:  425:      this->do_inter_process_publish(loaned_msg.get());
+        -:  426:    }
+        -:  427:  }
+        -:  428:
+        -:  429:  [[deprecated("use get_published_type_allocator() or get_ros_message_type_allocator() instead")]]
+        -:  430:  std::shared_ptr<PublishedTypeAllocator>
+        -:  431:  get_allocator() const
+        -:  432:  {
+        -:  433:    return std::make_shared<PublishedTypeAllocator>(published_type_allocator_);
+        -:  434:  }
+        -:  435:
+        -:  436:  PublishedTypeAllocator
+        -:  437:  get_published_type_allocator() const
+        -:  438:  {
+        -:  439:    return published_type_allocator_;
+        -:  440:  }
+        -:  441:
+        -:  442:  ROSMessageTypeAllocator
+        -:  443:  get_ros_message_type_allocator() const
+        -:  444:  {
+        -:  445:    return ros_message_type_allocator_;
+        -:  446:  }
+        -:  447:
+        -:  448:protected:
+        -:  449:  void
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_E24do_inter_process_publishERKS5_ called 34 returned 100% blocks executed 25%
+       34:  450:  do_inter_process_publish(const ROSMessageType & msg)
+        -:  451:  {
+       34:  452:    TRACEPOINT(rclcpp_publish, nullptr, static_cast<const void *>(&msg));
+       34:  452-block  0
+call    0 returned 34
+       34:  453:    auto status = rcl_publish(publisher_handle_.get(), &msg, nullptr);
+call    0 returned 34
+call    1 returned 34
+        -:  454:
+       34:  455:    if (RCL_RET_PUBLISHER_INVALID == status) {
+branch  0 taken 0 (fallthrough)
+branch  1 taken 34
+    #####:  456:      rcl_reset_error();  // next call will reset error message if not context
+    %%%%%:  456-block  0
+call    0 never executed
+    #####:  457:      if (rcl_publisher_is_valid_except_context(publisher_handle_.get())) {
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  458:        rcl_context_t * context = rcl_publisher_get_context(publisher_handle_.get());
+    %%%%%:  458-block  0
+call    0 never executed
+call    1 never executed
+    #####:  459:        if (nullptr != context && !rcl_context_is_valid(context)) {
+branch  0 never executed
+branch  1 never executed
+    %%%%%:  459-block  0
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  459-block  1
+    %%%%%:  459-block  2
+    %%%%%:  459-block  3
+branch  5 never executed
+branch  6 never executed
+        -:  460:          // publisher is invalid due to context being shutdown
+    #####:  461:          return;
+    %%%%%:  461-block  0
+        -:  462:        }
+        -:  463:      }
+        -:  464:    }
+       34:  465:    if (RCL_RET_OK != status) {
+       34:  465-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 34
+    #####:  466:      rclcpp::exceptions::throw_from_rcl_error(status, "failed to publish message");
+    %%%%%:  466-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  466-block  1
+call    4 never executed
+    $$$$$:  466-block  2
+call    5 never executed
+    $$$$$:  466-block  3
+    $$$$$:  466-block  4
+call    6 never executed
+        -:  467:    }
+        -:  468:  }
+        -:  469:
+        -:  470:  void
+        -:  471:  do_serialized_publish(const rcl_serialized_message_t * serialized_msg)
+        -:  472:  {
+        -:  473:    if (intra_process_is_enabled_) {
+        -:  474:      // TODO(Karsten1987): support serialized message passed by intraprocess
+        -:  475:      throw std::runtime_error("storing serialized messages in intra process is not supported yet");
+        -:  476:    }
+        -:  477:    auto status = rcl_publish_serialized_message(publisher_handle_.get(), serialized_msg, nullptr);
+        -:  478:    if (RCL_RET_OK != status) {
+        -:  479:      rclcpp::exceptions::throw_from_rcl_error(status, "failed to publish serialized message");
+        -:  480:    }
+        -:  481:  }
+        -:  482:
+        -:  483:  void
+        -:  484:  do_loaned_message_publish(
+        -:  485:    std::unique_ptr<ROSMessageType, std::function<void(ROSMessageType *)>> msg)
+        -:  486:  {
+        -:  487:    auto status = rcl_publish_loaned_message(publisher_handle_.get(), msg.get(), nullptr);
+        -:  488:
+        -:  489:    if (RCL_RET_PUBLISHER_INVALID == status) {
+        -:  490:      rcl_reset_error();  // next call will reset error message if not context
+        -:  491:      if (rcl_publisher_is_valid_except_context(publisher_handle_.get())) {
+        -:  492:        rcl_context_t * context = rcl_publisher_get_context(publisher_handle_.get());
+        -:  493:        if (nullptr != context && !rcl_context_is_valid(context)) {
+        -:  494:          // publisher is invalid due to context being shutdown
+        -:  495:          return;
+        -:  496:        }
+        -:  497:      }
+        -:  498:    }
+        -:  499:    if (RCL_RET_OK != status) {
+        -:  500:      rclcpp::exceptions::throw_from_rcl_error(status, "failed to publish message");
+        -:  501:    }
+        -:  502:  }
+        -:  503:
+        -:  504:  void
+        -:  505:  do_intra_process_publish(std::unique_ptr<PublishedType, PublishedTypeDeleter> msg)
+        -:  506:  {
+        -:  507:    auto ipm = weak_ipm_.lock();
+        -:  508:    if (!ipm) {
+        -:  509:      throw std::runtime_error(
+        -:  510:              "intra process publish called after destruction of intra process manager");
+        -:  511:    }
+        -:  512:    if (!msg) {
+        -:  513:      throw std::runtime_error("cannot publish msg which is a null pointer");
+        -:  514:    }
+        -:  515:
+        -:  516:    ipm->template do_intra_process_publish<PublishedType, ROSMessageType, AllocatorT>(
+        -:  517:      intra_process_publisher_id_,
+        -:  518:      std::move(msg),
+        -:  519:      published_type_allocator_);
+        -:  520:  }
+        -:  521:
+        -:  522:  void
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_E36do_intra_process_ros_message_publishESt10unique_ptrIS5_St14default_deleteIS5_EE called 0 returned 0% blocks executed 0%
+    #####:  523:  do_intra_process_ros_message_publish(std::unique_ptr<ROSMessageType, ROSMessageTypeDeleter> msg)
+        -:  524:  {
+    #####:  525:    auto ipm = weak_ipm_.lock();
+    %%%%%:  525-block  0
+call    0 never executed
+    #####:  526:    if (!ipm) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  527:      throw std::runtime_error(
+    %%%%%:  527-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  527-block  1
+call    4 never executed
+    $$$$$:  527-block  2
+call    5 never executed
+        -:  528:              "intra process publish called after destruction of intra process manager");
+        -:  529:    }
+    #####:  530:    if (!msg) {
+    %%%%%:  530-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  531:      throw std::runtime_error("cannot publish msg which is a null pointer");
+    %%%%%:  531-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  531-block  1
+call    4 never executed
+    $$$$$:  531-block  2
+call    5 never executed
+        -:  532:    }
+        -:  533:
+    #####:  534:    ipm->template do_intra_process_publish<ROSMessageType, ROSMessageType, AllocatorT>(
+    %%%%%:  534-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  534-block  1
+call    5 never executed
+    $$$$$:  534-block  2
+call    6 never executed
+    $$$$$:  534-block  3
+        -:  535:      intra_process_publisher_id_,
+    #####:  536:      std::move(msg),
+    #####:  537:      ros_message_type_allocator_);
+call    0 never executed
+    #####:  538:  }
+call    0 never executed
+    $$$$$:  538-block  0
+call    1 never executed
+        -:  539:
+        -:  540:  std::shared_ptr<const ROSMessageType>
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_E54do_intra_process_ros_message_publish_and_return_sharedESt10unique_ptrIS5_St14default_deleteIS5_EE called 0 returned 0% blocks executed 0%
+    #####:  541:  do_intra_process_ros_message_publish_and_return_shared(
+        -:  542:    std::unique_ptr<ROSMessageType, ROSMessageTypeDeleter> msg)
+        -:  543:  {
+    #####:  544:    auto ipm = weak_ipm_.lock();
+    %%%%%:  544-block  0
+call    0 never executed
+    #####:  545:    if (!ipm) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  546:      throw std::runtime_error(
+    %%%%%:  546-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  546-block  1
+call    4 never executed
+    $$$$$:  546-block  2
+call    5 never executed
+        -:  547:              "intra process publish called after destruction of intra process manager");
+        -:  548:    }
+    #####:  549:    if (!msg) {
+    %%%%%:  549-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  550:      throw std::runtime_error("cannot publish msg which is a null pointer");
+    %%%%%:  550-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  550-block  1
+call    4 never executed
+    $$$$$:  550-block  2
+call    5 never executed
+        -:  551:    }
+        -:  552:
+        -:  553:    return ipm->template do_intra_process_publish_and_return_shared<ROSMessageType, ROSMessageType,
+        -:  554:             AllocatorT>(
+        -:  555:      intra_process_publisher_id_,
+    #####:  556:      std::move(msg),
+    #####:  557:      ros_message_type_allocator_);
+    %%%%%:  557-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  557-block  1
+call    6 never executed
+    %%%%%:  557-block  2
+    $$$$$:  557-block  3
+call    7 never executed
+    $$$$$:  557-block  4
+    #####:  558:  }
+call    0 never executed
+    $$$$$:  558-block  0
+call    1 never executed
+        -:  559:
+        -:  560:
+        -:  561:  /// Return a new unique_ptr using the ROSMessageType of the publisher.
+        -:  562:  std::unique_ptr<ROSMessageType, ROSMessageTypeDeleter>
+        -:  563:  create_ros_message_unique_ptr()
+        -:  564:  {
+        -:  565:    auto ptr = ROSMessageTypeAllocatorTraits::allocate(ros_message_type_allocator_, 1);
+        -:  566:    ROSMessageTypeAllocatorTraits::construct(ros_message_type_allocator_, ptr);
+        -:  567:    return std::unique_ptr<ROSMessageType, ROSMessageTypeDeleter>(ptr, ros_message_type_deleter_);
+        -:  568:  }
+        -:  569:
+        -:  570:  /// Duplicate a given ros message as a unique_ptr.
+        -:  571:  std::unique_ptr<ROSMessageType, ROSMessageTypeDeleter>
+function _ZN6rclcpp9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES4_E35duplicate_ros_message_as_unique_ptrERKS5_ called 0 returned 0% blocks executed 0%
+    #####:  572:  duplicate_ros_message_as_unique_ptr(const ROSMessageType & msg)
+        -:  573:  {
+    #####:  574:    auto ptr = ROSMessageTypeAllocatorTraits::allocate(ros_message_type_allocator_, 1);
+    %%%%%:  574-block  0
+call    0 never executed
+    #####:  575:    ROSMessageTypeAllocatorTraits::construct(ros_message_type_allocator_, ptr, msg);
+call    0 never executed
+    #####:  576:    return std::unique_ptr<ROSMessageType, ROSMessageTypeDeleter>(ptr, ros_message_type_deleter_);
+call    0 never executed
+        -:  577:  }
+        -:  578:
+        -:  579:  /// Duplicate a given type adapted message as a unique_ptr.
+        -:  580:  std::unique_ptr<PublishedType, PublishedTypeDeleter>
+        -:  581:  duplicate_type_adapt_message_as_unique_ptr(const PublishedType & msg)
+        -:  582:  {
+        -:  583:    auto ptr = PublishedTypeAllocatorTraits::allocate(published_type_allocator_, 1);
+        -:  584:    PublishedTypeAllocatorTraits::construct(published_type_allocator_, ptr, msg);
+        -:  585:    return std::unique_ptr<PublishedType, PublishedTypeDeleter>(ptr, published_type_deleter_);
+        -:  586:  }
+        -:  587:
+        -:  588:  /// Copy of original options passed during construction.
+        -:  589:  /**
+        -:  590:   * It is important to save a copy of this so that the rmw payload which it
+        -:  591:   * may contain is kept alive for the duration of the publisher.
+        -:  592:   */
+        -:  593:  const rclcpp::PublisherOptionsWithAllocator<AllocatorT> options_;
+        -:  594:
+        -:  595:  PublishedTypeAllocator published_type_allocator_;
+        -:  596:  PublishedTypeDeleter published_type_deleter_;
+        -:  597:  ROSMessageTypeAllocator ros_message_type_allocator_;
+        -:  598:  ROSMessageTypeDeleter ros_message_type_deleter_;
+        -:  599:};
+        -:  600:
+        -:  601:}  // namespace rclcpp
+        -:  602:
+        -:  603:#endif  // RCLCPP__PUBLISHER_HPP_

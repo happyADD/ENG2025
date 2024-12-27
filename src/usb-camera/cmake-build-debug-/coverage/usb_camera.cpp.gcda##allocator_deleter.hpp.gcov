@@ -1,0 +1,126 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/allocator/allocator_deleter.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2015 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__ALLOCATOR__ALLOCATOR_DELETER_HPP_
+        -:   16:#define RCLCPP__ALLOCATOR__ALLOCATOR_DELETER_HPP_
+        -:   17:
+        -:   18:#include <memory>
+        -:   19:#include <stdexcept>
+        -:   20:
+        -:   21:namespace rclcpp
+        -:   22:{
+        -:   23:namespace allocator
+        -:   24:{
+        -:   25:
+        -:   26:template<typename Allocator>
+        -:   27:class AllocatorDeleter
+        -:   28:{
+        -:   29:  template<typename T>
+        -:   30:  using AllocRebind = typename std::allocator_traits<Allocator>::template rebind_alloc<T>;
+        -:   31:
+        -:   32:public:
+        -:   33:  AllocatorDeleter()
+        -:   34:  : allocator_(nullptr)
+        -:   35:  {
+        -:   36:  }
+        -:   37:
+        -:   38:  explicit AllocatorDeleter(Allocator * a)
+        -:   39:  : allocator_(a)
+        -:   40:  {
+        -:   41:  }
+        -:   42:
+        -:   43:  template<typename T>
+        -:   44:  explicit AllocatorDeleter(const AllocatorDeleter<T> & a)
+        -:   45:  {
+        -:   46:    allocator_ = a.get_allocator();
+        -:   47:  }
+        -:   48:
+        -:   49:  template<typename T>
+        -:   50:  void operator()(T * ptr)
+        -:   51:  {
+        -:   52:    std::allocator_traits<AllocRebind<T>>::destroy(*allocator_, ptr);
+        -:   53:    std::allocator_traits<AllocRebind<T>>::deallocate(*allocator_, ptr, 1);
+        -:   54:    ptr = nullptr;
+        -:   55:  }
+        -:   56:
+        -:   57:  Allocator * get_allocator() const
+        -:   58:  {
+        -:   59:    return allocator_;
+        -:   60:  }
+        -:   61:
+        -:   62:  void set_allocator(Allocator * alloc)
+        -:   63:  {
+        -:   64:    allocator_ = alloc;
+        -:   65:  }
+        -:   66:
+        -:   67:private:
+        -:   68:  Allocator * allocator_;
+        -:   69:};
+        -:   70:
+        -:   71:template<typename Alloc, typename T, typename D>
+        -:   72:void set_allocator_for_deleter(D * deleter, Alloc * alloc)
+        -:   73:{
+        -:   74:  (void) alloc;
+        -:   75:  (void) deleter;
+        -:   76:  throw std::runtime_error("Reached unexpected template specialization");
+        -:   77:}
+        -:   78:
+        -:   79:template<typename T, typename U>
+        4:   80:void set_allocator_for_deleter(std::default_delete<T> * deleter, std::allocator<U> * alloc)
+        -:   81:{
+        -:   82:  (void) deleter;
+        -:   83:  (void) alloc;
+        4:   84:}
+------------------
+_ZN6rclcpp9allocator25set_allocator_for_deleterIN11sensor_msgs3msg6Image_ISaIvEEES6_EEvPSt14default_deleteIT_EPSaIT0_E:
+function _ZN6rclcpp9allocator25set_allocator_for_deleterIN11sensor_msgs3msg6Image_ISaIvEEES6_EEvPSt14default_deleteIT_EPSaIT0_E called 2 returned 100% blocks executed 100%
+        2:   80:void set_allocator_for_deleter(std::default_delete<T> * deleter, std::allocator<U> * alloc)
+        -:   81:{
+        -:   82:  (void) deleter;
+        -:   83:  (void) alloc;
+        2:   84:}
+------------------
+_ZN6rclcpp9allocator25set_allocator_for_deleterIN11sensor_msgs3msg11CameraInfo_ISaIvEEES6_EEvPSt14default_deleteIT_EPSaIT0_E:
+function _ZN6rclcpp9allocator25set_allocator_for_deleterIN11sensor_msgs3msg11CameraInfo_ISaIvEEES6_EEvPSt14default_deleteIT_EPSaIT0_E called 2 returned 100% blocks executed 100%
+        2:   80:void set_allocator_for_deleter(std::default_delete<T> * deleter, std::allocator<U> * alloc)
+        -:   81:{
+        -:   82:  (void) deleter;
+        -:   83:  (void) alloc;
+        2:   84:}
+------------------
+        -:   85:
+        -:   86:template<typename Alloc, typename T>
+        -:   87:void set_allocator_for_deleter(AllocatorDeleter<T> * deleter, Alloc * alloc)
+        -:   88:{
+        -:   89:  if (!deleter || !alloc) {
+        -:   90:    throw std::invalid_argument("Argument was NULL to set_allocator_for_deleter");
+        -:   91:  }
+        -:   92:  deleter->set_allocator(alloc);
+        -:   93:}
+        -:   94:
+        -:   95:template<typename Alloc, typename T>
+        -:   96:using Deleter = typename std::conditional<
+        -:   97:  std::is_same<typename std::allocator_traits<Alloc>::template rebind_alloc<T>,
+        -:   98:  std::allocator<T>>::value,
+        -:   99:  std::default_delete<T>,
+        -:  100:  AllocatorDeleter<Alloc>
+        -:  101:  >::type;
+        -:  102:}  // namespace allocator
+        -:  103:}  // namespace rclcpp
+        -:  104:
+        -:  105:#endif  // RCLCPP__ALLOCATOR__ALLOCATOR_DELETER_HPP_

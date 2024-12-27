@@ -1,0 +1,2109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite
+  name="ImgProcess.uncrustify"
+  tests="11"
+  failures="10"
+  errors="0"
+  time="0.092"
+>
+  <testcase
+    name="cmake-build-debug/CMakeFiles/3.28.1/CompilerIdC/CMakeCCompilerId.c"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 311 lines"><![CDATA[--- cmake-build-debug/CMakeFiles/3.28.1/CompilerIdC/CMakeCCompilerId.c
++++ cmake-build-debug/CMakeFiles/3.28.1/CompilerIdC/CMakeCCompilerId.c.uncrustify
+@@ -32 +32 @@
+-  /* __INTEL_COMPILER = VRP prior to 2021, and then VVVV for 2021 and later,
++/* __INTEL_COMPILER = VRP prior to 2021, and then VVVV for 2021 and later,
+@@ -35,2 +35,2 @@
+-#  define COMPILER_VERSION_MAJOR DEC(__INTEL_COMPILER/100)
+-#  define COMPILER_VERSION_MINOR DEC(__INTEL_COMPILER/10 % 10)
++#  define COMPILER_VERSION_MAJOR DEC(__INTEL_COMPILER / 100)
++#  define COMPILER_VERSION_MINOR DEC(__INTEL_COMPILER / 10 % 10)
+@@ -40 +40 @@
+-#   define COMPILER_VERSION_PATCH DEC(__INTEL_COMPILER   % 10)
++#   define COMPILER_VERSION_PATCH DEC(__INTEL_COMPILER % 10)
+@@ -45 +45 @@
+-   /* The third version component from --version is an update index,
++/* The third version component from --version is an update index,
+@@ -50 +50 @@
+-   /* __INTEL_COMPILER_BUILD_DATE = YYYYMMDD */
++/* __INTEL_COMPILER_BUILD_DATE = YYYYMMDD */
+@@ -54 +54 @@
+-   /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -83,3 +83,3 @@
+-# define COMPILER_VERSION_MAJOR DEC(__INTEL_LLVM_COMPILER/100)
+-# define COMPILER_VERSION_MINOR DEC(__INTEL_LLVM_COMPILER/10 % 10)
+-# define COMPILER_VERSION_PATCH DEC(__INTEL_LLVM_COMPILER    % 10)
++# define COMPILER_VERSION_MAJOR DEC(__INTEL_LLVM_COMPILER / 100)
++# define COMPILER_VERSION_MINOR DEC(__INTEL_LLVM_COMPILER / 10 % 10)
++# define COMPILER_VERSION_PATCH DEC(__INTEL_LLVM_COMPILER % 10)
+@@ -87,3 +87,3 @@
+-# define COMPILER_VERSION_MAJOR DEC(__INTEL_LLVM_COMPILER/10000)
+-# define COMPILER_VERSION_MINOR DEC(__INTEL_LLVM_COMPILER/100 % 100)
+-# define COMPILER_VERSION_PATCH DEC(__INTEL_LLVM_COMPILER     % 100)
++# define COMPILER_VERSION_MAJOR DEC(__INTEL_LLVM_COMPILER / 10000)
++# define COMPILER_VERSION_MINOR DEC(__INTEL_LLVM_COMPILER / 100 % 100)
++# define COMPILER_VERSION_PATCH DEC(__INTEL_LLVM_COMPILER % 100)
+@@ -92 +92 @@
+-  /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -118,3 +118,3 @@
+-# define COMPILER_VERSION_MAJOR HEX(__CODEGEARC_VERSION__>>24 & 0x00FF)
+-# define COMPILER_VERSION_MINOR HEX(__CODEGEARC_VERSION__>>16 & 0x00FF)
+-# define COMPILER_VERSION_PATCH DEC(__CODEGEARC_VERSION__     & 0xFFFF)
++# define COMPILER_VERSION_MAJOR HEX(__CODEGEARC_VERSION__ >> 24 & 0x00FF)
++# define COMPILER_VERSION_MINOR HEX(__CODEGEARC_VERSION__ >> 16 & 0x00FF)
++# define COMPILER_VERSION_PATCH DEC(__CODEGEARC_VERSION__ & 0xFFFF)
+@@ -124,2 +124,2 @@
+-  /* __BORLANDC__ = 0xVRR */
+-# define COMPILER_VERSION_MAJOR HEX(__BORLANDC__>>8)
++/* __BORLANDC__ = 0xVRR */
++# define COMPILER_VERSION_MAJOR HEX(__BORLANDC__ >> 8)
+@@ -130 +130 @@
+-   /* __WATCOMC__ = VVRR */
++/* __WATCOMC__ = VVRR */
+@@ -139 +139 @@
+-   /* __WATCOMC__ = VVRP + 1100 */
++/* __WATCOMC__ = VVRP + 1100 */
+@@ -149,4 +149,4 @@
+-   /* __SUNPRO_C = 0xVRRP */
+-#  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_C>>12)
+-#  define COMPILER_VERSION_MINOR HEX(__SUNPRO_C>>4 & 0xFF)
+-#  define COMPILER_VERSION_PATCH HEX(__SUNPRO_C    & 0xF)
++/* __SUNPRO_C = 0xVRRP */
++#  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_C >> 12)
++#  define COMPILER_VERSION_MINOR HEX(__SUNPRO_C >> 4 & 0xFF)
++#  define COMPILER_VERSION_PATCH HEX(__SUNPRO_C & 0xF)
+@@ -154,4 +154,4 @@
+-   /* __SUNPRO_CC = 0xVRP */
+-#  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_C>>8)
+-#  define COMPILER_VERSION_MINOR HEX(__SUNPRO_C>>4 & 0xF)
+-#  define COMPILER_VERSION_PATCH HEX(__SUNPRO_C    & 0xF)
++/* __SUNPRO_CC = 0xVRP */
++#  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_C >> 8)
++#  define COMPILER_VERSION_MINOR HEX(__SUNPRO_C >> 4 & 0xF)
++#  define COMPILER_VERSION_PATCH HEX(__SUNPRO_C & 0xF)
+@@ -162,4 +162,4 @@
+-  /* __HP_cc = VVRRPP */
+-# define COMPILER_VERSION_MAJOR DEC(__HP_cc/10000)
+-# define COMPILER_VERSION_MINOR DEC(__HP_cc/100 % 100)
+-# define COMPILER_VERSION_PATCH DEC(__HP_cc     % 100)
++/* __HP_cc = VVRRPP */
++# define COMPILER_VERSION_MAJOR DEC(__HP_cc / 10000)
++# define COMPILER_VERSION_MINOR DEC(__HP_cc / 100 % 100)
++# define COMPILER_VERSION_PATCH DEC(__HP_cc % 100)
+@@ -169,4 +169,4 @@
+-  /* __DECC_VER = VVRRTPPPP */
+-# define COMPILER_VERSION_MAJOR DEC(__DECC_VER/10000000)
+-# define COMPILER_VERSION_MINOR DEC(__DECC_VER/100000  % 100)
+-# define COMPILER_VERSION_PATCH DEC(__DECC_VER         % 10000)
++/* __DECC_VER = VVRRTPPPP */
++# define COMPILER_VERSION_MAJOR DEC(__DECC_VER / 10000000)
++# define COMPILER_VERSION_MINOR DEC(__DECC_VER / 100000 % 100)
++# define COMPILER_VERSION_PATCH DEC(__DECC_VER % 10000)
+@@ -176,4 +176,4 @@
+-  /* __IBMC__ = VRP */
+-# define COMPILER_VERSION_MAJOR DEC(__IBMC__/100)
+-# define COMPILER_VERSION_MINOR DEC(__IBMC__/10 % 10)
+-# define COMPILER_VERSION_PATCH DEC(__IBMC__    % 10)
++/* __IBMC__ = VRP */
++# define COMPILER_VERSION_MAJOR DEC(__IBMC__ / 100)
++# define COMPILER_VERSION_MINOR DEC(__IBMC__ / 10 % 10)
++# define COMPILER_VERSION_PATCH DEC(__IBMC__ % 10)
+@@ -199,4 +199,4 @@
+-  /* __IBMC__ = VRP */
+-# define COMPILER_VERSION_MAJOR DEC(__IBMC__/100)
+-# define COMPILER_VERSION_MINOR DEC(__IBMC__/10 % 10)
+-# define COMPILER_VERSION_PATCH DEC(__IBMC__    % 10)
++/* __IBMC__ = VRP */
++# define COMPILER_VERSION_MAJOR DEC(__IBMC__ / 100)
++# define COMPILER_VERSION_MINOR DEC(__IBMC__ / 10 % 10)
++# define COMPILER_VERSION_PATCH DEC(__IBMC__ % 10)
+@@ -206,4 +206,4 @@
+-  /* __IBMC__ = VRP */
+-# define COMPILER_VERSION_MAJOR DEC(__IBMC__/100)
+-# define COMPILER_VERSION_MINOR DEC(__IBMC__/10 % 10)
+-# define COMPILER_VERSION_PATCH DEC(__IBMC__    % 10)
++/* __IBMC__ = VRP */
++# define COMPILER_VERSION_MAJOR DEC(__IBMC__ / 100)
++# define COMPILER_VERSION_MINOR DEC(__IBMC__ / 10 % 10)
++# define COMPILER_VERSION_PATCH DEC(__IBMC__ % 10)
+@@ -242,4 +242,4 @@
+-  /* __TI_COMPILER_VERSION__ = VVVRRRPPP */
+-# define COMPILER_VERSION_MAJOR DEC(__TI_COMPILER_VERSION__/1000000)
+-# define COMPILER_VERSION_MINOR DEC(__TI_COMPILER_VERSION__/1000   % 1000)
+-# define COMPILER_VERSION_PATCH DEC(__TI_COMPILER_VERSION__        % 1000)
++/* __TI_COMPILER_VERSION__ = VVVRRRPPP */
++# define COMPILER_VERSION_MAJOR DEC(__TI_COMPILER_VERSION__ / 1000000)
++# define COMPILER_VERSION_MINOR DEC(__TI_COMPILER_VERSION__ / 1000 % 1000)
++# define COMPILER_VERSION_PATCH DEC(__TI_COMPILER_VERSION__ % 1000)
+@@ -277 +277 @@
+-# define COMPILER_VERSION_PATCH DEC(__GHS_VERSION_NUMBER      % 10)
++# define COMPILER_VERSION_PATCH DEC(__GHS_VERSION_NUMBER % 10)
+@@ -282 +282 @@
+-  # define COMPILER_VERSION_MAJOR DEC(__VERSION__/1000)
++  # define COMPILER_VERSION_MAJOR DEC(__VERSION__ / 1000)
+@@ -304,4 +304,4 @@
+-  /* __ARMCC_VERSION = VRRPPPP */
+-  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION/1000000)
+-  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION/10000 % 100)
+-  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION     % 10000)
++/* __ARMCC_VERSION = VRRPPPP */
++  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION / 1000000)
++  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION / 10000 % 100)
++  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION % 10000)
+@@ -309,4 +309,4 @@
+-  /* __ARMCC_VERSION = VRPPPP */
+-  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION/100000)
+-  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION/10000 % 10)
+-  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION    % 10000)
++/* __ARMCC_VERSION = VRPPPP */
++  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION / 100000)
++  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION / 10000 % 10)
++  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION % 10000)
+@@ -325 +325 @@
+-   /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -333,3 +333,3 @@
+-  # define COMPILER_VERSION_MAJOR DEC(__ARMCOMPILER_VERSION/1000000)
+-  # define COMPILER_VERSION_MINOR DEC(__ARMCOMPILER_VERSION/10000 % 100)
+-  # define COMPILER_VERSION_PATCH DEC(__ARMCOMPILER_VERSION/100   % 100)
++  # define COMPILER_VERSION_MAJOR DEC(__ARMCOMPILER_VERSION / 1000000)
++  # define COMPILER_VERSION_MINOR DEC(__ARMCOMPILER_VERSION / 10000 % 100)
++  # define COMPILER_VERSION_PATCH DEC(__ARMCOMPILER_VERSION / 100 % 100)
+@@ -347 +347 @@
+-   /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -380 +380 @@
+-  /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -385 +385 @@
+-    /* _MSC_FULL_VER = VVRRPPPPP */
++/* _MSC_FULL_VER = VVRRPPPPP */
+@@ -388 +388 @@
+-    /* _MSC_FULL_VER = VVRRPPPP */
++/* _MSC_FULL_VER = VVRRPPPP */
+@@ -399 +399 @@
+-  /* __VERSIONNUM__ = 0xVVRRPPTT */
++/* __VERSIONNUM__ = 0xVVRRPPTT */
+@@ -413 +413,3 @@
+-# elif defined(__VER__) && (defined(__ICCAVR__) || defined(__ICCRX__) || defined(__ICCRH850__) || defined(__ICCRL78__) || defined(__ICC430__) || defined(__ICCRISCV__) || defined(__ICCV850__) || defined(__ICC8051__) || defined(__ICCSTM8__))
++# elif defined(__VER__) && (defined(__ICCAVR__) || defined(__ICCRX__) || defined(__ICCRH850__) || \
++  defined(__ICCRL78__) || defined(__ICC430__) || defined(__ICCRISCV__) || defined(__ICCV850__) || \
++  defined(__ICC8051__) || defined(__ICCSTM8__))
+@@ -415 +417 @@
+-#  define COMPILER_VERSION_MINOR DEC((__VER__) - (((__VER__) / 100)*100))
++#  define COMPILER_VERSION_MINOR DEC((__VER__) -(((__VER__) / 100) * 100))
+@@ -427,4 +429,4 @@
+-  /* SDCC = VRP */
+-#  define COMPILER_VERSION_MAJOR DEC(SDCC/100)
+-#  define COMPILER_VERSION_MINOR DEC(SDCC/10 % 10)
+-#  define COMPILER_VERSION_PATCH DEC(SDCC    % 10)
++/* SDCC = VRP */
++#  define COMPILER_VERSION_MAJOR DEC(SDCC / 100)
++#  define COMPILER_VERSION_MINOR DEC(SDCC / 10 % 10)
++#  define COMPILER_VERSION_PATCH DEC(SDCC % 10)
+@@ -448 +450 @@
+-char const* info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";
++char const * info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";
+@@ -450 +452 @@
+-char const* info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";
++char const * info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";
+@@ -454 +456 @@
+-char const* qnxnto = "INFO" ":" "qnxnto[]";
++char const * qnxnto = "INFO" ":" "qnxnto[]";
+@@ -458 +460 @@
+-char const *info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";
++char const * info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";
+@@ -734,9 +736,9 @@
+-#define DEC(n)                   \
+-  ('0' + (((n) / 10000000)%10)), \
+-  ('0' + (((n) / 1000000)%10)),  \
+-  ('0' + (((n) / 100000)%10)),   \
+-  ('0' + (((n) / 10000)%10)),    \
+-  ('0' + (((n) / 1000)%10)),     \
+-  ('0' + (((n) / 100)%10)),      \
+-  ('0' + (((n) / 10)%10)),       \
+-  ('0' +  ((n) % 10))
++#define DEC(n) \
++  ('0' + (((n) / 10000000) % 10)), \
++  ('0' + (((n) / 1000000) % 10)), \
++  ('0' + (((n) / 100000) % 10)), \
++  ('0' + (((n) / 10000) % 10)), \
++  ('0' + (((n) / 1000) % 10)), \
++  ('0' + (((n) / 100) % 10)), \
++  ('0' + (((n) / 10) % 10)), \
++  ('0' + ((n) % 10))
+@@ -745,9 +747,9 @@
+-#define HEX(n)             \
+-  ('0' + ((n)>>28 & 0xF)), \
+-  ('0' + ((n)>>24 & 0xF)), \
+-  ('0' + ((n)>>20 & 0xF)), \
+-  ('0' + ((n)>>16 & 0xF)), \
+-  ('0' + ((n)>>12 & 0xF)), \
+-  ('0' + ((n)>>8  & 0xF)), \
+-  ('0' + ((n)>>4  & 0xF)), \
+-  ('0' + ((n)     & 0xF))
++#define HEX(n) \
++  ('0' + ((n) >> 28 & 0xF)), \
++  ('0' + ((n) >> 24 & 0xF)), \
++  ('0' + ((n) >> 20 & 0xF)), \
++  ('0' + ((n) >> 16 & 0xF)), \
++  ('0' + ((n) >> 12 & 0xF)), \
++  ('0' + ((n) >> 8 & 0xF)), \
++  ('0' + ((n) >> 4 & 0xF)), \
++  ('0' + ((n) & 0xF))
+@@ -757 +759 @@
+-char const* info_version = "INFO" ":" "compiler_version[" COMPILER_VERSION "]";
++char const * info_version = "INFO" ":" "compiler_version[" COMPILER_VERSION "]";
+@@ -763 +765 @@
+-  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','[',
++  'c', 'o', 'm', 'p', 'i', 'l', 'e', 'r', '_', 'v', 'e', 'r', 's', 'i', 'o', 'n', '[',
+@@ -768 +770 @@
+-   '.', COMPILER_VERSION_PATCH,
++  '.', COMPILER_VERSION_PATCH,
+@@ -770 +772 @@
+-    '.', COMPILER_VERSION_TWEAK,
++  '.', COMPILER_VERSION_TWEAK,
+@@ -774 +776,2 @@
+-  ']','\0'};
++  ']', '\0'
++};
+@@ -781,3 +784,4 @@
+-  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','_',
+-  'i','n','t','e','r','n','a','l','[',
+-  COMPILER_VERSION_INTERNAL,']','\0'};
++  'c', 'o', 'm', 'p', 'i', 'l', 'e', 'r', '_', 'v', 'e', 'r', 's', 'i', 'o', 'n', '_',
++  'i', 'n', 't', 'e', 'r', 'n', 'a', 'l', '[',
++  COMPILER_VERSION_INTERNAL, ']', '\0'
++};
+@@ -785 +789,2 @@
+-char const* info_version_internal = "INFO" ":" "compiler_version_internal[" COMPILER_VERSION_INTERNAL_STR "]";
++char const * info_version_internal =
++  "INFO" ":" "compiler_version_internal[" COMPILER_VERSION_INTERNAL_STR "]";
+@@ -792 +797 @@
+-  's','i','m','u','l','a','t','e','_','v','e','r','s','i','o','n','[',
++  's', 'i', 'm', 'u', 'l', 'a', 't', 'e', '_', 'v', 'e', 'r', 's', 'i', 'o', 'n', '[',
+@@ -797 +802 @@
+-   '.', SIMULATE_VERSION_PATCH,
++  '.', SIMULATE_VERSION_PATCH,
+@@ -799 +804 @@
+-    '.', SIMULATE_VERSION_TWEAK,
++  '.', SIMULATE_VERSION_TWEAK,
+@@ -803 +808,2 @@
+-  ']','\0'};
++  ']', '\0'
++};
+@@ -810,3 +816,2 @@
+-char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";
+-char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
+-
++char const * info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";
++char const * info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
+@@ -832 +837 @@
+-const char* info_language_standard_default =
++const char * info_language_standard_default =
+@@ -835,3 +840,3 @@
+-const char* info_language_extensions_default = "INFO" ":" "extensions_default["
+-#if (defined(__clang__) || defined(__GNUC__) || defined(__xlC__) ||           \
+-     defined(__TI_COMPILER_VERSION__)) &&                                     \
++const char * info_language_extensions_default = "INFO" ":" "extensions_default["
++#if (defined(__clang__) || defined(__GNUC__) || defined(__xlC__) || \
++  defined(__TI_COMPILER_VERSION__)) && \
+@@ -843 +848 @@
+-"]";
++  "]";
+@@ -851 +856 @@
+-int main(argc, argv) int argc; char *argv[];
++int main(argc, argv) int argc; char * argv[];
+@@ -853 +858 @@
+-int main(int argc, char* argv[])
++int main(int argc, char * argv[])
+]]></failure>
+  </testcase>
+  <testcase
+    name="cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 303 lines"><![CDATA[--- cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp
++++ cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp.uncrustify
+@@ -20 +20 @@
+-  /* __COMO_VERSION__ = VRR */
++/* __COMO_VERSION__ = VRR */
+@@ -32 +32 @@
+-  /* __INTEL_COMPILER = VRP prior to 2021, and then VVVV for 2021 and later,
++/* __INTEL_COMPILER = VRP prior to 2021, and then VVVV for 2021 and later,
+@@ -35,2 +35,2 @@
+-#  define COMPILER_VERSION_MAJOR DEC(__INTEL_COMPILER/100)
+-#  define COMPILER_VERSION_MINOR DEC(__INTEL_COMPILER/10 % 10)
++#  define COMPILER_VERSION_MAJOR DEC(__INTEL_COMPILER / 100)
++#  define COMPILER_VERSION_MINOR DEC(__INTEL_COMPILER / 10 % 10)
+@@ -40 +40 @@
+-#   define COMPILER_VERSION_PATCH DEC(__INTEL_COMPILER   % 10)
++#   define COMPILER_VERSION_PATCH DEC(__INTEL_COMPILER % 10)
+@@ -45 +45 @@
+-   /* The third version component from --version is an update index,
++/* The third version component from --version is an update index,
+@@ -50 +50 @@
+-   /* __INTEL_COMPILER_BUILD_DATE = YYYYMMDD */
++/* __INTEL_COMPILER_BUILD_DATE = YYYYMMDD */
+@@ -54 +54 @@
+-   /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -83,3 +83,3 @@
+-# define COMPILER_VERSION_MAJOR DEC(__INTEL_LLVM_COMPILER/100)
+-# define COMPILER_VERSION_MINOR DEC(__INTEL_LLVM_COMPILER/10 % 10)
+-# define COMPILER_VERSION_PATCH DEC(__INTEL_LLVM_COMPILER    % 10)
++# define COMPILER_VERSION_MAJOR DEC(__INTEL_LLVM_COMPILER / 100)
++# define COMPILER_VERSION_MINOR DEC(__INTEL_LLVM_COMPILER / 10 % 10)
++# define COMPILER_VERSION_PATCH DEC(__INTEL_LLVM_COMPILER % 10)
+@@ -87,3 +87,3 @@
+-# define COMPILER_VERSION_MAJOR DEC(__INTEL_LLVM_COMPILER/10000)
+-# define COMPILER_VERSION_MINOR DEC(__INTEL_LLVM_COMPILER/100 % 100)
+-# define COMPILER_VERSION_PATCH DEC(__INTEL_LLVM_COMPILER     % 100)
++# define COMPILER_VERSION_MAJOR DEC(__INTEL_LLVM_COMPILER / 10000)
++# define COMPILER_VERSION_MINOR DEC(__INTEL_LLVM_COMPILER / 100 % 100)
++# define COMPILER_VERSION_PATCH DEC(__INTEL_LLVM_COMPILER % 100)
+@@ -92 +92 @@
+-  /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -118,3 +118,3 @@
+-# define COMPILER_VERSION_MAJOR HEX(__CODEGEARC_VERSION__>>24 & 0x00FF)
+-# define COMPILER_VERSION_MINOR HEX(__CODEGEARC_VERSION__>>16 & 0x00FF)
+-# define COMPILER_VERSION_PATCH DEC(__CODEGEARC_VERSION__     & 0xFFFF)
++# define COMPILER_VERSION_MAJOR HEX(__CODEGEARC_VERSION__ >> 24 & 0x00FF)
++# define COMPILER_VERSION_MINOR HEX(__CODEGEARC_VERSION__ >> 16 & 0x00FF)
++# define COMPILER_VERSION_PATCH DEC(__CODEGEARC_VERSION__ & 0xFFFF)
+@@ -124,2 +124,2 @@
+-  /* __BORLANDC__ = 0xVRR */
+-# define COMPILER_VERSION_MAJOR HEX(__BORLANDC__>>8)
++/* __BORLANDC__ = 0xVRR */
++# define COMPILER_VERSION_MAJOR HEX(__BORLANDC__ >> 8)
+@@ -130 +130 @@
+-   /* __WATCOMC__ = VVRR */
++/* __WATCOMC__ = VVRR */
+@@ -139 +139 @@
+-   /* __WATCOMC__ = VVRP + 1100 */
++/* __WATCOMC__ = VVRP + 1100 */
+@@ -149,4 +149,4 @@
+-   /* __SUNPRO_CC = 0xVRRP */
+-#  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_CC>>12)
+-#  define COMPILER_VERSION_MINOR HEX(__SUNPRO_CC>>4 & 0xFF)
+-#  define COMPILER_VERSION_PATCH HEX(__SUNPRO_CC    & 0xF)
++/* __SUNPRO_CC = 0xVRRP */
++#  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_CC >> 12)
++#  define COMPILER_VERSION_MINOR HEX(__SUNPRO_CC >> 4 & 0xFF)
++#  define COMPILER_VERSION_PATCH HEX(__SUNPRO_CC & 0xF)
+@@ -154,4 +154,4 @@
+-   /* __SUNPRO_CC = 0xVRP */
+-#  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_CC>>8)
+-#  define COMPILER_VERSION_MINOR HEX(__SUNPRO_CC>>4 & 0xF)
+-#  define COMPILER_VERSION_PATCH HEX(__SUNPRO_CC    & 0xF)
++/* __SUNPRO_CC = 0xVRP */
++#  define COMPILER_VERSION_MAJOR HEX(__SUNPRO_CC >> 8)
++#  define COMPILER_VERSION_MINOR HEX(__SUNPRO_CC >> 4 & 0xF)
++#  define COMPILER_VERSION_PATCH HEX(__SUNPRO_CC & 0xF)
+@@ -162,4 +162,4 @@
+-  /* __HP_aCC = VVRRPP */
+-# define COMPILER_VERSION_MAJOR DEC(__HP_aCC/10000)
+-# define COMPILER_VERSION_MINOR DEC(__HP_aCC/100 % 100)
+-# define COMPILER_VERSION_PATCH DEC(__HP_aCC     % 100)
++/* __HP_aCC = VVRRPP */
++# define COMPILER_VERSION_MAJOR DEC(__HP_aCC / 10000)
++# define COMPILER_VERSION_MINOR DEC(__HP_aCC / 100 % 100)
++# define COMPILER_VERSION_PATCH DEC(__HP_aCC % 100)
+@@ -169,4 +169,4 @@
+-  /* __DECCXX_VER = VVRRTPPPP */
+-# define COMPILER_VERSION_MAJOR DEC(__DECCXX_VER/10000000)
+-# define COMPILER_VERSION_MINOR DEC(__DECCXX_VER/100000  % 100)
+-# define COMPILER_VERSION_PATCH DEC(__DECCXX_VER         % 10000)
++/* __DECCXX_VER = VVRRTPPPP */
++# define COMPILER_VERSION_MAJOR DEC(__DECCXX_VER / 10000000)
++# define COMPILER_VERSION_MINOR DEC(__DECCXX_VER / 100000 % 100)
++# define COMPILER_VERSION_PATCH DEC(__DECCXX_VER % 10000)
+@@ -176,4 +176,4 @@
+-  /* __IBMCPP__ = VRP */
+-# define COMPILER_VERSION_MAJOR DEC(__IBMCPP__/100)
+-# define COMPILER_VERSION_MINOR DEC(__IBMCPP__/10 % 10)
+-# define COMPILER_VERSION_PATCH DEC(__IBMCPP__    % 10)
++/* __IBMCPP__ = VRP */
++# define COMPILER_VERSION_MAJOR DEC(__IBMCPP__ / 100)
++# define COMPILER_VERSION_MINOR DEC(__IBMCPP__ / 10 % 10)
++# define COMPILER_VERSION_PATCH DEC(__IBMCPP__ % 10)
+@@ -199,4 +199,4 @@
+-  /* __IBMCPP__ = VRP */
+-# define COMPILER_VERSION_MAJOR DEC(__IBMCPP__/100)
+-# define COMPILER_VERSION_MINOR DEC(__IBMCPP__/10 % 10)
+-# define COMPILER_VERSION_PATCH DEC(__IBMCPP__    % 10)
++/* __IBMCPP__ = VRP */
++# define COMPILER_VERSION_MAJOR DEC(__IBMCPP__ / 100)
++# define COMPILER_VERSION_MINOR DEC(__IBMCPP__ / 10 % 10)
++# define COMPILER_VERSION_PATCH DEC(__IBMCPP__ % 10)
+@@ -206,4 +206,4 @@
+-  /* __IBMCPP__ = VRP */
+-# define COMPILER_VERSION_MAJOR DEC(__IBMCPP__/100)
+-# define COMPILER_VERSION_MINOR DEC(__IBMCPP__/10 % 10)
+-# define COMPILER_VERSION_PATCH DEC(__IBMCPP__    % 10)
++/* __IBMCPP__ = VRP */
++# define COMPILER_VERSION_MAJOR DEC(__IBMCPP__ / 100)
++# define COMPILER_VERSION_MINOR DEC(__IBMCPP__ / 10 % 10)
++# define COMPILER_VERSION_PATCH DEC(__IBMCPP__ % 10)
+@@ -242,4 +242,4 @@
+-  /* __TI_COMPILER_VERSION__ = VVVRRRPPP */
+-# define COMPILER_VERSION_MAJOR DEC(__TI_COMPILER_VERSION__/1000000)
+-# define COMPILER_VERSION_MINOR DEC(__TI_COMPILER_VERSION__/1000   % 1000)
+-# define COMPILER_VERSION_PATCH DEC(__TI_COMPILER_VERSION__        % 1000)
++/* __TI_COMPILER_VERSION__ = VVVRRRPPP */
++# define COMPILER_VERSION_MAJOR DEC(__TI_COMPILER_VERSION__ / 1000000)
++# define COMPILER_VERSION_MINOR DEC(__TI_COMPILER_VERSION__ / 1000 % 1000)
++# define COMPILER_VERSION_PATCH DEC(__TI_COMPILER_VERSION__ % 1000)
+@@ -277 +277 @@
+-# define COMPILER_VERSION_PATCH DEC(__GHS_VERSION_NUMBER      % 10)
++# define COMPILER_VERSION_PATCH DEC(__GHS_VERSION_NUMBER % 10)
+@@ -282 +282 @@
+-  # define COMPILER_VERSION_MAJOR DEC(__VERSION__/1000)
++  # define COMPILER_VERSION_MAJOR DEC(__VERSION__ / 1000)
+@@ -298,4 +298,4 @@
+-  /* __ARMCC_VERSION = VRRPPPP */
+-  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION/1000000)
+-  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION/10000 % 100)
+-  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION     % 10000)
++/* __ARMCC_VERSION = VRRPPPP */
++  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION / 1000000)
++  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION / 10000 % 100)
++  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION % 10000)
+@@ -303,4 +303,4 @@
+-  /* __ARMCC_VERSION = VRPPPP */
+-  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION/100000)
+-  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION/10000 % 10)
+-  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION    % 10000)
++/* __ARMCC_VERSION = VRPPPP */
++  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION / 100000)
++  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION / 10000 % 10)
++  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION % 10000)
+@@ -319 +319 @@
+-   /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -327,3 +327,3 @@
+-  # define COMPILER_VERSION_MAJOR DEC(__ARMCOMPILER_VERSION/1000000)
+-  # define COMPILER_VERSION_MINOR DEC(__ARMCOMPILER_VERSION/10000 % 100)
+-  # define COMPILER_VERSION_PATCH DEC(__ARMCOMPILER_VERSION/100   % 100)
++  # define COMPILER_VERSION_MAJOR DEC(__ARMCOMPILER_VERSION / 1000000)
++  # define COMPILER_VERSION_MINOR DEC(__ARMCOMPILER_VERSION / 10000 % 100)
++  # define COMPILER_VERSION_PATCH DEC(__ARMCOMPILER_VERSION / 100 % 100)
+@@ -341 +341 @@
+-   /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -378 +378 @@
+-  /* _MSC_VER = VVRR */
++/* _MSC_VER = VVRR */
+@@ -383 +383 @@
+-    /* _MSC_FULL_VER = VVRRPPPPP */
++/* _MSC_FULL_VER = VVRRPPPPP */
+@@ -386 +386 @@
+-    /* _MSC_FULL_VER = VVRRPPPP */
++/* _MSC_FULL_VER = VVRRPPPP */
+@@ -397 +397 @@
+-  /* __VERSIONNUM__ = 0xVVRRPPTT */
++/* __VERSIONNUM__ = 0xVVRRPPTT */
+@@ -411 +411,3 @@
+-# elif defined(__VER__) && (defined(__ICCAVR__) || defined(__ICCRX__) || defined(__ICCRH850__) || defined(__ICCRL78__) || defined(__ICC430__) || defined(__ICCRISCV__) || defined(__ICCV850__) || defined(__ICC8051__) || defined(__ICCSTM8__))
++# elif defined(__VER__) && (defined(__ICCAVR__) || defined(__ICCRX__) || defined(__ICCRH850__) || \
++  defined(__ICCRL78__) || defined(__ICC430__) || defined(__ICCRISCV__) || defined(__ICCV850__) || \
++  defined(__ICC8051__) || defined(__ICCSTM8__))
+@@ -413 +415 @@
+-#  define COMPILER_VERSION_MINOR DEC((__VER__) - (((__VER__) / 100)*100))
++#  define COMPILER_VERSION_MINOR DEC((__VER__) -(((__VER__) / 100) * 100))
+@@ -433 +435 @@
+-char const* info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";
++char const * info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";
+@@ -435 +437 @@
+-char const* info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";
++char const * info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";
+@@ -439 +441 @@
+-char const* qnxnto = "INFO" ":" "qnxnto[]";
++char const * qnxnto = "INFO" ":" "qnxnto[]";
+@@ -443 +445 @@
+-char const *info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";
++char const * info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";
+@@ -719,9 +721,9 @@
+-#define DEC(n)                   \
+-  ('0' + (((n) / 10000000)%10)), \
+-  ('0' + (((n) / 1000000)%10)),  \
+-  ('0' + (((n) / 100000)%10)),   \
+-  ('0' + (((n) / 10000)%10)),    \
+-  ('0' + (((n) / 1000)%10)),     \
+-  ('0' + (((n) / 100)%10)),      \
+-  ('0' + (((n) / 10)%10)),       \
+-  ('0' +  ((n) % 10))
++#define DEC(n) \
++  ('0' + (((n) / 10000000) % 10)), \
++  ('0' + (((n) / 1000000) % 10)), \
++  ('0' + (((n) / 100000) % 10)), \
++  ('0' + (((n) / 10000) % 10)), \
++  ('0' + (((n) / 1000) % 10)), \
++  ('0' + (((n) / 100) % 10)), \
++  ('0' + (((n) / 10) % 10)), \
++  ('0' + ((n) % 10))
+@@ -730,9 +732,9 @@
+-#define HEX(n)             \
+-  ('0' + ((n)>>28 & 0xF)), \
+-  ('0' + ((n)>>24 & 0xF)), \
+-  ('0' + ((n)>>20 & 0xF)), \
+-  ('0' + ((n)>>16 & 0xF)), \
+-  ('0' + ((n)>>12 & 0xF)), \
+-  ('0' + ((n)>>8  & 0xF)), \
+-  ('0' + ((n)>>4  & 0xF)), \
+-  ('0' + ((n)     & 0xF))
++#define HEX(n) \
++  ('0' + ((n) >> 28 & 0xF)), \
++  ('0' + ((n) >> 24 & 0xF)), \
++  ('0' + ((n) >> 20 & 0xF)), \
++  ('0' + ((n) >> 16 & 0xF)), \
++  ('0' + ((n) >> 12 & 0xF)), \
++  ('0' + ((n) >> 8 & 0xF)), \
++  ('0' + ((n) >> 4 & 0xF)), \
++  ('0' + ((n) & 0xF))
+@@ -742 +744 @@
+-char const* info_version = "INFO" ":" "compiler_version[" COMPILER_VERSION "]";
++char const * info_version = "INFO" ":" "compiler_version[" COMPILER_VERSION "]";
+@@ -748 +750 @@
+-  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','[',
++  'c', 'o', 'm', 'p', 'i', 'l', 'e', 'r', '_', 'v', 'e', 'r', 's', 'i', 'o', 'n', '[',
+@@ -753 +755 @@
+-   '.', COMPILER_VERSION_PATCH,
++  '.', COMPILER_VERSION_PATCH,
+@@ -755 +757 @@
+-    '.', COMPILER_VERSION_TWEAK,
++  '.', COMPILER_VERSION_TWEAK,
+@@ -759 +761 @@
+-  ']','\0'};
++  ']', '\0'};
+@@ -766,3 +768,3 @@
+-  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','_',
+-  'i','n','t','e','r','n','a','l','[',
+-  COMPILER_VERSION_INTERNAL,']','\0'};
++  'c', 'o', 'm', 'p', 'i', 'l', 'e', 'r', '_', 'v', 'e', 'r', 's', 'i', 'o', 'n', '_',
++  'i', 'n', 't', 'e', 'r', 'n', 'a', 'l', '[',
++  COMPILER_VERSION_INTERNAL, ']', '\0'};
+@@ -770 +772,2 @@
+-char const* info_version_internal = "INFO" ":" "compiler_version_internal[" COMPILER_VERSION_INTERNAL_STR "]";
++char const * info_version_internal =
++  "INFO" ":" "compiler_version_internal[" COMPILER_VERSION_INTERNAL_STR "]";
+@@ -777 +780 @@
+-  's','i','m','u','l','a','t','e','_','v','e','r','s','i','o','n','[',
++  's', 'i', 'm', 'u', 'l', 'a', 't', 'e', '_', 'v', 'e', 'r', 's', 'i', 'o', 'n', '[',
+@@ -782 +785 @@
+-   '.', SIMULATE_VERSION_PATCH,
++  '.', SIMULATE_VERSION_PATCH,
+@@ -784 +787 @@
+-    '.', SIMULATE_VERSION_TWEAK,
++  '.', SIMULATE_VERSION_TWEAK,
+@@ -788 +791 @@
+-  ']','\0'};
++  ']', '\0'};
+@@ -795,3 +798,2 @@
+-char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";
+-char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
+-
++char const * info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";
++char const * info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
+@@ -816 +818 @@
+-const char* info_language_standard_default = "INFO" ":" "standard_default["
++const char * info_language_standard_default = "INFO" ":" "standard_default["
+@@ -830,5 +832,5 @@
+-"]";
+-
+-const char* info_language_extensions_default = "INFO" ":" "extensions_default["
+-#if (defined(__clang__) || defined(__GNUC__) || defined(__xlC__) ||           \
+-     defined(__TI_COMPILER_VERSION__)) &&                                     \
++  "]";
++
++const char * info_language_extensions_default = "INFO" ":" "extensions_default["
++#if (defined(__clang__) || defined(__GNUC__) || defined(__xlC__) || \
++  defined(__TI_COMPILER_VERSION__)) && \
+@@ -840 +842 @@
+-"]";
++  "]";
+@@ -844 +846 @@
+-int main(int argc, char* argv[])
++int main(int argc, char * argv[])
+]]></failure>
+  </testcase>
+  <testcase
+    name="include/ImgProcess.h"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 27 lines"><![CDATA[--- include/ImgProcess.h
++++ include/ImgProcess.h.uncrustify
+@@ -18 +18 @@
+-class ImgProcess_node : public rclcpp::Node{
++class ImgProcess_node: public rclcpp::Node {
+@@ -20,2 +20,2 @@
+-    using RosImage = sensor_msgs::msg::Image;
+-    using CameraInfo = sensor_msgs::msg::CameraInfo;
++  using RosImage = sensor_msgs::msg::Image;
++  using CameraInfo = sensor_msgs::msg::CameraInfo;
+@@ -23,2 +23,3 @@
+-    rclcpp::Subscription<RosImage>::SharedPtr ImageSubscription_;
+-    rclcpp::Subscription<CameraInfo>::SharedPtr CameraInfoSubscription_;
++  rclcpp::Subscription < RosImage > ::SharedPtr ImageSubscription_;
++  rclcpp::Subscription < CameraInfo > ::SharedPtr CameraInfoSubscription_;
++
+@@ -26,4 +27,4 @@
+-    ImgProcess_node();
+-    ImgProcess_node(const rclcpp::NodeOptions &options);
+-    void imageCallback(RosImage::UniquePtr rosImage);
+-    void cameraInfoCallback(const CameraInfo::ConstSharedPtr &cameraInfo);//相机信息回调函数
++  ImgProcess_node();
++  ImgProcess_node(const rclcpp::NodeOptions & options);
++  void imageCallback(RosImage::UniquePtr rosImage);
++  void cameraInfoCallback(const CameraInfo::ConstSharedPtr & cameraInfo); //相机信息回调函数
+@@ -33 +33,0 @@
+-
+]]></failure>
+  </testcase>
+  <testcase
+    name="include/ImgProcessFuction/config.h"
+    classname="ImgProcess.uncrustify"/>
+  <testcase
+    name="include/ImgProcessFuction/graphic.h"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 128 lines"><![CDATA[--- include/ImgProcessFuction/graphic.h
++++ include/ImgProcessFuction/graphic.h.uncrustify
+@@ -12 +12 @@
+-int bgr2binary(cv::Mat& srcImg, cv::Mat& img_out, int method, int thresh, bool if_Red);
++int bgr2binary(cv::Mat & srcImg, cv::Mat & img_out, int method, int thresh, bool if_Red);
+@@ -16,4 +16,4 @@
+-    double aero;
+-    cv::Point2f center;
+-    float radius=0;
+-    bool match = false;
++  double aero;
++  cv::Point2f center;
++  float radius = 0;
++  bool match = false;
+@@ -21 +21 @@
+-    auxPoint(cv::InputArray contour);
++  auxPoint(cv::InputArray contour);
+@@ -23 +23 @@
+-    void draw(cv::Mat& image);
++  void draw(cv::Mat & image);
+@@ -28,6 +28,6 @@
+-    double aero = 0;
+-    cv::Point2d points[3];
+-    double angle_cos = 0;
+-    angle_d edge_angle[2]{0, 0};
+-    int index = 0;
+-    int aux = 0;
++  double aero = 0;
++  cv::Point2d points[3];
++  double angle_cos = 0;
++  angle_d edge_angle[2] {0, 0};
++  int index = 0;
++  int aux = 0;
+@@ -35,2 +35,2 @@
+-    triangle() = default;
+-    triangle(cv::InputArray contour);
++  triangle() = default;
++  triangle(cv::InputArray contour);
+@@ -38,2 +38,2 @@
+-    bool isCorner();
+-    bool hasAux(auxPoint p);
++  bool isCorner();
++  bool hasAux(auxPoint p);
+@@ -41 +41 @@
+-    void draw(cv::Mat& image);
++  void draw(cv::Mat & image);
+@@ -46,3 +46,3 @@
+-    triangle corners[2];
+-    int pointIndex[2]{0};   // 构成边的点在triangle中的index
+-    angle_d edge_angle{0};
++  triangle corners[2];
++  int pointIndex[2] {0};    // 构成边的点在triangle中的index
++  angle_d edge_angle {0};
+@@ -50,4 +50,4 @@
+-    edge() = default;
+-    edge(triangle t1, triangle t2);
+-    bool isEdge();      // 只有在isEdge执行后才会将所有的成员都初始化
+-    bool isInEdge(int tid);
++  edge() = default;
++  edge(triangle t1, triangle t2);
++  bool isEdge();        // 只有在isEdge执行后才会将所有的成员都初始化
++  bool isInEdge(int tid);
+@@ -55 +55 @@
+-    void draw(cv::Mat& image);
++  void draw(cv::Mat & image);
+@@ -60 +60,2 @@
+-    double edgeAngle = 0;
++  double edgeAngle = 0;
++
+@@ -62,5 +63,5 @@
+-    triangle corners[4];
+-    double aero = 0;
+-    int aux = 0;
+-    std::vector<cv::Point2f> points;
+-    std::vector<cv::Point2i> points2draw;
++  triangle corners[4];
++  double aero = 0;
++  int aux = 0;
++  std::vector < cv::Point2f > points;
++  std::vector < cv::Point2i > points2draw;
+@@ -68,4 +69,4 @@
+-    square(edge e1, edge e2);
+-    bool isParallel() const;
+-    double getEdgeRate();
+-    void sortByAux();     // 以下标为i的三角形开头，逆时针寻找边线
++  square(edge e1, edge e2);
++  bool isParallel() const;
++  double getEdgeRate();
++  void sortByAux();       // 以下标为i的三角形开头，逆时针寻找边线
+@@ -73,2 +74,2 @@
+-    void draw(cv::Mat& image);
+-    void drawR(cv::Mat& image);
++  void draw(cv::Mat & image);
++  void drawR(cv::Mat & image);
+@@ -79,6 +80,6 @@
+-    std::vector<triangle> triangles;
+-    std::vector<edge> edges;
+-    std::vector<square> squares;
+-    std::vector<auxPoint> auxPoints;
+-    int nowTid = 0;
+-    void addContoursAsAuxPoint(cv::InputArray contour);
++  std::vector < triangle > triangles;
++  std::vector < edge > edges;
++  std::vector < square > squares;
++  std::vector < auxPoint > auxPoints;
++  int nowTid = 0;
++  void addContoursAsAuxPoint(cv::InputArray contour);
+@@ -87,4 +88,4 @@
+-    bool addContours(cv::InputArray contour);
+-    int calculateEdges();
+-    int calculateSquares();
+-    int isSquareAux(int sid, cv::Point2d point, float size);
++  bool addContours(cv::InputArray contour);
++  int calculateEdges();
++  int calculateSquares();
++  int isSquareAux(int sid, cv::Point2d point, float size);
+@@ -92,2 +93,2 @@
+-    void sortSquare();
+-    square getSquare(int sid);
++  void sortSquare();
++  square getSquare(int sid);
+@@ -95,2 +96,2 @@
+-    void draw(cv::Mat& image);
+-    bool empty();
++  void draw(cv::Mat & image);
++  bool empty();
+@@ -100 +100,0 @@
+-
+]]></failure>
+  </testcase>
+  <testcase
+    name="include/ImgProcessFuction/utils.h"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 63 lines"><![CDATA[--- include/ImgProcessFuction/utils.h
++++ include/ImgProcessFuction/utils.h.uncrustify
+@@ -12 +12 @@
+-template<typename T>
++template < typename T >
+@@ -14 +14,2 @@
+-    T num;
++  T num;
++
+@@ -16,13 +17,7 @@
+-    angle(T t) {num = t;}
+-    angle operator-(const angle<T> a1) {
+-        T n = abs(num - a1.num);
+-        while (n > 2 * M_PIl) {
+-            n -= 2 * M_PIl;
+-        }
+-        if (n > M_PIl) {
+-            n = 2 * M_PIl - n;
+-        }
+-        if (n > M_PI_2l) {
+-            n = M_PIl - n;
+-        }
+-        return n;
++  angle(T t) {
++    num = t;
++  }
++  angle operator - (const angle < T > a1) {
++    T n = abs(num - a1.num);
++    while (n > 2 * M_PIl) {
++      n -= 2 * M_PIl;
+@@ -30,2 +25,2 @@
+-    operator T() const {
+-        return num;
++    if (n > M_PIl) {
++      n = 2 * M_PIl - n;
+@@ -33,3 +28,2 @@
+-    angle<T> reverse() {
+-        num += M_PIl;
+-        return *this;
++    if (n > M_PI_2l) {
++      n = M_PIl - n;
+@@ -36,0 +31,10 @@
++    return n;
++  }
++  operator T() const
++  {
++    return num;
++  }
++  angle < T > reverse() {
++    num += M_PIl;
++    return *this;
++  }
+@@ -39,2 +43,2 @@
+-typedef angle<float> angle_f;
+-typedef angle<double> angle_d;
++typedef angle < float > angle_f;
++typedef angle < double > angle_d;
+@@ -46,2 +50,3 @@
+-constexpr double degree2rad(double degree) {
+-    return degree / 180 * M_PIl;
++constexpr double degree2rad(double degree)
++{
++  return degree / 180 * M_PIl;
+]]></failure>
+  </testcase>
+  <testcase
+    name="src/ImgProcess.cpp"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 110 lines"><![CDATA[--- src/ImgProcess.cpp
++++ src/ImgProcess.cpp.uncrustify
+@@ -8 +8,2 @@
+-ImgProcess_node::ImgProcess_node() : ImgProcess_node(rclcpp::NodeOptions()) {}
++ImgProcess_node::ImgProcess_node()
++: ImgProcess_node(rclcpp::NodeOptions()) {}
+@@ -10 +11,2 @@
+-ImgProcess_node::ImgProcess_node(const rclcpp::NodeOptions &options):Node("demo_node",options)
++ImgProcess_node::ImgProcess_node(const rclcpp::NodeOptions & options)
++: Node("demo_node", options)
+@@ -12,6 +14,6 @@
+-    RCLCPP_INFO(get_logger(),"ImgProcess Node is inited!");
+-    ImageSubscription_ = create_subscription<RosImage>(
+-        "image_raw",
+-        10,
+-        std::bind(&ImgProcess_node::imageCallback, this, std::placeholders::_1)
+-    );
++  RCLCPP_INFO(get_logger(), "ImgProcess Node is inited!");
++  ImageSubscription_ = create_subscription<RosImage>(
++    "image_raw",
++    10,
++    std::bind(&ImgProcess_node::imageCallback, this, std::placeholders::_1)
++  );
+@@ -19,5 +21,5 @@
+-    CameraInfoSubscription_ = create_subscription<CameraInfo>(
+-        "camera_info",
+-        1,
+-        std::bind(&ImgProcess_node::cameraInfoCallback,this,std::placeholders::_1)
+-    );
++  CameraInfoSubscription_ = create_subscription<CameraInfo>(
++    "camera_info",
++    1,
++    std::bind(&ImgProcess_node::cameraInfoCallback, this, std::placeholders::_1)
++  );
+@@ -28,16 +30,16 @@
+-    cv::Mat bgrImage;
+-    if (rosImage->encoding == "bgr8") {
+-        bgrImage = cv::Mat(rosImage->height, rosImage->width, CV_8UC3, rosImage->data.data());
+-    } else {
+-        cv::Mat bayerImage(rosImage->height, rosImage->width, CV_8UC1, rosImage->data.data());
+-        cv::cvtColor(bayerImage, bgrImage, cv::COLOR_BayerRG2RGB);
+-    }
+-    PreProcessImg(bgrImage,bgrImage);
+-    threshold(bgrImage, bgrImage, 0, 255, cv::THRESH_BINARY);
+-    std::vector<std::vector<cv::Point>> contours;
+-    std::vector<cv::Vec4i> hierarchy;
+-    cv::findContours(bgrImage, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+-    manager man;
+-    for (const auto &contour: contours) {
+-        man.addContours(contour);
+-    }
++  cv::Mat bgrImage;
++  if (rosImage->encoding == "bgr8") {
++    bgrImage = cv::Mat(rosImage->height, rosImage->width, CV_8UC3, rosImage->data.data());
++  } else {
++    cv::Mat bayerImage(rosImage->height, rosImage->width, CV_8UC1, rosImage->data.data());
++    cv::cvtColor(bayerImage, bgrImage, cv::COLOR_BayerRG2RGB);
++  }
++  PreProcessImg(bgrImage, bgrImage);
++  threshold(bgrImage, bgrImage, 0, 255, cv::THRESH_BINARY);
++  std::vector<std::vector<cv::Point>> contours;
++  std::vector<cv::Vec4i> hierarchy;
++  cv::findContours(bgrImage, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
++  manager man;
++  for (const auto & contour: contours) {
++    man.addContours(contour);
++  }
+@@ -45,5 +47,5 @@
+-    try {
+-        man.calculateEdges();
+-        man.calculateSquares();
+-        man.sortSquare();
+-    } catch (cv::Exception &e) {
++  try {
++    man.calculateEdges();
++    man.calculateSquares();
++    man.sortSquare();
++  } catch (cv::Exception & e) {
+@@ -51,12 +53,12 @@
+-        return ;
+-    }
+-    if (man.empty()) {
+-        std::cout << "find no squares"<< std::endl;
+-        return ;
+-    }
+-    square s = man.getSquare(0);
+-    std::cout << "aux num: " << s.aux << std::endl;
+-    cvtColor(bgrImage,bgrImage,cv::COLOR_GRAY2BGR);
+-    polylines(bgrImage,s.points2draw,true,cv::Scalar(0,255,0),2);
+-    // 显示帧
+-    RCLCPP_INFO(get_logger(),"Image Get!");
++    return;
++  }
++  if (man.empty()) {
++    std::cout << "find no squares" << std::endl;
++    return;
++  }
++  square s = man.getSquare(0);
++  std::cout << "aux num: " << s.aux << std::endl;
++  cvtColor(bgrImage, bgrImage, cv::COLOR_GRAY2BGR);
++  polylines(bgrImage, s.points2draw, true, cv::Scalar(0, 255, 0), 2);
++  // 显示帧
++  RCLCPP_INFO(get_logger(), "Image Get!");
+@@ -65 +67 @@
+-void ImgProcess_node::cameraInfoCallback(const CameraInfo::ConstSharedPtr& cameraInfo)
++void ImgProcess_node::cameraInfoCallback(const CameraInfo::ConstSharedPtr & cameraInfo)
+@@ -67,2 +69 @@
+-    ;
+-}+}
+]]></failure>
+  </testcase>
+  <testcase
+    name="src/ImgProcessFuction/Process.cpp"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 115 lines"><![CDATA[--- src/ImgProcessFuction/Process.cpp
++++ src/ImgProcessFuction/Process.cpp.uncrustify
+@@ -11,5 +11,26 @@
+-    VideoCapture cap(0,CAP_V4L2);
+-    if (!cap.isOpened())
+-    {
+-        std::cout << "无法打开摄像头" << std::endl;
+-        return -1; // 如果打开失败，退出程序
++  VideoCapture cap(0, CAP_V4L2);
++  if (!cap.isOpened()) {
++    std::cout << "无法打开摄像头" << std::endl;
++    return -1;     // 如果打开失败，退出程序
++  }
++
++  Mat frame;
++  while (true) {
++
++    bool ret = cap.read(frame);     // 读取一帧
++    if (!ret) {
++      std::cout << "无法读取视频流" << std::endl;
++      break;       // 如果读取失败，退出循环
++    }
++    imshow("raw", frame);
++    PreProcessImg(frame, frame);
++    imshow("processed", frame);
++    threshold(frame, frame, 0, 255, THRESH_BINARY);
++    imshow("Binaried", frame);
++    std::vector<std::vector<Point>> contours;
++    std::vector<Vec4i> hierarchy;
++    findContours(frame, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
++
++    manager man;
++    for (const auto & contour: contours) {
++      man.addContours(contour);
+@@ -18,3 +39,5 @@
+-    Mat frame;
+-    while (true)
+-    {
++    try {
++      man.calculateEdges();
++      man.calculateSquares();
++      man.sortSquare();
++    } catch (cv::Exception & e) {
+@@ -22,49 +45 @@
+-        bool ret = cap.read(frame); // 读取一帧
+-        if (!ret)
+-        {
+-            std::cout << "无法读取视频流" << std::endl;
+-            break; // 如果读取失败，退出循环
+-        }
+-        imshow("raw",frame);
+-        PreProcessImg(frame,frame);
+-        imshow("processed",frame);
+-        threshold(frame, frame, 0, 255, THRESH_BINARY);
+-        imshow("Binaried",frame);
+-        std::vector<std::vector<Point>> contours;
+-        std::vector<Vec4i> hierarchy;
+-        findContours(frame, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+-
+-        manager man;
+-        for (const auto &contour: contours) {
+-            man.addContours(contour);
+-        }
+-
+-        try {
+-            man.calculateEdges();
+-            man.calculateSquares();
+-            man.sortSquare();
+-        } catch (cv::Exception &e) {
+-
+-            return -1;
+-        }
+-        if (man.empty()) {
+-            imshow("debug",frame);
+-            if (waitKey(1) == 'q')
+-            {
+-                break;
+-            }
+-            std::cout << "find no squares"<< std::endl;
+-            continue;
+-            // return 1;
+-        }
+-        square s = man.getSquare(0);
+-        std::cout << "aux num: " << s.aux << std::endl;
+-        cvtColor(frame,frame,COLOR_GRAY2BGR);
+-        polylines(frame,s.points2draw,true,Scalar(0,255,0),2);
+-        // 显示帧
+-        imshow("Camera", frame);
+-        // 按'q'键退出循环
+-        if (waitKey(1))
+-        {
+-            continue;
+-        }
++      return -1;
+@@ -71,0 +47,20 @@
++    if (man.empty()) {
++      imshow("debug", frame);
++      if (waitKey(1) == 'q') {
++        break;
++      }
++      std::cout << "find no squares" << std::endl;
++      continue;
++      // return 1;
++    }
++    square s = man.getSquare(0);
++    std::cout << "aux num: " << s.aux << std::endl;
++    cvtColor(frame, frame, COLOR_GRAY2BGR);
++    polylines(frame, s.points2draw, true, Scalar(0, 255, 0), 2);
++    // 显示帧
++    imshow("Camera", frame);
++    // 按'q'键退出循环
++    if (waitKey(1)) {
++      continue;
++    }
++  }
+]]></failure>
+  </testcase>
+  <testcase
+    name="src/ImgProcessFuction/graphic.cpp"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 825 lines"><![CDATA[--- src/ImgProcessFuction/graphic.cpp
++++ src/ImgProcessFuction/graphic.cpp.uncrustify
+@@ -9,17 +9,342 @@
+-int bgr2binary(Mat& srcImg, Mat& img_out, int method, int thresh, bool if_Red)
+-{
+-    if (srcImg.empty())
+-        return -1;
+-    if (method == 1)
+-    {
+-        //method 1: split channels and substract
+-        std::vector<Mat> imgChannels;
+-        split(srcImg, imgChannels);
+-        Mat red_channel = imgChannels.at(2);
+-        Mat green_channel = imgChannels.at(1);
+-        Mat blue_channel = imgChannels.at(0);
+-        Mat mid_chn_img;
+-
+-        if (if_Red)
+-        {
+-            mid_chn_img = red_channel - blue_channel - green_channel;
++int bgr2binary(Mat & srcImg, Mat & img_out, int method, int thresh, bool if_Red)
++{
++  if (srcImg.empty()) {
++    return -1;
++  }
++  if (method == 1) {
++    //method 1: split channels and substract
++    std::vector<Mat> imgChannels;
++    split(srcImg, imgChannels);
++    Mat red_channel = imgChannels.at(2);
++    Mat green_channel = imgChannels.at(1);
++    Mat blue_channel = imgChannels.at(0);
++    Mat mid_chn_img;
++
++    if (if_Red) {
++      mid_chn_img = red_channel - blue_channel - green_channel;
++    } else {
++      mid_chn_img = blue_channel - red_channel - green_channel;
++    }
++
++    threshold(mid_chn_img, img_out, thresh, 255, THRESH_BINARY);
++  }
++  if (method == 2) {
++    //method 2:
++    Mat imgGray;
++    cvtColor(srcImg, imgGray, COLOR_BGR2GRAY);
++    threshold(imgGray, img_out, thresh, 255, THRESH_BINARY);
++  }
++  return 0;
++}
++
++
++auxPoint::auxPoint(cv::InputArray contour)
++{
++  aero = contourArea(contour);
++  minEnclosingCircle(contour, center, radius);
++}
++
++void auxPoint::draw(cv::Mat & image)
++{
++  circle(image, center, radius, cv::Scalar(0, 255, 0), 3);
++}
++
++
++triangle::triangle(cv::InputArray contour)
++{
++  std::vector<cv::Point2d> _triangle;
++  aero = cv::contourArea(contour);
++  cv::minEnclosingTriangle(contour, _triangle);
++  double minAngleCos = 1;   // [0~180]度范围内cos函数单调递减，故最小cos为最大角
++  int minIndex = 0;
++  for (int i = 0; i < 3; i++) {
++    double angleCos =
++      getAngleCosByPoints(_triangle[(i + 1) % 3], _triangle[i], _triangle[(i + 2) % 3]);
++    if (angleCos < minAngleCos) {
++      minAngleCos = angleCos;
++      minIndex = i;
++    }
++  }
++  points[0] = _triangle[(minIndex + 1) % 3];
++  points[1] = _triangle[minIndex];
++  points[2] = _triangle[(minIndex + 2) % 3];
++  angle_cos = minAngleCos;
++  edge_angle[0] = getEdgeAngle(points[1], points[0]);
++  edge_angle[1] = getEdgeAngle(points[1], points[2]);
++}
++
++bool triangle::isCorner()
++{
++  if (aero < MIN_AERO) {
++    return false;
++  }
++  if (angle_cos > cos(degree2rad(MIN_ANGLE))) {
++    return false;
++  }
++  double l1 = getLength(points[0], points[1]);
++  double l2 = getLength(points[0], points[2]);
++  double diff = abs(l1 - l2) / std::min(l1, l2);
++  if (diff > MAX_LENGTH_DIFF) {
++    return false;
++  }
++  return true;
++}
++
++void triangle::draw(cv::Mat & image)
++{
++  for (int i = 0; i < 3; i++) {
++    cv::line(image, points[i], points[(i + 1) % 3], cv::Scalar(255, 255, 0), 1, cv::LINE_AA);
++    circle(image, points[1], 3, cv::Scalar(200, 20, 20), 2);
++  }
++}
++
++bool triangle::hasAux(auxPoint p)
++{
++  double aeroRate = p.aero / aero;
++  if (aeroRate < AUX_MIN_AERO || aeroRate > AUX_MAX_AERO) {
++    return false;
++  }
++  bool has = false;
++  for (auto & i : edge_angle) {
++    angle_d toAux = getEdgeAngle(points[1], p.center);
++    if (toAux - i > degree2rad(AUX_MAX_ANGLE)) {
++      continue;
++    }
++    double length = getLength(points[1], p.center) / sqrt(p.aero);
++    if (length < AUX_MIN_LENGTH || length > AUX_MAX_LENGTH) {
++      continue;
++    }
++    has = true;
++  }
++  return has;
++}
++
++
++edge::edge(triangle t1, triangle t2)
++{
++  corners[0] = t1;
++  corners[1] = t2;
++}
++
++bool edge::isEdge()
++{
++  if (abs(corners[0].aero - corners[1].aero) /
++    std::min(corners[0].aero, corners[1].aero) > MAX_AERO_DIFF)
++  {
++    return false;
++  }
++  double minDiff = 3.1 * M_PIl;
++  for (int i = 0; i < 2; i++) {
++    for (int j = 0; j < 2; j++) {
++
++      // cv::Mat image = cv::Mat::zeros(1080, 1920, CV_8UC3);
++      // corners[0].draw(image);
++      // corners[1].draw(image);
++      // cv::line(image, corners[0].points[1], corners[1].points[1], cv::Scalar(0, 255, 255), 2, cv::LINE_AA);
++      // cv::line(image, corners[0].points[i*2], corners[0].points[1], cv::Scalar(0, 255, 255), 2, cv::LINE_AA);
++      // cv::line(image, corners[1].points[j*2], corners[1].points[1], cv::Scalar(0, 255, 255), 2, cv::LINE_AA);
++      // DEBUG: 需要详细debug边的匹配时请解注释这段代码，然后启动调试，断点设置在本行，进入断点后查看image
++
++      angle_d tris_angle = corners[0].edge_angle[i] - corners[1].edge_angle[j].reverse();
++      if (tris_angle > degree2rad(MAX_TRIANGLE_EDGE_ANGLE_DIFF)) {
++        continue;
++      }
++      angle_d edgeAngle = getEdgeAngle(corners[0].points[1], corners[1].points[1]);
++      angle_d diff1 = edgeAngle - corners[0].edge_angle[i];
++      if (diff1 > degree2rad(MAX_EDGE_TRIANGLE_DIFF)) {
++        continue;
++      }
++      angle_d diff2 = edgeAngle - corners[1].edge_angle[j].reverse();
++      if (diff2 > degree2rad(MAX_EDGE_TRIANGLE_DIFF)) {
++        continue;
++      }
++      double totalDiff = diff1 + diff2 + tris_angle;
++      if (totalDiff < minDiff) {
++        edge_angle = edgeAngle;
++        pointIndex[0] = i * 2;         // 将[0, 1]重映射为[0, 2]
++        pointIndex[1] = j * 2;
++        minDiff = totalDiff;
++      }
++    }
++  }
++  return minDiff < 3 * M_PIl;
++}
++
++bool edge::isInEdge(int tid)
++{
++  return corners[0].index == tid || corners[1].index == tid;
++}
++
++void edge::draw(cv::Mat & image)
++{
++  cv::line(
++    image, corners[0].points[1], corners[1].points[1], cv::Scalar(
++      0, 255,
++      255), 3, cv::LINE_AA);
++}
++
++
++square::square(edge e1, edge e2)
++{
++  edgeAngle = e1.edge_angle - e2.edge_angle;
++  corners[0] = e1.corners[0];
++  corners[1] = e1.corners[1];
++  corners[2] = e2.corners[0];
++  corners[3] = e2.corners[1];
++
++  std::vector<cv::Point> temp;
++
++  for (auto & corner : corners) {
++    temp.push_back(corner.points[1]);
++  }
++
++  aero = cv::contourArea(temp);
++}
++
++bool square::isParallel() const
++{
++  return edgeAngle < MAX_EDGE_ANGLE_DIFF;
++}
++
++bool cmp_y(triangle & A, triangle & B)
++{
++  return A.points[1].y > B.points[1].y;
++}
++
++void swap(triangle & A, triangle & B)
++{
++  triangle C = A;
++  A = B;
++  B = C;
++}
++
++void square::sortByAux()
++{
++  std::sort(corners, corners + 4, cmp_y);
++  if (corners[1].points[1].x < corners[0].points[1].x) {
++    swap(corners[0], corners[1]);
++  }
++  if (corners[2].points[1].x < corners[3].points[1].x) {
++    swap(corners[2], corners[3]);
++  }
++
++  int maxAux = 0;
++  int maxAuxIndex = 0;
++  for (int i = 0; i < 4; i++) {
++    if (corners[i].aux > maxAux) {
++      maxAux = corners[i].aux;
++      maxAuxIndex = i;
++    }
++  }
++  aux = maxAux;
++  maxAuxIndex = 2;
++
++  points.push_back(corners[(maxAuxIndex + 2) % 4].points[1]);
++  points.push_back(corners[(maxAuxIndex + 3) % 4].points[1]);
++  points.push_back(corners[maxAuxIndex].points[1]);
++  points.push_back(corners[(maxAuxIndex + 1) % 4].points[1]);
++
++  points2draw.push_back(corners[(maxAuxIndex + 2) % 4].points[1]);
++  points2draw.push_back(corners[(maxAuxIndex + 3) % 4].points[1]);
++  points2draw.push_back(corners[maxAuxIndex].points[1]);
++  points2draw.push_back(corners[(maxAuxIndex + 1) % 4].points[1]);
++}
++
++void square::draw(cv::Mat & image)
++{
++  circle(image, points[0], 3, cv::Scalar(200, 20, 20), 2);
++  circle(image, points[1], 3, cv::Scalar(20, 200, 20), 2);
++  circle(image, points[2], 3, cv::Scalar(200, 20, 200), 2);
++  circle(image, points[3], 3, cv::Scalar(200, 200, 20), 2);
++}
++
++void square::drawR(cv::Mat & image)
++{
++  cv::polylines(image, points2draw, true, cv::Scalar(255, 0, 0), 4);
++}
++
++double square::getEdgeRate()
++{
++  double min = 1e20, max = 0;
++  for (int i = 0; i < 4; i++) {
++    auto pd = points[i] - points[(i + 1) % 4];
++    double len = sqrt(pow(pd.x, 2) + pow(pd.y, 2));
++    if (len > max) {
++      max = len;
++    }
++    if (len < min) {
++      min = len;
++    }
++  }
++  return min / max;
++}
++
++
++bool manager::addContours(cv::InputArray contour)
++{
++  triangle tri = triangle(contour);
++  if (tri.isCorner()) {
++    tri.index = nowTid++;
++    triangles.push_back(tri);
++    addContoursAsAuxPoint(contour);
++    return true;
++  }
++  addContoursAsAuxPoint(contour);
++  return false;
++}
++
++int manager::calculateEdges()
++{
++  if (triangles.size() < 2) {
++    return 0;
++  }
++  for (int i = 0; i < triangles.size(); i++) {
++    for (int j = 0; j < auxPoints.size(); j++) {
++      if (auxPoints[j].match) {
++        continue;
++      }
++      if (triangles[i].hasAux(auxPoints[j])) {
++        auxPoints[j].match = true;
++        triangles[i].aero += 2 * auxPoints[j].aero;
++        triangles[i].aux++;
++      }
++    }
++  }
++  for (int i = 0; i < triangles.size() - 1; i++) {
++    for (int j = i + 1; j < triangles.size(); j++) {
++      edge e(triangles[i], triangles[j]);
++      if (e.isEdge()) {
++        edges.push_back(e);
++      }
++    }
++  }
++  return (int)edges.size();
++}
++
++int manager::calculateSquares()
++{
++  if (edges.size() < 2) {
++    return 0;
++  }
++  for (int i = 0; i < edges.size() - 1; i++) {
++    for (int j = i + 1; j < edges.size(); j++) {
++      square s(edges[i], edges[j]);
++      if (s.isParallel()) {
++        int ok[4] = {0};
++        for (int k = 0; k < edges.size(); k++) {
++          if (k == i || k == j) {
++            continue;
++          }
++          bool isIn[4];
++          isIn[0] = edges[k].isInEdge(edges[i].corners[0].index);
++          isIn[1] = edges[k].isInEdge(edges[i].corners[1].index);
++          isIn[2] = edges[k].isInEdge(edges[j].corners[0].index);
++          isIn[3] = edges[k].isInEdge(edges[j].corners[1].index);
++          for (int u = 0; u < 2; u++) {
++            for (int v = 2; v < 4; v++) {
++              if (isIn[u] && isIn[v]) {
++                ok[u]++;
++                ok[v]++;
++              }
++            }
++          }
+@@ -27,3 +352,7 @@
+-        else
+-        {
+-            mid_chn_img = blue_channel - red_channel - green_channel;
++        if (ok[0] > 0 && ok[1] > 0 && ok[2] > 0 && ok[3] > 0) {
++          s.sortByAux();
++          if (s.aux >= MIN_AUX_FOUND && s.aero > MIN_SQUARE_AERO &&
++            s.getEdgeRate() > MIN_EDGE_RATE)
++          {
++            squares.push_back(s);
++          }
+@@ -31,370 +360,4 @@
+-
+-        threshold(mid_chn_img, img_out, thresh, 255, THRESH_BINARY);
+-    }
+-    if (method == 2)
+-    {
+-        //method 2:
+-        Mat imgGray;
+-        cvtColor(srcImg, imgGray, COLOR_BGR2GRAY);
+-        threshold(imgGray, img_out, thresh, 255, THRESH_BINARY);
+-    }
+-    return 0;
+-}
+-
+-
+-auxPoint::auxPoint(cv::InputArray contour)
+-{
+-    aero = contourArea(contour);
+-    minEnclosingCircle(contour, center, radius);
+-}
+-
+-void auxPoint::draw(cv::Mat& image)
+-{
+-    circle(image, center, radius, cv::Scalar(0, 255, 0), 3);
+-}
+-
+-
+-triangle::triangle(cv::InputArray contour)
+-{
+-    std::vector<cv::Point2d> _triangle;
+-    aero = cv::contourArea(contour);
+-    cv::minEnclosingTriangle(contour, _triangle);
+-    double minAngleCos = 1; // [0~180]度范围内cos函数单调递减，故最小cos为最大角
+-    int minIndex = 0;
+-    for (int i = 0; i < 3; i++)
+-    {
+-        double angleCos = getAngleCosByPoints(_triangle[(i + 1) % 3], _triangle[i], _triangle[(i + 2) % 3]);
+-        if (angleCos < minAngleCos)
+-        {
+-            minAngleCos = angleCos;
+-            minIndex = i;
+-        }
+-    }
+-    points[0] = _triangle[(minIndex + 1) % 3];
+-    points[1] = _triangle[minIndex];
+-    points[2] = _triangle[(minIndex + 2) % 3];
+-    angle_cos = minAngleCos;
+-    edge_angle[0] = getEdgeAngle(points[1], points[0]);
+-    edge_angle[1] = getEdgeAngle(points[1], points[2]);
+-}
+-
+-bool triangle::isCorner()
+-{
+-    if (aero < MIN_AERO)
+-    {
+-        return false;
+-    }
+-    if (angle_cos > cos(degree2rad(MIN_ANGLE)))
+-    {
+-        return false;
+-    }
+-    double l1 = getLength(points[0], points[1]);
+-    double l2 = getLength(points[0], points[2]);
+-    double diff = abs(l1 - l2) / std::min(l1, l2);
+-    if (diff > MAX_LENGTH_DIFF)
+-    {
+-        return false;
+-    }
+-    return true;
+-}
+-
+-void triangle::draw(cv::Mat& image)
+-{
+-    for (int i = 0; i < 3; i++)
+-    {
+-        cv::line(image, points[i], points[(i + 1) % 3], cv::Scalar(255, 255, 0), 1, cv::LINE_AA);
+-        circle(image, points[1], 3, cv::Scalar(200, 20, 20), 2);
+-    }
+-}
+-
+-bool triangle::hasAux(auxPoint p)
+-{
+-    double aeroRate = p.aero / aero;
+-    if (aeroRate < AUX_MIN_AERO || aeroRate > AUX_MAX_AERO)
+-    {
+-        return false;
+-    }
+-    bool has = false;
+-    for (auto& i : edge_angle)
+-    {
+-        angle_d toAux = getEdgeAngle(points[1], p.center);
+-        if (toAux - i > degree2rad(AUX_MAX_ANGLE))
+-        {
+-            continue;
+-        }
+-        double length = getLength(points[1], p.center) / sqrt(p.aero);
+-        if (length < AUX_MIN_LENGTH || length > AUX_MAX_LENGTH)
+-        {
+-            continue;
+-        }
+-        has = true;
+-    }
+-    return has;
+-}
+-
+-
+-edge::edge(triangle t1, triangle t2)
+-{
+-    corners[0] = t1;
+-    corners[1] = t2;
+-}
+-
+-bool edge::isEdge()
+-{
+-    if (abs(corners[0].aero - corners[1].aero) / std::min(corners[0].aero, corners[1].aero) > MAX_AERO_DIFF)
+-    {
+-        return false;
+-    }
+-    double minDiff = 3.1 * M_PIl;
+-    for (int i = 0; i < 2; i++)
+-    {
+-        for (int j = 0; j < 2; j++)
+-        {
+-
+-            // cv::Mat image = cv::Mat::zeros(1080, 1920, CV_8UC3);
+-            // corners[0].draw(image);
+-            // corners[1].draw(image);
+-            // cv::line(image, corners[0].points[1], corners[1].points[1], cv::Scalar(0, 255, 255), 2, cv::LINE_AA);
+-            // cv::line(image, corners[0].points[i*2], corners[0].points[1], cv::Scalar(0, 255, 255), 2, cv::LINE_AA);
+-            // cv::line(image, corners[1].points[j*2], corners[1].points[1], cv::Scalar(0, 255, 255), 2, cv::LINE_AA);
+-            // DEBUG: 需要详细debug边的匹配时请解注释这段代码，然后启动调试，断点设置在本行，进入断点后查看image
+-
+-            angle_d tris_angle = corners[0].edge_angle[i] - corners[1].edge_angle[j].reverse();
+-            if (tris_angle > degree2rad(MAX_TRIANGLE_EDGE_ANGLE_DIFF))
+-            {
+-                continue;
+-            }
+-            angle_d edgeAngle = getEdgeAngle(corners[0].points[1], corners[1].points[1]);
+-            angle_d diff1 = edgeAngle - corners[0].edge_angle[i];
+-            if (diff1 > degree2rad(MAX_EDGE_TRIANGLE_DIFF))
+-            {
+-                continue;
+-            }
+-            angle_d diff2 = edgeAngle - corners[1].edge_angle[j].reverse();
+-            if (diff2 > degree2rad(MAX_EDGE_TRIANGLE_DIFF))
+-            {
+-                continue;
+-            }
+-            double totalDiff = diff1 + diff2 + tris_angle;
+-            if (totalDiff < minDiff)
+-            {
+-                edge_angle = edgeAngle;
+-                pointIndex[0] = i * 2; // 将[0, 1]重映射为[0, 2]
+-                pointIndex[1] = j * 2;
+-                minDiff = totalDiff;
+-            }
+-        }
+-    }
+-    return minDiff < 3 * M_PIl;
+-}
+-
+-bool edge::isInEdge(int tid)
+-{
+-    return corners[0].index == tid || corners[1].index == tid;
+-}
+-
+-void edge::draw(cv::Mat& image)
+-{
+-    cv::line(image, corners[0].points[1], corners[1].points[1], cv::Scalar(0, 255, 255), 3, cv::LINE_AA);
+-}
+-
+-
+-square::square(edge e1, edge e2)
+-{
+-    edgeAngle = e1.edge_angle - e2.edge_angle;
+-    corners[0] = e1.corners[0];
+-    corners[1] = e1.corners[1];
+-    corners[2] = e2.corners[0];
+-    corners[3] = e2.corners[1];
+-
+-    std::vector<cv::Point> temp;
+-
+-    for (auto& corner : corners)
+-    {
+-        temp.push_back(corner.points[1]);
+-    }
+-
+-    aero = cv::contourArea(temp);
+-}
+-
+-bool square::isParallel() const
+-{
+-    return edgeAngle < MAX_EDGE_ANGLE_DIFF;
+-}
+-
+-bool cmp_y(triangle& A, triangle& B)
+-{
+-    return A.points[1].y > B.points[1].y;
+-}
+-
+-void swap(triangle& A, triangle& B)
+-{
+-    triangle C = A;
+-    A = B;
+-    B = C;
+-}
+-
+-void square::sortByAux()
+-{
+-    std::sort(corners, corners + 4, cmp_y);
+-    if (corners[1].points[1].x < corners[0].points[1].x)
+-        swap(corners[0], corners[1]);
+-    if (corners[2].points[1].x < corners[3].points[1].x)
+-        swap(corners[2], corners[3]);
+-
+-    int maxAux = 0;
+-    int maxAuxIndex = 0;
+-    for (int i = 0; i < 4; i++)
+-    {
+-        if (corners[i].aux > maxAux)
+-        {
+-            maxAux = corners[i].aux;
+-            maxAuxIndex = i;
+-        }
+-    }
+-    aux = maxAux;
+-    maxAuxIndex = 2;
+-
+-    points.push_back(corners[(maxAuxIndex + 2) % 4].points[1]);
+-    points.push_back(corners[(maxAuxIndex + 3) % 4].points[1]);
+-    points.push_back(corners[maxAuxIndex].points[1]);
+-    points.push_back(corners[(maxAuxIndex + 1) % 4].points[1]);
+-
+-    points2draw.push_back(corners[(maxAuxIndex + 2) % 4].points[1]);
+-    points2draw.push_back(corners[(maxAuxIndex + 3) % 4].points[1]);
+-    points2draw.push_back(corners[maxAuxIndex].points[1]);
+-    points2draw.push_back(corners[(maxAuxIndex + 1) % 4].points[1]);
+-}
+-
+-void square::draw(cv::Mat& image)
+-{
+-    circle(image, points[0], 3, cv::Scalar(200, 20, 20), 2);
+-    circle(image, points[1], 3, cv::Scalar(20, 200, 20), 2);
+-    circle(image, points[2], 3, cv::Scalar(200, 20, 200), 2);
+-    circle(image, points[3], 3, cv::Scalar(200, 200, 20), 2);
+-}
+-
+-void square::drawR(cv::Mat& image)
+-{
+-    cv::polylines(image, points2draw, true, cv::Scalar(255, 0, 0), 4);
+-}
+-
+-double square::getEdgeRate()
+-{
+-    double min = 1e20, max = 0;
+-    for (int i = 0; i < 4; i++)
+-    {
+-        auto pd = points[i] - points[(i + 1) % 4];
+-        double len = sqrt(pow(pd.x, 2) + pow(pd.y, 2));
+-        if (len > max)
+-        {
+-            max = len;
+-        }
+-        if (len < min)
+-        {
+-            min = len;
+-        }
+-    }
+-    return min / max;
+-}
+-
+-
+-bool manager::addContours(cv::InputArray contour)
+-{
+-    triangle tri = triangle(contour);
+-    if (tri.isCorner())
+-    {
+-        tri.index = nowTid++;
+-        triangles.push_back(tri);
+-        addContoursAsAuxPoint(contour);
+-        return true;
+-    }
+-    addContoursAsAuxPoint(contour);
+-    return false;
+-}
+-
+-int manager::calculateEdges()
+-{
+-    if (triangles.size() < 2)
+-    {
+-        return 0;
+-    }
+-    for (int i = 0; i < triangles.size(); i++)
+-    {
+-        for (int j = 0; j < auxPoints.size(); j++)
+-        {
+-            if (auxPoints[j].match)
+-            {
+-                continue;
+-            }
+-            if (triangles[i].hasAux(auxPoints[j]))
+-            {
+-                auxPoints[j].match = true;
+-                triangles[i].aero += 2 * auxPoints[j].aero;
+-                triangles[i].aux++;
+-            }
+-        }
+-    }
+-    for (int i = 0; i < triangles.size() - 1; i++)
+-    {
+-        for (int j = i + 1; j < triangles.size(); j++)
+-        {
+-            edge e(triangles[i], triangles[j]);
+-            if (e.isEdge())
+-            {
+-                edges.push_back(e);
+-            }
+-        }
+-    }
+-    return (int)edges.size();
+-}
+-
+-int manager::calculateSquares()
+-{
+-    if (edges.size() < 2)
+-    {
+-        return 0;
+-    }
+-    for (int i = 0; i < edges.size() - 1; i++)
+-    {
+-        for (int j = i + 1; j < edges.size(); j++)
+-        {
+-            square s(edges[i], edges[j]);
+-            if (s.isParallel())
+-            {
+-                int ok[4] = {0};
+-                for (int k = 0; k < edges.size(); k++)
+-                {
+-                    if (k == i || k == j)
+-                    {
+-                        continue;
+-                    }
+-                    bool isIn[4];
+-                    isIn[0] = edges[k].isInEdge(edges[i].corners[0].index);
+-                    isIn[1] = edges[k].isInEdge(edges[i].corners[1].index);
+-                    isIn[2] = edges[k].isInEdge(edges[j].corners[0].index);
+-                    isIn[3] = edges[k].isInEdge(edges[j].corners[1].index);
+-                    for (int u = 0; u < 2; u++)
+-                    {
+-                        for (int v = 2; v < 4; v++)
+-                        {
+-                            if (isIn[u] && isIn[v])
+-                            {
+-                                ok[u]++;
+-                                ok[v]++;
+-                            }
+-                        }
+-                    }
+-                }
+-                if (ok[0] > 0 && ok[1] > 0 && ok[2] > 0 && ok[3] > 0)
+-                {
+-                    s.sortByAux();
+-                    if (s.aux >= MIN_AUX_FOUND && s.aero > MIN_SQUARE_AERO && s.getEdgeRate() > MIN_EDGE_RATE)
+-                    {
+-                        squares.push_back(s);
+-                    }
+-                }
+-            }
+-        }
+-    }
+-    return (int)squares.size();
++      }
++    }
++  }
++  return (int)squares.size();
+@@ -405 +368 @@
+-    return 0;
++  return 0;
+@@ -410,6 +373,6 @@
+-    return squares[sid];
+-}
+-
+-bool cmp_aero(const square& s1, const square& s2)
+-{
+-    return s1.aero > s2.aero;
++  return squares[sid];
++}
++
++bool cmp_aero(const square & s1, const square & s2)
++{
++  return s1.aero > s2.aero;
+@@ -420,25 +383,20 @@
+-    sort(squares.begin(), squares.end(), cmp_aero);
+-}
+-
+-void manager::draw(cv::Mat& image)
+-{
+-    for (auto& auxPoint : auxPoints)
+-    {
+-        if (auxPoint.match)
+-        {
+-            auxPoint.draw(image);
+-        }
+-    }
+-    for (auto& triangle : triangles)
+-    {
+-        triangle.draw(image);
+-    }
+-    for (auto& edge : edges)
+-    {
+-        edge.draw(image);
+-    }
+-    for (auto& square : squares)
+-    {
+-        square.draw(image);
+-    }
+-    squares[0].drawR(image);
++  sort(squares.begin(), squares.end(), cmp_aero);
++}
++
++void manager::draw(cv::Mat & image)
++{
++  for (auto & auxPoint : auxPoints) {
++    if (auxPoint.match) {
++      auxPoint.draw(image);
++    }
++  }
++  for (auto & triangle : triangles) {
++    triangle.draw(image);
++  }
++  for (auto & edge : edges) {
++    edge.draw(image);
++  }
++  for (auto & square : squares) {
++    square.draw(image);
++  }
++  squares[0].drawR(image);
+@@ -449 +407 @@
+-    return squares.empty();
++  return squares.empty();
+@@ -454,6 +412,5 @@
+-    auxPoint p(contour);
+-    if (p.aero > MIN_AUX_POINT_AERO)
+-    {
+-        auxPoints.push_back(p);
+-    }
+-}
++  auxPoint p(contour);
++  if (p.aero > MIN_AUX_POINT_AERO) {
++    auxPoints.push_back(p);
++  }
++}
+]]></failure>
+  </testcase>
+  <testcase
+    name="src/ImgProcessFuction/utils.cpp"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 131 lines"><![CDATA[--- src/ImgProcessFuction/utils.cpp
++++ src/ImgProcessFuction/utils.cpp.uncrustify
+@@ -8,5 +8,6 @@
+-double getAngleCosByPoints(cv::Point2d e1, cv::Point2d center, cv::Point2d e2) {
+-    cv::Point2d vec1 = e1 - center;
+-    cv::Point2d vec2 = e2 - center;
+-    double result = vec1.dot(vec2) / norm(vec1) / norm(vec2);
+-    return result;
++double getAngleCosByPoints(cv::Point2d e1, cv::Point2d center, cv::Point2d e2)
++{
++  cv::Point2d vec1 = e1 - center;
++  cv::Point2d vec2 = e2 - center;
++  double result = vec1.dot(vec2) / norm(vec1) / norm(vec2);
++  return result;
+@@ -15,3 +16,4 @@
+-angle_d getEdgeAngle(cv::Point2d p1, cv::Point2d p2) {
+-    cv::Point2d p = p1 - p2;
+-    return atan2(p.y, p.x);
++angle_d getEdgeAngle(cv::Point2d p1, cv::Point2d p2)
++{
++  cv::Point2d p = p1 - p2;
++  return atan2(p.y, p.x);
+@@ -20,2 +22,3 @@
+-double getLength(cv::Point2d p1, cv::Point2d p2) {
+-    return norm(p1 - p2);
++double getLength(cv::Point2d p1, cv::Point2d p2)
++{
++  return norm(p1 - p2);
+@@ -24 +27 @@
+-void PreProcessImg(InputArray src,OutputArray dst)
++void PreProcessImg(InputArray src, OutputArray dst)
+@@ -26,18 +29,18 @@
+-    /*第一步：过滤红蓝*/
+-    Mat hsv;
+-    cvtColor(src, hsv, COLOR_BGR2HSV);
+-    cv::Mat redMask, blueMask;
+-    cv::inRange(hsv, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), redMask);
+-    cv::inRange(hsv, cv::Scalar(150, 100, 100), cv::Scalar(179, 255, 255), redMask);
+-    cv::inRange(hsv, cv::Scalar(100, 100, 100), cv::Scalar(140, 255, 255), blueMask);
+-    cv::Mat colorMask = redMask | blueMask;
+-    cv::Mat img;
+-    hsv.copyTo(img, colorMask);
+-    // imshow("debug1",img);
+-    /*第二步：滤波*/
+-    cvtColor(img, img, COLOR_HSV2BGR);
+-    cvtColor(img, img, COLOR_BGR2GRAY);
+-    //1.开操作
+-    Mat kernel = getStructuringElement(MORPH_ELLIPSE, Size(3, 3));
+-    morphologyEx(img, img, MORPH_OPEN, kernel);
+-    threshold(img, img, 50, 255, THRESH_BINARY);
++  /*第一步：过滤红蓝*/
++  Mat hsv;
++  cvtColor(src, hsv, COLOR_BGR2HSV);
++  cv::Mat redMask, blueMask;
++  cv::inRange(hsv, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), redMask);
++  cv::inRange(hsv, cv::Scalar(150, 100, 100), cv::Scalar(179, 255, 255), redMask);
++  cv::inRange(hsv, cv::Scalar(100, 100, 100), cv::Scalar(140, 255, 255), blueMask);
++  cv::Mat colorMask = redMask | blueMask;
++  cv::Mat img;
++  hsv.copyTo(img, colorMask);
++  // imshow("debug1",img);
++  /*第二步：滤波*/
++  cvtColor(img, img, COLOR_HSV2BGR);
++  cvtColor(img, img, COLOR_BGR2GRAY);
++  //1.开操作
++  Mat kernel = getStructuringElement(MORPH_ELLIPSE, Size(3, 3));
++  morphologyEx(img, img, MORPH_OPEN, kernel);
++  threshold(img, img, 50, 255, THRESH_BINARY);
+@@ -45,5 +48,5 @@
+-    //2.排除小的连续区域,暂时不用，当上面一步灰度低阈值低的时候开启
+-    std::vector<std::vector<Point>> contours;
+-    std::vector<Vec4i> hierarchy;
+-    findContours(img, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+-    // imshow("debug2",img);
++  //2.排除小的连续区域,暂时不用，当上面一步灰度低阈值低的时候开启
++  std::vector<std::vector<Point>> contours;
++  std::vector<Vec4i> hierarchy;
++  findContours(img, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
++  // imshow("debug2",img);
+@@ -51 +54 @@
+-    //对区域特征进行过滤
++  //对区域特征进行过滤
+@@ -53,2 +56,8 @@
+-    std::vector<std::pair<double, int>> areas_and_it;
+-    for (size_t i = 0; i < contours.size(); i++)
++  std::vector<std::pair<double, int>> areas_and_it;
++  for (size_t i = 0; i < contours.size(); i++) {
++    areas_and_it.emplace_back(contourArea(contours[i]), i);
++  }
++  std::sort(
++    areas_and_it.begin(), areas_and_it.end(),
++    [](const std::pair<double, int> & a,
++    const std::pair<double, int> & b)
+@@ -56 +65 @@
+-        areas_and_it.emplace_back(contourArea(contours[i]), i);
++      return a.first > b.first;
+@@ -58,15 +67,10 @@
+-    std::sort(areas_and_it.begin(), areas_and_it.end(),
+-              [](const std::pair<double, int>& a,
+-                 const std::pair<double, int>& b)
+-              {
+-                  return a.first > b.first;
+-              }
+-    );
+-    cv::Mat filteredDst(img.size(), img.type(), cv::Scalar(0, 0, 0));
+-    for (int i = 0; i < std::min(6, static_cast<int>(contours.size())); i++)
+-    {
+-        if (!areas_and_it.empty())
+-            if (areas_and_it.at(i).first < areas_and_it.at(0).first * 0.9 && areas_and_it.at(i).first > areas_and_it.
+-                at(0).first * 1.1)
+-                break;
+-        drawContours(filteredDst, contours, areas_and_it.at(i).second, Scalar(255), FILLED);
++  );
++  cv::Mat filteredDst(img.size(), img.type(), cv::Scalar(0, 0, 0));
++  for (int i = 0; i < std::min(6, static_cast<int>(contours.size())); i++) {
++    if (!areas_and_it.empty()) {
++      if (areas_and_it.at(i).first < areas_and_it.at(0).first * 0.9 &&
++        areas_and_it.at(i).first > areas_and_it.
++        at(0).first * 1.1)
++      {
++        break;
++      }
+@@ -74,2 +78,4 @@
+-    // imshow("debug3",filteredDst);
+-    filteredDst.copyTo(dst);
++    drawContours(filteredDst, contours, areas_and_it.at(i).second, Scalar(255), FILLED);
++  }
++  // imshow("debug3",filteredDst);
++  filteredDst.copyTo(dst);
+@@ -77 +82,0 @@
+-
+]]></failure>
+  </testcase>
+  <testcase
+    name="src/node_run.cpp"
+    classname="ImgProcess.uncrustify"
+  >
+      <failure message="Diff with 14 lines"><![CDATA[--- src/node_run.cpp
++++ src/node_run.cpp.uncrustify
+@@ -6 +6 @@
+-int main(int argc, char **argv)
++int main(int argc, char ** argv)
+@@ -8,4 +8,4 @@
+-    rclcpp::init(argc,argv);
+-    rclcpp::spin(std::make_shared<ImgProcess_node>());
+-    rclcpp::shutdown();
+-}+  rclcpp::init(argc, argv);
++  rclcpp::spin(std::make_shared<ImgProcess_node>());
++  rclcpp::shutdown();
++}
+]]></failure>
+  </testcase>
+  <system-out>Checked files:
+* cmake-build-debug/CMakeFiles/3.28.1/CompilerIdC/CMakeCCompilerId.c
+* cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp
+* include/ImgProcess.h
+* include/ImgProcessFuction/config.h
+* include/ImgProcessFuction/graphic.h
+* include/ImgProcessFuction/utils.h
+* src/ImgProcess.cpp
+* src/ImgProcessFuction/Process.cpp
+* src/ImgProcessFuction/graphic.cpp
+* src/ImgProcessFuction/utils.cpp
+* src/node_run.cpp</system-out>
+</testsuite>

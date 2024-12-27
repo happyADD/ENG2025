@@ -1,0 +1,7 @@
+[ 20%] [32m[1mLinking CXX executable ImgProcess[0m
+/usr/bin/ld: CMakeFiles/ImgProcess.dir/src/ImgProcess.cpp.o: in function `ImgProcess_node::imageCallback(std::unique_ptr<sensor_msgs::msg::Image_<std::allocator<void> >, std::default_delete<sensor_msgs::msg::Image_<std::allocator<void> > > >)':
+ImgProcess.cpp:(.text+0xebe): undefined reference to `cv::imshow(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, cv::_InputArray const&)'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/ImgProcess.dir/build.make:238：ImgProcess] 错误 1
+gmake[1]: *** [CMakeFiles/Makefile2:137：CMakeFiles/ImgProcess.dir/all] 错误 2
+gmake: *** [Makefile:146：all] 错误 2

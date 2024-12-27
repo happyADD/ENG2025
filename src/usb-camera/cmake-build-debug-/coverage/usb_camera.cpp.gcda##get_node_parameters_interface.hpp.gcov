@@ -1,0 +1,127 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/node_interfaces/get_node_parameters_interface.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2020 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:
+        -:   16:#ifndef RCLCPP__NODE_INTERFACES__GET_NODE_PARAMETERS_INTERFACE_HPP_
+        -:   17:#define RCLCPP__NODE_INTERFACES__GET_NODE_PARAMETERS_INTERFACE_HPP_
+        -:   18:
+        -:   19:#include <memory>
+        -:   20:#include <utility>
+        -:   21:#include <type_traits>
+        -:   22:
+        -:   23:#include "rcpputils/pointer_traits.hpp"
+        -:   24:
+        -:   25:#include "rclcpp/node_interfaces/node_parameters_interface.hpp"
+        -:   26:#include "rclcpp/node_interfaces/node_parameters_interface_traits.hpp"
+        -:   27:
+        -:   28:
+        -:   29:/// This header provides the get_node_parameters_interface() template function.
+        -:   30:/**
+        -:   31: * This function is useful for getting the NodeParametersInterface pointer from
+        -:   32: * various kinds of Node-like classes.
+        -:   33: *
+        -:   34: * It's able to get a std::shared_ptr to a NodeParametersInterface so long as the class
+        -:   35: * has a method called ``get_node_parameters_interface()`` which returns one.
+        -:   36: */
+        -:   37:
+        -:   38:namespace rclcpp
+        -:   39:{
+        -:   40:namespace node_interfaces
+        -:   41:{
+        -:   42:namespace detail
+        -:   43:{
+        -:   44:
+        -:   45:// If NodeType has a method called get_node_parameters_interface() which returns a shared pointer.
+        -:   46:template<
+        -:   47:  typename NodeType,
+        -:   48:  typename std::enable_if<has_node_parameters_interface<
+        -:   49:    typename rcpputils::remove_pointer<NodeType>::type
+        -:   50:  >::value, int>::type = 0
+        -:   51:>
+        -:   52:std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface>
+function _ZN6rclcpp15node_interfaces6detail42get_node_parameters_interface_from_pointerIPNS_4NodeELi0EEESt10shared_ptrINS0_23NodeParametersInterfaceEET_ called 0 returned 0% blocks executed 0%
+    #####:   53:get_node_parameters_interface_from_pointer(NodeType node_pointer)
+        -:   54:{
+    #####:   55:  if (!node_pointer) {
+    %%%%%:   55-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:   56:    throw std::invalid_argument("node cannot be nullptr");
+    %%%%%:   56-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:   56-block  1
+call    4 never executed
+    $$$$$:   56-block  2
+call    5 never executed
+        -:   57:  }
+    #####:   58:  return node_pointer->get_node_parameters_interface();
+    %%%%%:   58-block  0
+call    0 never executed
+        -:   59:}
+        -:   60:
+        -:   61:}  // namespace detail
+        -:   62:
+        -:   63:/// Get the NodeParametersInterface as a shared pointer from a pointer to a "Node like" object.
+        -:   64:template<
+        -:   65:  typename NodeType,
+        -:   66:  typename std::enable_if<
+        -:   67:    rcpputils::is_pointer<NodeType>::value, int
+        -:   68:  >::type = 0
+        -:   69:>
+        -:   70:inline
+        -:   71:std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface>
+        -:   72:get_node_parameters_interface(NodeType && node)
+        -:   73:{
+        -:   74:  // Forward pointers to detail implementation directly.
+        -:   75:  return detail::get_node_parameters_interface_from_pointer(node);
+        -:   76:}
+        -:   77:
+        -:   78:/// Get the NodeParametersInterface as a shared pointer from a "Node like" object.
+        -:   79:template<
+        -:   80:  typename NodeType,
+        -:   81:  typename std::enable_if<
+        -:   82:    !rcpputils::is_pointer<NodeType>::value, int
+        -:   83:  >::type = 0
+        -:   84:>
+        -:   85:inline
+        -:   86:std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface>
+function _ZN6rclcpp15node_interfaces29get_node_parameters_interfaceIRNS_4NodeELi0EEESt10shared_ptrINS0_23NodeParametersInterfaceEEOT_ called 0 returned 0% blocks executed 0%
+    #####:   87:get_node_parameters_interface(NodeType && node)
+        -:   88:{
+        -:   89:  // Forward references to detail implementation as a pointer.
+    #####:   90:  return detail::get_node_parameters_interface_from_pointer(&node);
+    %%%%%:   90-block  0
+call    0 never executed
+        -:   91:}
+        -:   92:
+        -:   93:/// Keep the NodeParametersInterface a shared pointer.
+        -:   94:inline
+        -:   95:std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface>
+        -:   96:get_node_parameters_interface(
+        -:   97:  std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface> & node_interface)
+        -:   98:{
+        -:   99:  return node_interface;
+        -:  100:}
+        -:  101:
+        -:  102:}  // namespace node_interfaces
+        -:  103:}  // namespace rclcpp
+        -:  104:
+        -:  105:#endif  // RCLCPP__NODE_INTERFACES__GET_NODE_PARAMETERS_INTERFACE_HPP_

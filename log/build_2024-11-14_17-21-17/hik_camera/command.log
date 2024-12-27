@@ -1,0 +1,6 @@
+Invoking command in '/home/dcy/ENG/ENG2025/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG/ENG2025/src/hik_camera -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG/ENG2025/install/hik_camera
+Invoked command in '/home/dcy/ENG/ENG2025/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG/ENG2025/src/hik_camera -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG/ENG2025/install/hik_camera
+Invoking command in '/home/dcy/ENG/ENG2025/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/hik_camera -- -j16 -l16
+Invoked command in '/home/dcy/ENG/ENG2025/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/hik_camera -- -j16 -l16
+Invoking command in '/home/dcy/ENG/ENG2025/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG/ENG2025/build/hik_camera
+Invoked command in '/home/dcy/ENG/ENG2025/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG/ENG2025/build/hik_camera

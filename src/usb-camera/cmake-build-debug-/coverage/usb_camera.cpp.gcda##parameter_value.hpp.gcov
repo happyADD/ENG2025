@@ -1,0 +1,561 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/parameter_value.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2018 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__PARAMETER_VALUE_HPP_
+        -:   16:#define RCLCPP__PARAMETER_VALUE_HPP_
+        -:   17:
+        -:   18:#include <exception>
+        -:   19:#include <iostream>
+        -:   20:#include <ostream>
+        -:   21:#include <sstream>
+        -:   22:#include <string>
+        -:   23:#include <vector>
+        -:   24:
+        -:   25:#include "rcl_interfaces/msg/parameter_type.hpp"
+        -:   26:#include "rcl_interfaces/msg/parameter_value.hpp"
+        -:   27:#include "rclcpp/visibility_control.hpp"
+        -:   28:
+        -:   29:namespace rclcpp
+        -:   30:{
+        -:   31:
+        -:   32:enum ParameterType : uint8_t
+        -:   33:{
+        -:   34:  PARAMETER_NOT_SET = rcl_interfaces::msg::ParameterType::PARAMETER_NOT_SET,
+        -:   35:  PARAMETER_BOOL = rcl_interfaces::msg::ParameterType::PARAMETER_BOOL,
+        -:   36:  PARAMETER_INTEGER = rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER,
+        -:   37:  PARAMETER_DOUBLE = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE,
+        -:   38:  PARAMETER_STRING = rcl_interfaces::msg::ParameterType::PARAMETER_STRING,
+        -:   39:  PARAMETER_BYTE_ARRAY = rcl_interfaces::msg::ParameterType::PARAMETER_BYTE_ARRAY,
+        -:   40:  PARAMETER_BOOL_ARRAY = rcl_interfaces::msg::ParameterType::PARAMETER_BOOL_ARRAY,
+        -:   41:  PARAMETER_INTEGER_ARRAY = rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER_ARRAY,
+        -:   42:  PARAMETER_DOUBLE_ARRAY = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE_ARRAY,
+        -:   43:  PARAMETER_STRING_ARRAY = rcl_interfaces::msg::ParameterType::PARAMETER_STRING_ARRAY,
+        -:   44:};
+        -:   45:
+        -:   46:/// Return the name of a parameter type
+        -:   47:RCLCPP_PUBLIC
+        -:   48:std::string
+        -:   49:to_string(ParameterType type);
+        -:   50:
+        -:   51:RCLCPP_PUBLIC
+        -:   52:std::ostream &
+        -:   53:operator<<(std::ostream & os, ParameterType type);
+        -:   54:
+        -:   55:/// Indicate the parameter type does not match the expected type.
+        -:   56:class ParameterTypeException : public std::runtime_error
+        -:   57:{
+        -:   58:public:
+        -:   59:  /// Construct an instance.
+        -:   60:  /**
+        -:   61:   * \param[in] expected the expected parameter type.
+        -:   62:   * \param[in] actual the actual parameter type.
+        -:   63:   */
+        -:   64:  RCLCPP_PUBLIC
+function _ZN6rclcpp22ParameterTypeExceptionC2ENS_13ParameterTypeES1_ called 0 returned 0% blocks executed 0%
+    #####:   65:  ParameterTypeException(ParameterType expected, ParameterType actual)
+    #####:   66:  : std::runtime_error("expected [" + to_string(expected) + "] got [" + to_string(actual) + "]")
+    %%%%%:   66-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:   66-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:   66-block  2
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:   66-block  3
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    %%%%%:   66-block  4
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:   66-block  5
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:   66-block  6
+call   19 never executed
+call   20 never executed
+call   21 never executed
+call   22 never executed
+call   23 never executed
+call   24 never executed
+    $$$$$:   66-block  7
+call   25 never executed
+    $$$$$:   66-block  8
+    $$$$$:   66-block  9
+call   26 never executed
+    $$$$$:   66-block 10
+    $$$$$:   66-block 11
+call   27 never executed
+    $$$$$:   66-block 12
+    $$$$$:   66-block 13
+call   28 never executed
+    $$$$$:   66-block 14
+    $$$$$:   66-block 15
+call   29 never executed
+    $$$$$:   66-block 16
+    $$$$$:   66-block 17
+call   30 never executed
+    #####:   67:  {}
+        -:   68:};
+        -:   69:
+        -:   70:/// Store the type and value of a parameter.
+        -:   71:class ParameterValue
+        -:   72:{
+        -:   73:public:
+        -:   74:  /// Construct a parameter value with type PARAMETER_NOT_SET.
+        -:   75:  RCLCPP_PUBLIC
+        -:   76:  ParameterValue();
+        -:   77:  /// Construct a parameter value from a message.
+        -:   78:  RCLCPP_PUBLIC
+        -:   79:  explicit ParameterValue(const rcl_interfaces::msg::ParameterValue & value);
+        -:   80:  /// Construct a parameter value with type PARAMETER_BOOL.
+        -:   81:  RCLCPP_PUBLIC
+        -:   82:  explicit ParameterValue(const bool bool_value);
+        -:   83:  /// Construct a parameter value with type PARAMETER_INTEGER.
+        -:   84:  RCLCPP_PUBLIC
+        -:   85:  explicit ParameterValue(const int int_value);
+        -:   86:  /// Construct a parameter value with type PARAMETER_INTEGER.
+        -:   87:  RCLCPP_PUBLIC
+        -:   88:  explicit ParameterValue(const int64_t int_value);
+        -:   89:  /// Construct a parameter value with type PARAMETER_DOUBLE.
+        -:   90:  RCLCPP_PUBLIC
+        -:   91:  explicit ParameterValue(const float double_value);
+        -:   92:  /// Construct a parameter value with type PARAMETER_DOUBLE.
+        -:   93:  RCLCPP_PUBLIC
+        -:   94:  explicit ParameterValue(const double double_value);
+        -:   95:  /// Construct a parameter value with type PARAMETER_STRING.
+        -:   96:  RCLCPP_PUBLIC
+        -:   97:  explicit ParameterValue(const std::string & string_value);
+        -:   98:  /// Construct a parameter value with type PARAMETER_STRING.
+        -:   99:  RCLCPP_PUBLIC
+        -:  100:  explicit ParameterValue(const char * string_value);
+        -:  101:  /// Construct a parameter value with type PARAMETER_BYTE_ARRAY.
+        -:  102:  RCLCPP_PUBLIC
+        -:  103:  explicit ParameterValue(const std::vector<uint8_t> & byte_array_value);
+        -:  104:  /// Construct a parameter value with type PARAMETER_BOOL_ARRAY.
+        -:  105:  RCLCPP_PUBLIC
+        -:  106:  explicit ParameterValue(const std::vector<bool> & bool_array_value);
+        -:  107:  /// Construct a parameter value with type PARAMETER_INTEGER_ARRAY.
+        -:  108:  RCLCPP_PUBLIC
+        -:  109:  explicit ParameterValue(const std::vector<int> & int_array_value);
+        -:  110:  /// Construct a parameter value with type PARAMETER_INTEGER_ARRAY.
+        -:  111:  RCLCPP_PUBLIC
+        -:  112:  explicit ParameterValue(const std::vector<int64_t> & int_array_value);
+        -:  113:  /// Construct a parameter value with type PARAMETER_DOUBLE_ARRAY.
+        -:  114:  RCLCPP_PUBLIC
+        -:  115:  explicit ParameterValue(const std::vector<float> & double_array_value);
+        -:  116:  /// Construct a parameter value with type PARAMETER_DOUBLE_ARRAY.
+        -:  117:  RCLCPP_PUBLIC
+        -:  118:  explicit ParameterValue(const std::vector<double> & double_array_value);
+        -:  119:  /// Construct a parameter value with type PARAMETER_STRING_ARRAY.
+        -:  120:  RCLCPP_PUBLIC
+        -:  121:  explicit ParameterValue(const std::vector<std::string> & string_array_value);
+        -:  122:
+        -:  123:  /// Return an enum indicating the type of the set value.
+        -:  124:  RCLCPP_PUBLIC
+        -:  125:  ParameterType
+        -:  126:  get_type() const;
+        -:  127:
+        -:  128:  /// Return a message populated with the parameter value
+        -:  129:  RCLCPP_PUBLIC
+        -:  130:  rcl_interfaces::msg::ParameterValue
+        -:  131:  to_value_msg() const;
+        -:  132:
+        -:  133:  /// Equal operator.
+        -:  134:  RCLCPP_PUBLIC
+        -:  135:  bool
+        -:  136:  operator==(const ParameterValue & rhs) const;
+        -:  137:
+        -:  138:  /// Not equal operator.
+        -:  139:  RCLCPP_PUBLIC
+        -:  140:  bool
+        -:  141:  operator!=(const ParameterValue & rhs) const;
+        -:  142:
+        -:  143:  // The following get() variants require the use of ParameterType
+        -:  144:
+        -:  145:  template<ParameterType type>
+        -:  146:  constexpr
+        -:  147:  typename std::enable_if<type == ParameterType::PARAMETER_BOOL, const bool &>::type
+function _ZNK6rclcpp14ParameterValue3getILNS_13ParameterTypeE1EEENSt9enable_ifIXeqT_LS2_1EERKbE4typeEv called 0 returned 0% blocks executed 0%
+    #####:  148:  get() const
+        -:  149:  {
+    #####:  150:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_BOOL) {
+    %%%%%:  150-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  151:      throw ParameterTypeException(ParameterType::PARAMETER_BOOL, get_type());
+    %%%%%:  151-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  151-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  151-block  2
+call    7 never executed
+    $$$$$:  151-block  3
+call    8 never executed
+        -:  152:    }
+    #####:  153:    return value_.bool_value;
+    %%%%%:  153-block  0
+    %%%%%:  153-block  1
+        -:  154:  }
+        -:  155:
+        -:  156:  template<ParameterType type>
+        -:  157:  constexpr
+        -:  158:  typename std::enable_if<type == ParameterType::PARAMETER_INTEGER, const int64_t &>::type
+function _ZNK6rclcpp14ParameterValue3getILNS_13ParameterTypeE2EEENSt9enable_ifIXeqT_LS2_2EERKlE4typeEv called 5 returned 100% blocks executed 44%
+        5:  159:  get() const
+        -:  160:  {
+        5:  161:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER) {
+        5:  161-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 5
+    #####:  162:      throw ParameterTypeException(ParameterType::PARAMETER_INTEGER, get_type());
+    %%%%%:  162-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  162-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  162-block  2
+call    7 never executed
+    $$$$$:  162-block  3
+call    8 never executed
+        -:  163:    }
+        5:  164:    return value_.integer_value;
+        5:  164-block  0
+        5:  164-block  1
+        -:  165:  }
+        -:  166:
+        -:  167:  template<ParameterType type>
+        -:  168:  constexpr
+        -:  169:  typename std::enable_if<type == ParameterType::PARAMETER_DOUBLE, const double &>::type
+function _ZNK6rclcpp14ParameterValue3getILNS_13ParameterTypeE3EEENSt9enable_ifIXeqT_LS2_3EERKdE4typeEv called 3 returned 100% blocks executed 44%
+        3:  170:  get() const
+        -:  171:  {
+        3:  172:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE) {
+        3:  172-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 3
+    #####:  173:      throw ParameterTypeException(ParameterType::PARAMETER_DOUBLE, get_type());
+    %%%%%:  173-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  173-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  173-block  2
+call    7 never executed
+    $$$$$:  173-block  3
+call    8 never executed
+        -:  174:    }
+        3:  175:    return value_.double_value;
+        3:  175-block  0
+        3:  175-block  1
+        -:  176:  }
+        -:  177:
+        -:  178:  template<ParameterType type>
+        -:  179:  constexpr
+        -:  180:  typename std::enable_if<type == ParameterType::PARAMETER_STRING, const std::string &>::type
+function _ZNK6rclcpp14ParameterValue3getILNS_13ParameterTypeE4EEENSt9enable_ifIXeqT_LS2_4EERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE4typeEv called 1 returned 100% blocks executed 44%
+        1:  181:  get() const
+        -:  182:  {
+        1:  183:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_STRING) {
+        1:  183-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 1
+    #####:  184:      throw ParameterTypeException(ParameterType::PARAMETER_STRING, get_type());
+    %%%%%:  184-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  184-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  184-block  2
+call    7 never executed
+    $$$$$:  184-block  3
+call    8 never executed
+        -:  185:    }
+        1:  186:    return value_.string_value;
+        1:  186-block  0
+        1:  186-block  1
+        -:  187:  }
+        -:  188:
+        -:  189:  template<ParameterType type>
+        -:  190:  constexpr
+        -:  191:  typename std::enable_if<
+        -:  192:    type == ParameterType::PARAMETER_BYTE_ARRAY, const std::vector<uint8_t> &>::type
+        -:  193:  get() const
+        -:  194:  {
+        -:  195:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_BYTE_ARRAY) {
+        -:  196:      throw ParameterTypeException(ParameterType::PARAMETER_BYTE_ARRAY, get_type());
+        -:  197:    }
+        -:  198:    return value_.byte_array_value;
+        -:  199:  }
+        -:  200:
+        -:  201:  template<ParameterType type>
+        -:  202:  constexpr
+        -:  203:  typename std::enable_if<
+        -:  204:    type == ParameterType::PARAMETER_BOOL_ARRAY, const std::vector<bool> &>::type
+        -:  205:  get() const
+        -:  206:  {
+        -:  207:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_BOOL_ARRAY) {
+        -:  208:      throw ParameterTypeException(ParameterType::PARAMETER_BOOL_ARRAY, get_type());
+        -:  209:    }
+        -:  210:    return value_.bool_array_value;
+        -:  211:  }
+        -:  212:
+        -:  213:  template<ParameterType type>
+        -:  214:  constexpr
+        -:  215:  typename std::enable_if<
+        -:  216:    type == ParameterType::PARAMETER_INTEGER_ARRAY, const std::vector<int64_t> &>::type
+        -:  217:  get() const
+        -:  218:  {
+        -:  219:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER_ARRAY) {
+        -:  220:      throw ParameterTypeException(ParameterType::PARAMETER_INTEGER_ARRAY, get_type());
+        -:  221:    }
+        -:  222:    return value_.integer_array_value;
+        -:  223:  }
+        -:  224:
+        -:  225:  template<ParameterType type>
+        -:  226:  constexpr
+        -:  227:  typename std::enable_if<
+        -:  228:    type == ParameterType::PARAMETER_DOUBLE_ARRAY, const std::vector<double> &>::type
+function _ZNK6rclcpp14ParameterValue3getILNS_13ParameterTypeE8EEENSt9enable_ifIXeqT_LS2_8EERKSt6vectorIdSaIdEEE4typeEv called 4 returned 100% blocks executed 44%
+        4:  229:  get() const
+        -:  230:  {
+        4:  231:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE_ARRAY) {
+        4:  231-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 4
+    #####:  232:      throw ParameterTypeException(ParameterType::PARAMETER_DOUBLE_ARRAY, get_type());
+    %%%%%:  232-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  232-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  232-block  2
+call    7 never executed
+    $$$$$:  232-block  3
+call    8 never executed
+        -:  233:    }
+        4:  234:    return value_.double_array_value;
+        4:  234-block  0
+        4:  234-block  1
+        -:  235:  }
+        -:  236:
+        -:  237:  template<ParameterType type>
+        -:  238:  constexpr
+        -:  239:  typename std::enable_if<
+        -:  240:    type == ParameterType::PARAMETER_STRING_ARRAY, const std::vector<std::string> &>::type
+        -:  241:  get() const
+        -:  242:  {
+        -:  243:    if (value_.type != rcl_interfaces::msg::ParameterType::PARAMETER_STRING_ARRAY) {
+        -:  244:      throw ParameterTypeException(ParameterType::PARAMETER_STRING_ARRAY, get_type());
+        -:  245:    }
+        -:  246:    return value_.string_array_value;
+        -:  247:  }
+        -:  248:
+        -:  249:  // The following get() variants allow the use of primitive types
+        -:  250:
+        -:  251:  template<typename type>
+        -:  252:  constexpr
+        -:  253:  typename std::enable_if<std::is_same<type, bool>::value, const bool &>::type
+function _ZNK6rclcpp14ParameterValue3getIbEENSt9enable_ifIXsrSt7is_sameIT_bE5valueERKbE4typeEv called 0 returned 0% blocks executed 0%
+    #####:  254:  get() const
+        -:  255:  {
+    #####:  256:    return get<ParameterType::PARAMETER_BOOL>();
+    %%%%%:  256-block  0
+call    0 never executed
+        -:  257:  }
+        -:  258:
+        -:  259:  template<typename type>
+        -:  260:  constexpr
+        -:  261:  typename std::enable_if<
+        -:  262:    std::is_integral<type>::value && !std::is_same<type, bool>::value, const int64_t &>::type
+       5*:  263:  get() const
+        -:  264:  {
+       5*:  265:    return get<ParameterType::PARAMETER_INTEGER>();
+        -:  266:  }
+------------------
+_ZNK6rclcpp14ParameterValue3getIiEENSt9enable_ifIXaasrSt11is_integralIT_E5valuentsrSt7is_sameIS4_bE5valueERKlE4typeEv:
+function _ZNK6rclcpp14ParameterValue3getIiEENSt9enable_ifIXaasrSt11is_integralIT_E5valuentsrSt7is_sameIS4_bE5valueERKlE4typeEv called 5 returned 100% blocks executed 100%
+        5:  263:  get() const
+        -:  264:  {
+        5:  265:    return get<ParameterType::PARAMETER_INTEGER>();
+        5:  265-block  0
+call    0 returned 5
+        -:  266:  }
+------------------
+_ZNK6rclcpp14ParameterValue3getIlEENSt9enable_ifIXaasrSt11is_integralIT_E5valuentsrSt7is_sameIS4_bE5valueERKlE4typeEv:
+function _ZNK6rclcpp14ParameterValue3getIlEENSt9enable_ifIXaasrSt11is_integralIT_E5valuentsrSt7is_sameIS4_bE5valueERKlE4typeEv called 0 returned 0% blocks executed 0%
+    #####:  263:  get() const
+        -:  264:  {
+    #####:  265:    return get<ParameterType::PARAMETER_INTEGER>();
+    %%%%%:  265-block  0
+call    0 never executed
+        -:  266:  }
+------------------
+        -:  267:
+        -:  268:  template<typename type>
+        -:  269:  constexpr
+        -:  270:  typename std::enable_if<std::is_floating_point<type>::value, const double &>::type
+function _ZNK6rclcpp14ParameterValue3getIdEENSt9enable_ifIXsrSt17is_floating_pointIT_E5valueERKdE4typeEv called 3 returned 100% blocks executed 100%
+        3:  271:  get() const
+        -:  272:  {
+        3:  273:    return get<ParameterType::PARAMETER_DOUBLE>();
+        3:  273-block  0
+call    0 returned 3
+        -:  274:  }
+        -:  275:
+        -:  276:  template<typename type>
+        -:  277:  constexpr
+        -:  278:  typename std::enable_if<std::is_convertible<type, std::string>::value, const std::string &>::type
+       1*:  279:  get() const
+        -:  280:  {
+       1*:  281:    return get<ParameterType::PARAMETER_STRING>();
+        -:  282:  }
+------------------
+_ZNK6rclcpp14ParameterValue3getIA7_cEENSt9enable_ifIXsrSt14is_convertibleIT_NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE5valueERKSB_E4typeEv:
+function _ZNK6rclcpp14ParameterValue3getIA7_cEENSt9enable_ifIXsrSt14is_convertibleIT_NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEE5valueERKSB_E4typeEv called 1 returned 100% blocks executed 100%
+        1:  279:  get() const
+        -:  280:  {
+        1:  281:    return get<ParameterType::PARAMETER_STRING>();
+        1:  281-block  0
+call    0 returned 1
+        -:  282:  }
+------------------
+_ZNK6rclcpp14ParameterValue3getINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEENSt9enable_ifIXsrSt14is_convertibleIT_S7_E5valueERKS7_E4typeEv:
+function _ZNK6rclcpp14ParameterValue3getINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEENSt9enable_ifIXsrSt14is_convertibleIT_S7_E5valueERKS7_E4typeEv called 0 returned 0% blocks executed 0%
+    #####:  279:  get() const
+        -:  280:  {
+    #####:  281:    return get<ParameterType::PARAMETER_STRING>();
+    %%%%%:  281-block  0
+call    0 never executed
+        -:  282:  }
+------------------
+        -:  283:
+        -:  284:  template<typename type>
+        -:  285:  constexpr
+        -:  286:  typename std::enable_if<
+        -:  287:    std::is_convertible<
+        -:  288:      type, const std::vector<uint8_t> &>::value, const std::vector<uint8_t> &>::type
+        -:  289:  get() const
+        -:  290:  {
+        -:  291:    return get<ParameterType::PARAMETER_BYTE_ARRAY>();
+        -:  292:  }
+        -:  293:
+        -:  294:  template<typename type>
+        -:  295:  constexpr
+        -:  296:  typename std::enable_if<
+        -:  297:    std::is_convertible<
+        -:  298:      type, const std::vector<bool> &>::value, const std::vector<bool> &>::type
+        -:  299:  get() const
+        -:  300:  {
+        -:  301:    return get<ParameterType::PARAMETER_BOOL_ARRAY>();
+        -:  302:  }
+        -:  303:
+        -:  304:  template<typename type>
+        -:  305:  constexpr
+        -:  306:  typename std::enable_if<
+        -:  307:    std::is_convertible<
+        -:  308:      type, const std::vector<int> &>::value, const std::vector<int64_t> &>::type
+        -:  309:  get() const
+        -:  310:  {
+        -:  311:    return get<ParameterType::PARAMETER_INTEGER_ARRAY>();
+        -:  312:  }
+        -:  313:
+        -:  314:  template<typename type>
+        -:  315:  constexpr
+        -:  316:  typename std::enable_if<
+        -:  317:    std::is_convertible<
+        -:  318:      type, const std::vector<int64_t> &>::value, const std::vector<int64_t> &>::type
+        -:  319:  get() const
+        -:  320:  {
+        -:  321:    return get<ParameterType::PARAMETER_INTEGER_ARRAY>();
+        -:  322:  }
+        -:  323:
+        -:  324:  template<typename type>
+        -:  325:  constexpr
+        -:  326:  typename std::enable_if<
+        -:  327:    std::is_convertible<
+        -:  328:      type, const std::vector<float> &>::value, const std::vector<double> &>::type
+        -:  329:  get() const
+        -:  330:  {
+        -:  331:    return get<ParameterType::PARAMETER_DOUBLE_ARRAY>();
+        -:  332:  }
+        -:  333:
+        -:  334:  template<typename type>
+        -:  335:  constexpr
+        -:  336:  typename std::enable_if<
+        -:  337:    std::is_convertible<
+        -:  338:      type, const std::vector<double> &>::value, const std::vector<double> &>::type
+function _ZNK6rclcpp14ParameterValue3getISt6vectorIdSaIdEEEENSt9enable_ifIXsrSt14is_convertibleIT_RKS4_E5valueES9_E4typeEv called 4 returned 100% blocks executed 100%
+        4:  339:  get() const
+        -:  340:  {
+        4:  341:    return get<ParameterType::PARAMETER_DOUBLE_ARRAY>();
+        4:  341-block  0
+call    0 returned 4
+        -:  342:  }
+        -:  343:
+        -:  344:  template<typename type>
+        -:  345:  constexpr
+        -:  346:  typename std::enable_if<
+        -:  347:    std::is_convertible<
+        -:  348:      type, const std::vector<std::string> &>::value, const std::vector<std::string> &>::type
+        -:  349:  get() const
+        -:  350:  {
+        -:  351:    return get<ParameterType::PARAMETER_STRING_ARRAY>();
+        -:  352:  }
+        -:  353:
+        -:  354:private:
+        -:  355:  rcl_interfaces::msg::ParameterValue value_;
+        -:  356:};
+        -:  357:
+        -:  358:/// Return the value of a parameter as a string
+        -:  359:RCLCPP_PUBLIC
+        -:  360:std::string
+        -:  361:to_string(const ParameterValue & type);
+        -:  362:
+        -:  363:}  // namespace rclcpp
+        -:  364:
+        -:  365:#endif  // RCLCPP__PARAMETER_VALUE_HPP_

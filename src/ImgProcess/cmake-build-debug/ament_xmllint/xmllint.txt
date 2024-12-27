@@ -1,0 +1,20 @@
+-- run_test.py: invoking following command in '/home/dcy/ENG/ENG2025/src/ImgProcess':
+ - /opt/ros/humble/bin/ament_xmllint --xunit-file /home/dcy/ENG/ENG2025/src/ImgProcess/cmake-build-debug/test_results/ImgProcess/xmllint.xunit.xml
+
+File 'package.xml' is invalid:
+/home/dcy/ENG/ENG2025/src/ImgProcess/package.xml:4: element name: Schemas validity error : Element 'name': [facet 'pattern'] The value 'ImgProcess' is not accepted by the pattern '[a-z](_?[a-z0-9]+)*'.
+/home/dcy/ENG/ENG2025/src/ImgProcess/package.xml fails to validate
+
+1 files are invalid
+File 'cmake-build-debug/test_results/ImgProcess/cppcheck.xunit.xml' is valid
+
+File 'cmake-build-debug/test_results/ImgProcess/lint_cmake.xunit.xml' is valid
+
+File 'cmake-build-debug/test_results/ImgProcess/uncrustify.xunit.xml' is valid
+
+File 'cmake-build-debug/test_results/ImgProcess/xmllint.xunit.xml' is valid
+
+
+
+-- run_test.py: return code 1
+-- run_test.py: verify result file '/home/dcy/ENG/ENG2025/src/ImgProcess/cmake-build-debug/test_results/ImgProcess/xmllint.xunit.xml'

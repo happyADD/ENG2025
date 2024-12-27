@@ -1,0 +1,1746 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/qos_event.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2019 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__QOS_EVENT_HPP_
+        -:   16:#define RCLCPP__QOS_EVENT_HPP_
+        -:   17:
+        -:   18:#include <functional>
+        -:   19:#include <memory>
+        -:   20:#include <mutex>
+        -:   21:#include <stdexcept>
+        -:   22:#include <string>
+        -:   23:
+        -:   24:#include "rcl/error_handling.h"
+        -:   25:#include "rcl/event_callback.h"
+        -:   26:#include "rmw/impl/cpp/demangle.hpp"
+        -:   27:#include "rmw/incompatible_qos_events_statuses.h"
+        -:   28:
+        -:   29:#include "rcutils/logging_macros.h"
+        -:   30:
+        -:   31:#include "rclcpp/detail/cpp_callback_trampoline.hpp"
+        -:   32:#include "rclcpp/exceptions.hpp"
+        -:   33:#include "rclcpp/function_traits.hpp"
+        -:   34:#include "rclcpp/logging.hpp"
+        -:   35:#include "rclcpp/waitable.hpp"
+        -:   36:
+        -:   37:namespace rclcpp
+        -:   38:{
+        -:   39:
+        -:   40:using QOSDeadlineRequestedInfo = rmw_requested_deadline_missed_status_t;
+        -:   41:using QOSDeadlineOfferedInfo = rmw_offered_deadline_missed_status_t;
+        -:   42:using QOSLivelinessChangedInfo = rmw_liveliness_changed_status_t;
+        -:   43:using QOSLivelinessLostInfo = rmw_liveliness_lost_status_t;
+        -:   44:using QOSMessageLostInfo = rmw_message_lost_status_t;
+        -:   45:using QOSOfferedIncompatibleQoSInfo = rmw_offered_qos_incompatible_event_status_t;
+        -:   46:using QOSRequestedIncompatibleQoSInfo = rmw_requested_qos_incompatible_event_status_t;
+        -:   47:
+        -:   48:using QOSDeadlineRequestedCallbackType = std::function<void (QOSDeadlineRequestedInfo &)>;
+        -:   49:using QOSDeadlineOfferedCallbackType = std::function<void (QOSDeadlineOfferedInfo &)>;
+        -:   50:using QOSLivelinessChangedCallbackType = std::function<void (QOSLivelinessChangedInfo &)>;
+        -:   51:using QOSLivelinessLostCallbackType = std::function<void (QOSLivelinessLostInfo &)>;
+        -:   52:using QOSMessageLostCallbackType = std::function<void (QOSMessageLostInfo &)>;
+        -:   53:using QOSOfferedIncompatibleQoSCallbackType = std::function<void (QOSOfferedIncompatibleQoSInfo &)>;
+        -:   54:using QOSRequestedIncompatibleQoSCallbackType =
+        -:   55:  std::function<void (QOSRequestedIncompatibleQoSInfo &)>;
+        -:   56:
+        -:   57:/// Contains callbacks for various types of events a Publisher can receive from the middleware.
+        -:   58:struct PublisherEventCallbacks
+        -:   59:{
+        -:   60:  QOSDeadlineOfferedCallbackType deadline_callback;
+        -:   61:  QOSLivelinessLostCallbackType liveliness_callback;
+        -:   62:  QOSOfferedIncompatibleQoSCallbackType incompatible_qos_callback;
+        -:   63:};
+        -:   64:
+        -:   65:/// Contains callbacks for non-message events that a Subscription can receive from the middleware.
+        -:   66:struct SubscriptionEventCallbacks
+        -:   67:{
+        -:   68:  QOSDeadlineRequestedCallbackType deadline_callback;
+        -:   69:  QOSLivelinessChangedCallbackType liveliness_callback;
+        -:   70:  QOSRequestedIncompatibleQoSCallbackType incompatible_qos_callback;
+        -:   71:  QOSMessageLostCallbackType message_lost_callback;
+        -:   72:};
+        -:   73:
+        -:   74:class UnsupportedEventTypeException : public exceptions::RCLErrorBase, public std::runtime_error
+        -:   75:{
+        -:   76:public:
+        -:   77:  RCLCPP_PUBLIC
+        -:   78:  UnsupportedEventTypeException(
+        -:   79:    rcl_ret_t ret,
+        -:   80:    const rcl_error_state_t * error_state,
+        -:   81:    const std::string & prefix);
+        -:   82:
+        -:   83:  RCLCPP_PUBLIC
+        -:   84:  UnsupportedEventTypeException(
+        -:   85:    const exceptions::RCLErrorBase & base_exc,
+        -:   86:    const std::string & prefix);
+        -:   87:};
+        -:   88:
+        -:   89:class QOSEventHandlerBase : public Waitable
+        -:   90:{
+        -:   91:public:
+        -:   92:  enum class EntityType : std::size_t
+        -:   93:  {
+        -:   94:    Event,
+        -:   95:  };
+        -:   96:
+        -:   97:  RCLCPP_PUBLIC
+        -:   98:  virtual ~QOSEventHandlerBase();
+        -:   99:
+        -:  100:  /// Get the number of ready events
+        -:  101:  RCLCPP_PUBLIC
+        -:  102:  size_t
+        -:  103:  get_number_of_ready_events() override;
+        -:  104:
+        -:  105:  /// Add the Waitable to a wait set.
+        -:  106:  RCLCPP_PUBLIC
+        -:  107:  void
+        -:  108:  add_to_wait_set(rcl_wait_set_t * wait_set) override;
+        -:  109:
+        -:  110:  /// Check if the Waitable is ready.
+        -:  111:  RCLCPP_PUBLIC
+        -:  112:  bool
+        -:  113:  is_ready(rcl_wait_set_t * wait_set) override;
+        -:  114:
+        -:  115:  /// Set a callback to be called when each new event instance occurs.
+        -:  116:  /**
+        -:  117:   * The callback receives a size_t which is the number of events that occurred
+        -:  118:   * since the last time this callback was called.
+        -:  119:   * Normally this is 1, but can be > 1 if events occurred before any
+        -:  120:   * callback was set.
+        -:  121:   *
+        -:  122:   * The callback also receives an int identifier argument.
+        -:  123:   * This is needed because a Waitable may be composed of several distinct entities,
+        -:  124:   * such as subscriptions, services, etc.
+        -:  125:   * The application should provide a generic callback function that will be then
+        -:  126:   * forwarded by the waitable to all of its entities.
+        -:  127:   * Before forwarding, a different value for the identifier argument will be
+        -:  128:   * bond to the function.
+        -:  129:   * This implies that the provided callback can use the identifier to behave
+        -:  130:   * differently depending on which entity triggered the waitable to become ready.
+        -:  131:   *
+        -:  132:   * Since this callback is called from the middleware, you should aim to make
+        -:  133:   * it fast and not blocking.
+        -:  134:   * If you need to do a lot of work or wait for some other event, you should
+        -:  135:   * spin it off to another thread, otherwise you risk blocking the middleware.
+        -:  136:   *
+        -:  137:   * Calling it again will clear any previously set callback.
+        -:  138:   *
+        -:  139:   * An exception will be thrown if the callback is not callable.
+        -:  140:   *
+        -:  141:   * This function is thread-safe.
+        -:  142:   *
+        -:  143:   * If you want more information available in the callback, like the qos event
+        -:  144:   * or other information, you may use a lambda with captures or std::bind.
+        -:  145:   *
+        -:  146:   * \sa rmw_event_set_callback
+        -:  147:   * \sa rcl_event_set_callback
+        -:  148:   *
+        -:  149:   * \param[in] callback functor to be called when a new event occurs
+        -:  150:   */
+        -:  151:  void
+function _ZN6rclcpp19QOSEventHandlerBase21set_on_ready_callbackESt8functionIFvmiEE called 0 returned 0% blocks executed 0%
+    #####:  152:  set_on_ready_callback(std::function<void(size_t, int)> callback) override
+        -:  153:  {
+    #####:  154:    if (!callback) {
+    %%%%%:  154-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  155:      throw std::invalid_argument(
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  156:              "The callback passed to set_on_ready_callback "
+    #####:  157:              "is not callable.");
+    %%%%%:  157-block  0
+call    0 never executed
+    %%%%%:  157-block  1
+call    1 never executed
+    $$$$$:  157-block  2
+call    2 never executed
+        -:  158:    }
+        -:  159:
+        -:  160:    // Note: we bind the int identifier argument to this waitable's entity types
+        -:  161:    auto new_callback =
+function _ZZN6rclcpp19QOSEventHandlerBase21set_on_ready_callbackESt8functionIFvmiEEENKUlmE_clEm called 0 returned 0% blocks executed 0%
+    #####:  162:      [callback, this](size_t number_of_events) {
+        -:  163:        try {
+    #####:  164:          callback(number_of_events, static_cast<int>(EntityType::Event));
+    %%%%%:  164-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    =====:  165:        } catch (const std::exception & exception) {
+    $$$$$:  165-block  0
+branch  0 never executed
+branch  1 never executed
+    $$$$$:  165-block  1
+call    2 never executed
+    =====:  166:          RCLCPP_ERROR_STREAM(
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    $$$$$:  166-block  0
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:  166-block  1
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    $$$$$:  166-block  2
+call    9 never executed
+branch 10 never executed
+branch 11 never executed
+    $$$$$:  166-block  3
+call   12 never executed
+branch 13 never executed
+branch 14 never executed
+    $$$$$:  166-block  4
+call   15 never executed
+branch 16 never executed
+branch 17 never executed
+    $$$$$:  166-block  5
+call   18 never executed
+branch 19 never executed
+branch 20 never executed
+    $$$$$:  166-block  6
+call   21 never executed
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    $$$$$:  166-block  7
+call   25 never executed
+branch 26 never executed
+branch 27 never executed
+    $$$$$:  166-block  8
+call   28 never executed
+branch 29 never executed
+branch 30 never executed
+    $$$$$:  166-block  9
+branch 31 never executed
+branch 32 never executed
+    $$$$$:  166-block 10
+call   33 never executed
+branch 34 never executed
+branch 35 never executed
+    $$$$$:  166-block 11
+call   36 never executed
+branch 37 never executed
+branch 38 never executed
+    $$$$$:  166-block 12
+call   39 never executed
+branch 40 never executed
+branch 41 never executed
+    $$$$$:  166-block 13
+call   42 never executed
+branch 43 never executed
+branch 44 never executed
+    $$$$$:  166-block 14
+call   45 never executed
+branch 46 never executed
+branch 47 never executed
+    $$$$$:  166-block 15
+call   48 never executed
+branch 49 never executed
+branch 50 never executed
+    $$$$$:  166-block 16
+call   51 never executed
+call   52 never executed
+branch 53 never executed
+branch 54 never executed
+    $$$$$:  166-block 17
+call   55 never executed
+branch 56 never executed
+branch 57 never executed
+    $$$$$:  166-block 18
+call   58 never executed
+call   59 never executed
+branch 60 never executed
+branch 61 never executed
+    $$$$$:  166-block 19
+call   62 never executed
+call   63 never executed
+call   64 never executed
+branch 65 never executed
+branch 66 never executed
+    $$$$$:  166-block 20
+call   67 never executed
+branch 68 never executed
+branch 69 never executed
+    $$$$$:  166-block 21
+call   70 never executed
+call   71 never executed
+call   72 never executed
+branch 73 never executed
+branch 74 never executed
+    $$$$$:  166-block 22
+call   75 never executed
+branch 76 never executed
+branch 77 never executed
+    $$$$$:  166-block 23
+call   78 never executed
+call   79 never executed
+branch 80 never executed
+branch 81 never executed
+    $$$$$:  166-block 24
+call   82 never executed
+call   83 never executed
+call   84 never executed
+call   85 never executed
+    $$$$$:  166-block 25
+call   86 never executed
+    $$$$$:  166-block 26
+call   87 never executed
+    $$$$$:  166-block 27
+    $$$$$:  166-block 28
+    $$$$$:  166-block 29
+    $$$$$:  166-block 30
+call   88 never executed
+    $$$$$:  166-block 31
+    $$$$$:  166-block 32
+call   89 never executed
+    $$$$$:  166-block 33
+    $$$$$:  166-block 34
+call   90 never executed
+    $$$$$:  166-block 35
+    $$$$$:  166-block 36
+call   91 never executed
+    $$$$$:  166-block 37
+    $$$$$:  166-block 38
+call   92 never executed
+    $$$$$:  166-block 39
+    $$$$$:  166-block 40
+call   93 never executed
+    $$$$$:  166-block 41
+    $$$$$:  166-block 42
+call   94 never executed
+    $$$$$:  166-block 43
+    $$$$$:  166-block 44
+call   95 never executed
+        -:  167:            // TODO(wjwwood): get this class access to the node logger it is associated with
+        -:  168:            rclcpp::get_logger("rclcpp"),
+        -:  169:            "rclcpp::QOSEventHandlerBase@" << this <<
+        -:  170:              " caught " << rmw::impl::cpp::demangle(exception) <<
+        -:  171:              " exception in user-provided callback for the 'on ready' callback: " <<
+        -:  172:              exception.what());
+    =====:  173:        } catch (...) {
+call    0 never executed
+    $$$$$:  173-block  0
+call    1 never executed
+    $$$$$:  173-block  1
+call    2 never executed
+    =====:  174:          RCLCPP_ERROR_STREAM(
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    $$$$$:  174-block  0
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:  174-block  1
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    $$$$$:  174-block  2
+call    9 never executed
+branch 10 never executed
+branch 11 never executed
+    $$$$$:  174-block  3
+call   12 never executed
+branch 13 never executed
+branch 14 never executed
+    $$$$$:  174-block  4
+branch 15 never executed
+branch 16 never executed
+    $$$$$:  174-block  5
+call   17 never executed
+branch 18 never executed
+branch 19 never executed
+    $$$$$:  174-block  6
+branch 20 never executed
+branch 21 never executed
+    $$$$$:  174-block  7
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    $$$$$:  174-block  8
+call   25 never executed
+branch 26 never executed
+branch 27 never executed
+    $$$$$:  174-block  9
+call   28 never executed
+branch 29 never executed
+branch 30 never executed
+    $$$$$:  174-block 10
+call   31 never executed
+branch 32 never executed
+branch 33 never executed
+    $$$$$:  174-block 11
+call   34 never executed
+branch 35 never executed
+branch 36 never executed
+    $$$$$:  174-block 12
+call   37 never executed
+branch 38 never executed
+branch 39 never executed
+    $$$$$:  174-block 13
+call   40 never executed
+call   41 never executed
+branch 42 never executed
+branch 43 never executed
+    $$$$$:  174-block 14
+call   44 never executed
+branch 45 never executed
+branch 46 never executed
+    $$$$$:  174-block 15
+call   47 never executed
+call   48 never executed
+branch 49 never executed
+branch 50 never executed
+    $$$$$:  174-block 16
+call   51 never executed
+call   52 never executed
+call   53 never executed
+branch 54 never executed
+branch 55 never executed
+    $$$$$:  174-block 17
+call   56 never executed
+branch 57 never executed
+branch 58 never executed
+    $$$$$:  174-block 18
+call   59 never executed
+call   60 never executed
+call   61 never executed
+branch 62 never executed
+branch 63 never executed
+    $$$$$:  174-block 19
+call   64 never executed
+branch 65 never executed
+branch 66 never executed
+    $$$$$:  174-block 20
+call   67 never executed
+call   68 never executed
+branch 69 never executed
+branch 70 never executed
+    $$$$$:  174-block 21
+call   71 never executed
+call   72 never executed
+call   73 never executed
+call   74 never executed
+    $$$$$:  174-block 22
+call   75 never executed
+    $$$$$:  174-block 23
+    $$$$$:  174-block 24
+    $$$$$:  174-block 25
+call   76 never executed
+    $$$$$:  174-block 26
+    $$$$$:  174-block 27
+call   77 never executed
+    $$$$$:  174-block 28
+    $$$$$:  174-block 29
+call   78 never executed
+    $$$$$:  174-block 30
+    $$$$$:  174-block 31
+call   79 never executed
+    $$$$$:  174-block 32
+    $$$$$:  174-block 33
+call   80 never executed
+    $$$$$:  174-block 34
+    $$$$$:  174-block 35
+call   81 never executed
+    $$$$$:  174-block 36
+    $$$$$:  174-block 37
+call   82 never executed
+    $$$$$:  174-block 38
+    $$$$$:  174-block 39
+call   83 never executed
+        -:  175:            rclcpp::get_logger("rclcpp"),
+        -:  176:            "rclcpp::QOSEventHandlerBase@" << this <<
+        -:  177:              " caught unhandled exception in user-provided callback " <<
+        -:  178:              "for the 'on ready' callback");
+    =====:  179:        }
+call    0 never executed
+    $$$$$:  179-block  0
+call    1 never executed
+    #####:  180:      };
+    %%%%%:  180-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  180-block  1
+        -:  181:
+    #####:  182:    std::lock_guard<std::recursive_mutex> lock(callback_mutex_);
+    %%%%%:  182-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  183:
+        -:  184:    // Set it temporarily to the new callback, while we replace the old one.
+        -:  185:    // This two-step setting, prevents a gap where the old std::function has
+        -:  186:    // been replaced but the middleware hasn't been told about the new one yet.
+    #####:  187:    set_on_new_event_callback(
+    %%%%%:  187-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  188:      rclcpp::detail::cpp_callback_trampoline<const void *, size_t>,
+        -:  189:      static_cast<const void *>(&new_callback));
+        -:  190:
+        -:  191:    // Store the std::function to keep it in scope, also overwrites the existing one.
+    #####:  192:    on_new_event_callback_ = new_callback;
+    %%%%%:  192-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  193:
+        -:  194:    // Set it again, now using the permanent storage.
+    #####:  195:    set_on_new_event_callback(
+        -:  196:      rclcpp::detail::cpp_callback_trampoline<const void *, size_t>,
+    #####:  197:      static_cast<const void *>(&on_new_event_callback_));
+    %%%%%:  197-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  198:  }
+    %%%%%:  198-block  0
+call    0 never executed
+call    1 never executed
+    $$$$$:  198-block  1
+call    2 never executed
+    $$$$$:  198-block  2
+call    3 never executed
+        -:  199:
+        -:  200:  /// Unset the callback registered for new events, if any.
+        -:  201:  void
+function _ZN6rclcpp19QOSEventHandlerBase23clear_on_ready_callbackEv called 2 returned 100% blocks executed 60%
+        2:  202:  clear_on_ready_callback() override
+        -:  203:  {
+        2:  204:    std::lock_guard<std::recursive_mutex> lock(callback_mutex_);
+        2:  204-block  0
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        2:  205:    if (on_new_event_callback_) {
+        2:  205-block  0
+call    0 returned 2
+branch  1 taken 0 (fallthrough)
+branch  2 taken 2
+    #####:  206:      set_on_new_event_callback(nullptr, nullptr);
+    %%%%%:  206-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  207:      on_new_event_callback_ = nullptr;
+    %%%%%:  207-block  0
+call    0 never executed
+        -:  208:    }
+        2:  209:  }
+        2:  209-block  0
+call    0 returned 2
+    $$$$$:  209-block  1
+call    1 never executed
+        -:  210:
+        -:  211:protected:
+        -:  212:  RCLCPP_PUBLIC
+        -:  213:  void
+        -:  214:  set_on_new_event_callback(rcl_event_callback_t callback, const void * user_data);
+        -:  215:
+        -:  216:  rcl_event_t event_handle_;
+        -:  217:  size_t wait_set_event_index_;
+        -:  218:  std::recursive_mutex callback_mutex_;
+        -:  219:  std::function<void(size_t)> on_new_event_callback_{nullptr};
+        -:  220:};
+        -:  221:
+        -:  222:template<typename EventCallbackT, typename ParentHandleT>
+        -:  223:class QOSEventHandler : public QOSEventHandlerBase
+        -:  224:{
+        -:  225:public:
+        -:  226:  template<typename InitFuncT, typename EventTypeEnum>
+       2*:  227:  QOSEventHandler(
+        -:  228:    const EventCallbackT & callback,
+        -:  229:    InitFuncT init_func,
+        -:  230:    ParentHandleT parent_handle,
+        -:  231:    EventTypeEnum event_type)
+       2*:  232:  : parent_handle_(parent_handle), event_callback_(callback)
+        -:  233:  {
+       2*:  234:    event_handle_ = rcl_get_zero_initialized_event();
+       2*:  235:    rcl_ret_t ret = init_func(&event_handle_, parent_handle.get(), event_type);
+       2*:  236:    if (ret != RCL_RET_OK) {
+    #####:  237:      if (ret == RCL_RET_UNSUPPORTED) {
+    #####:  238:        UnsupportedEventTypeException exc(ret, rcl_get_error_state(), "Failed to initialize event");
+    #####:  239:        rcl_reset_error();
+    #####:  240:        throw exc;
+    =====:  241:      } else {
+    #####:  242:        rclcpp::exceptions::throw_from_rcl_error(ret, "Failed to initialize event");
+        -:  243:      }
+        -:  244:    }
+       2*:  245:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKSU_26rcl_publisher_event_type_eES12_EERKSS_T_SV_T0_:
+function _ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKSU_26rcl_publisher_event_type_eES12_EERKSS_T_SV_T0_ called 1 returned 100% blocks executed 19%
+        1:  227:  QOSEventHandler(
+        -:  228:    const EventCallbackT & callback,
+        -:  229:    InitFuncT init_func,
+        -:  230:    ParentHandleT parent_handle,
+        -:  231:    EventTypeEnum event_type)
+        1:  232:  : parent_handle_(parent_handle), event_callback_(callback)
+        1:  232-block  0
+call    0 returned 1
+call    1 returned 1
+        -:  233:  {
+        1:  234:    event_handle_ = rcl_get_zero_initialized_event();
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  235:    rcl_ret_t ret = init_func(&event_handle_, parent_handle.get(), event_type);
+        1:  235-block  0
+call    0 returned 1
+call    1 returned 1
+branch  2 taken 1 (fallthrough)
+branch  3 taken 0 (throw)
+        1:  236:    if (ret != RCL_RET_OK) {
+        1:  236-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 1
+    #####:  237:      if (ret == RCL_RET_UNSUPPORTED) {
+    %%%%%:  237-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  238:        UnsupportedEventTypeException exc(ret, rcl_get_error_state(), "Failed to initialize event");
+    %%%%%:  238-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  238-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  238-block  2
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+call   10 never executed
+    $$$$$:  238-block  3
+    $$$$$:  238-block  4
+    #####:  239:        rcl_reset_error();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  240:        throw exc;
+    %%%%%:  240-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  240-block  1
+call    4 never executed
+    $$$$$:  240-block  2
+call    5 never executed
+    =====:  241:      } else {
+    $$$$$:  241-block  0
+call    0 never executed
+    #####:  242:        rclcpp::exceptions::throw_from_rcl_error(ret, "Failed to initialize event");
+    %%%%%:  242-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  242-block  1
+call    4 never executed
+    $$$$$:  242-block  2
+call    5 never executed
+    $$$$$:  242-block  3
+    $$$$$:  242-block  4
+call    6 never executed
+    $$$$$:  242-block  5
+        -:  243:      }
+        -:  244:    }
+        1:  245:  }
+        1:  245-block  0
+    $$$$$:  245-block  1
+call    0 never executed
+    $$$$$:  245-block  2
+call    1 never executed
+------------------
+_ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKSU_26rcl_publisher_event_type_eES12_EERKSS_T_SV_T0_:
+function _ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKSU_26rcl_publisher_event_type_eES12_EERKSS_T_SV_T0_ called 1 returned 100% blocks executed 19%
+        1:  227:  QOSEventHandler(
+        -:  228:    const EventCallbackT & callback,
+        -:  229:    InitFuncT init_func,
+        -:  230:    ParentHandleT parent_handle,
+        -:  231:    EventTypeEnum event_type)
+        1:  232:  : parent_handle_(parent_handle), event_callback_(callback)
+        1:  232-block  0
+call    0 returned 1
+call    1 returned 1
+        -:  233:  {
+        1:  234:    event_handle_ = rcl_get_zero_initialized_event();
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  235:    rcl_ret_t ret = init_func(&event_handle_, parent_handle.get(), event_type);
+        1:  235-block  0
+call    0 returned 1
+call    1 returned 1
+branch  2 taken 1 (fallthrough)
+branch  3 taken 0 (throw)
+        1:  236:    if (ret != RCL_RET_OK) {
+        1:  236-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 1
+    #####:  237:      if (ret == RCL_RET_UNSUPPORTED) {
+    %%%%%:  237-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  238:        UnsupportedEventTypeException exc(ret, rcl_get_error_state(), "Failed to initialize event");
+    %%%%%:  238-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  238-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  238-block  2
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+call   10 never executed
+    $$$$$:  238-block  3
+    $$$$$:  238-block  4
+    #####:  239:        rcl_reset_error();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  240:        throw exc;
+    %%%%%:  240-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  240-block  1
+call    4 never executed
+    $$$$$:  240-block  2
+call    5 never executed
+    =====:  241:      } else {
+    $$$$$:  241-block  0
+call    0 never executed
+    #####:  242:        rclcpp::exceptions::throw_from_rcl_error(ret, "Failed to initialize event");
+    %%%%%:  242-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  242-block  1
+call    4 never executed
+    $$$$$:  242-block  2
+call    5 never executed
+    $$$$$:  242-block  3
+    $$$$$:  242-block  4
+call    6 never executed
+    $$$$$:  242-block  5
+        -:  243:      }
+        -:  244:    }
+        1:  245:  }
+        1:  245-block  0
+    $$$$$:  245-block  1
+call    0 never executed
+    $$$$$:  245-block  2
+call    1 never executed
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR35rmw_qos_incompatible_event_status_sEESt10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKS7_26rcl_publisher_event_type_eESF_EERKS5_T_S8_T0_:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR35rmw_qos_incompatible_event_status_sEESt10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKS7_26rcl_publisher_event_type_eESF_EERKS5_T_S8_T0_ called 0 returned 0% blocks executed 0%
+    #####:  227:  QOSEventHandler(
+        -:  228:    const EventCallbackT & callback,
+        -:  229:    InitFuncT init_func,
+        -:  230:    ParentHandleT parent_handle,
+        -:  231:    EventTypeEnum event_type)
+    #####:  232:  : parent_handle_(parent_handle), event_callback_(callback)
+    %%%%%:  232-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+        -:  233:  {
+    #####:  234:    event_handle_ = rcl_get_zero_initialized_event();
+    %%%%%:  234-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  235:    rcl_ret_t ret = init_func(&event_handle_, parent_handle.get(), event_type);
+    %%%%%:  235-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  236:    if (ret != RCL_RET_OK) {
+    %%%%%:  236-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  237:      if (ret == RCL_RET_UNSUPPORTED) {
+    %%%%%:  237-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  238:        UnsupportedEventTypeException exc(ret, rcl_get_error_state(), "Failed to initialize event");
+    %%%%%:  238-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  238-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  238-block  2
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+call   10 never executed
+    $$$$$:  238-block  3
+    $$$$$:  238-block  4
+    #####:  239:        rcl_reset_error();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  240:        throw exc;
+    %%%%%:  240-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  240-block  1
+call    4 never executed
+    $$$$$:  240-block  2
+call    5 never executed
+    =====:  241:      } else {
+    $$$$$:  241-block  0
+call    0 never executed
+    #####:  242:        rclcpp::exceptions::throw_from_rcl_error(ret, "Failed to initialize event");
+    %%%%%:  242-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  242-block  1
+call    4 never executed
+    $$$$$:  242-block  2
+call    5 never executed
+    $$$$$:  242-block  3
+    $$$$$:  242-block  4
+call    6 never executed
+    $$$$$:  242-block  5
+        -:  243:      }
+        -:  244:    }
+    #####:  245:  }
+    %%%%%:  245-block  0
+    $$$$$:  245-block  1
+call    0 never executed
+    $$$$$:  245-block  2
+call    1 never executed
+    $$$$$:  245-block  3
+call    2 never executed
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR28rmw_liveliness_lost_status_sEESt10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKS7_26rcl_publisher_event_type_eESF_EERKS5_T_S8_T0_:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR28rmw_liveliness_lost_status_sEESt10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKS7_26rcl_publisher_event_type_eESF_EERKS5_T_S8_T0_ called 0 returned 0% blocks executed 0%
+    #####:  227:  QOSEventHandler(
+        -:  228:    const EventCallbackT & callback,
+        -:  229:    InitFuncT init_func,
+        -:  230:    ParentHandleT parent_handle,
+        -:  231:    EventTypeEnum event_type)
+    #####:  232:  : parent_handle_(parent_handle), event_callback_(callback)
+    %%%%%:  232-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+        -:  233:  {
+    #####:  234:    event_handle_ = rcl_get_zero_initialized_event();
+    %%%%%:  234-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  235:    rcl_ret_t ret = init_func(&event_handle_, parent_handle.get(), event_type);
+    %%%%%:  235-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  236:    if (ret != RCL_RET_OK) {
+    %%%%%:  236-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  237:      if (ret == RCL_RET_UNSUPPORTED) {
+    %%%%%:  237-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  238:        UnsupportedEventTypeException exc(ret, rcl_get_error_state(), "Failed to initialize event");
+    %%%%%:  238-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  238-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  238-block  2
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+call   10 never executed
+    $$$$$:  238-block  3
+    $$$$$:  238-block  4
+    #####:  239:        rcl_reset_error();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  240:        throw exc;
+    %%%%%:  240-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  240-block  1
+call    4 never executed
+    $$$$$:  240-block  2
+call    5 never executed
+    =====:  241:      } else {
+    $$$$$:  241-block  0
+call    0 never executed
+    #####:  242:        rclcpp::exceptions::throw_from_rcl_error(ret, "Failed to initialize event");
+    %%%%%:  242-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  242-block  1
+call    4 never executed
+    $$$$$:  242-block  2
+call    5 never executed
+    $$$$$:  242-block  3
+    $$$$$:  242-block  4
+call    6 never executed
+    $$$$$:  242-block  5
+        -:  243:      }
+        -:  244:    }
+    #####:  245:  }
+    %%%%%:  245-block  0
+    $$$$$:  245-block  1
+call    0 never executed
+    $$$$$:  245-block  2
+call    1 never executed
+    $$$$$:  245-block  3
+call    2 never executed
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR36rmw_offered_deadline_missed_status_sEESt10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKS7_26rcl_publisher_event_type_eESF_EERKS5_T_S8_T0_:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR36rmw_offered_deadline_missed_status_sEESt10shared_ptrI15rcl_publisher_sEEC2IPFiP11rcl_event_sPKS7_26rcl_publisher_event_type_eESF_EERKS5_T_S8_T0_ called 0 returned 0% blocks executed 0%
+    #####:  227:  QOSEventHandler(
+        -:  228:    const EventCallbackT & callback,
+        -:  229:    InitFuncT init_func,
+        -:  230:    ParentHandleT parent_handle,
+        -:  231:    EventTypeEnum event_type)
+    #####:  232:  : parent_handle_(parent_handle), event_callback_(callback)
+    %%%%%:  232-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+        -:  233:  {
+    #####:  234:    event_handle_ = rcl_get_zero_initialized_event();
+    %%%%%:  234-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  235:    rcl_ret_t ret = init_func(&event_handle_, parent_handle.get(), event_type);
+    %%%%%:  235-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  236:    if (ret != RCL_RET_OK) {
+    %%%%%:  236-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  237:      if (ret == RCL_RET_UNSUPPORTED) {
+    %%%%%:  237-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  238:        UnsupportedEventTypeException exc(ret, rcl_get_error_state(), "Failed to initialize event");
+    %%%%%:  238-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  238-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  238-block  2
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+call   10 never executed
+    $$$$$:  238-block  3
+    $$$$$:  238-block  4
+    #####:  239:        rcl_reset_error();
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  240:        throw exc;
+    %%%%%:  240-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  240-block  1
+call    4 never executed
+    $$$$$:  240-block  2
+call    5 never executed
+    =====:  241:      } else {
+    $$$$$:  241-block  0
+call    0 never executed
+    #####:  242:        rclcpp::exceptions::throw_from_rcl_error(ret, "Failed to initialize event");
+    %%%%%:  242-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  242-block  1
+call    4 never executed
+    $$$$$:  242-block  2
+call    5 never executed
+    $$$$$:  242-block  3
+    $$$$$:  242-block  4
+call    6 never executed
+    $$$$$:  242-block  5
+        -:  243:      }
+        -:  244:    }
+    #####:  245:  }
+    %%%%%:  245-block  0
+    $$$$$:  245-block  1
+call    0 never executed
+    $$$$$:  245-block  2
+call    1 never executed
+    $$$$$:  245-block  3
+call    2 never executed
+------------------
+        -:  246:
+        -:  247:  /// Take data so that the callback cannot be scheduled again
+        -:  248:  std::shared_ptr<void>
+    #####:  249:  take_data() override
+        -:  250:  {
+        -:  251:    EventCallbackInfoT callback_info;
+    #####:  252:    rcl_ret_t ret = rcl_take_event(&event_handle_, &callback_info);
+    #####:  253:    if (ret != RCL_RET_OK) {
+    #####:  254:      RCUTILS_LOG_ERROR_NAMED(
+        -:  255:        "rclcpp",
+        -:  256:        "Couldn't take event info: %s", rcl_get_error_string().str);
+    #####:  257:      return nullptr;
+        -:  258:    }
+    #####:  259:    return std::static_pointer_cast<void>(std::make_shared<EventCallbackInfoT>(callback_info));
+        -:  260:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR36rmw_offered_deadline_missed_status_sEESt10shared_ptrI15rcl_publisher_sEE9take_dataEv:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR36rmw_offered_deadline_missed_status_sEESt10shared_ptrI15rcl_publisher_sEE9take_dataEv called 0 returned 0% blocks executed 0%
+    #####:  249:  take_data() override
+        -:  250:  {
+        -:  251:    EventCallbackInfoT callback_info;
+    #####:  252:    rcl_ret_t ret = rcl_take_event(&event_handle_, &callback_info);
+    %%%%%:  252-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  253:    if (ret != RCL_RET_OK) {
+    %%%%%:  253-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  254:      RCUTILS_LOG_ERROR_NAMED(
+    %%%%%:  254-block  0
+branch  0 never executed
+branch  1 never executed
+    %%%%%:  254-block  1
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  254-block  2
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  254-block  3
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  254-block  4
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    %%%%%:  254-block  5
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  254-block  6
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  254-block  7
+call   19 never executed
+branch 20 never executed
+branch 21 never executed
+    %%%%%:  254-block  8
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    %%%%%:  254-block  9
+call   25 never executed
+branch 26 never executed
+branch 27 never executed
+    %%%%%:  254-block 10
+branch 28 never executed
+branch 29 never executed
+    %%%%%:  254-block 11
+call   30 never executed
+branch 31 never executed
+branch 32 never executed
+    %%%%%:  254-block 12
+call   33 never executed
+branch 34 never executed
+branch 35 never executed
+    %%%%%:  254-block 13
+    $$$$$:  254-block 14
+    $$$$$:  254-block 15
+    $$$$$:  254-block 16
+        -:  255:        "rclcpp",
+        -:  256:        "Couldn't take event info: %s", rcl_get_error_string().str);
+    #####:  257:      return nullptr;
+    %%%%%:  257-block  0
+call    0 never executed
+        -:  258:    }
+    #####:  259:    return std::static_pointer_cast<void>(std::make_shared<EventCallbackInfoT>(callback_info));
+    %%%%%:  259-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  259-block  1
+call    3 never executed
+call    4 never executed
+        -:  260:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR28rmw_liveliness_lost_status_sEESt10shared_ptrI15rcl_publisher_sEE9take_dataEv:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR28rmw_liveliness_lost_status_sEESt10shared_ptrI15rcl_publisher_sEE9take_dataEv called 0 returned 0% blocks executed 0%
+    #####:  249:  take_data() override
+        -:  250:  {
+        -:  251:    EventCallbackInfoT callback_info;
+    #####:  252:    rcl_ret_t ret = rcl_take_event(&event_handle_, &callback_info);
+    %%%%%:  252-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  253:    if (ret != RCL_RET_OK) {
+    %%%%%:  253-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  254:      RCUTILS_LOG_ERROR_NAMED(
+    %%%%%:  254-block  0
+branch  0 never executed
+branch  1 never executed
+    %%%%%:  254-block  1
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  254-block  2
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  254-block  3
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  254-block  4
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    %%%%%:  254-block  5
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  254-block  6
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  254-block  7
+call   19 never executed
+branch 20 never executed
+branch 21 never executed
+    %%%%%:  254-block  8
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    %%%%%:  254-block  9
+call   25 never executed
+branch 26 never executed
+branch 27 never executed
+    %%%%%:  254-block 10
+branch 28 never executed
+branch 29 never executed
+    %%%%%:  254-block 11
+call   30 never executed
+branch 31 never executed
+branch 32 never executed
+    %%%%%:  254-block 12
+call   33 never executed
+branch 34 never executed
+branch 35 never executed
+    %%%%%:  254-block 13
+    $$$$$:  254-block 14
+    $$$$$:  254-block 15
+    $$$$$:  254-block 16
+        -:  255:        "rclcpp",
+        -:  256:        "Couldn't take event info: %s", rcl_get_error_string().str);
+    #####:  257:      return nullptr;
+    %%%%%:  257-block  0
+call    0 never executed
+        -:  258:    }
+    #####:  259:    return std::static_pointer_cast<void>(std::make_shared<EventCallbackInfoT>(callback_info));
+    %%%%%:  259-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  259-block  1
+call    3 never executed
+call    4 never executed
+        -:  260:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR35rmw_qos_incompatible_event_status_sEESt10shared_ptrI15rcl_publisher_sEE9take_dataEv:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR35rmw_qos_incompatible_event_status_sEESt10shared_ptrI15rcl_publisher_sEE9take_dataEv called 0 returned 0% blocks executed 0%
+    #####:  249:  take_data() override
+        -:  250:  {
+        -:  251:    EventCallbackInfoT callback_info;
+    #####:  252:    rcl_ret_t ret = rcl_take_event(&event_handle_, &callback_info);
+    %%%%%:  252-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  253:    if (ret != RCL_RET_OK) {
+    %%%%%:  253-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  254:      RCUTILS_LOG_ERROR_NAMED(
+    %%%%%:  254-block  0
+branch  0 never executed
+branch  1 never executed
+    %%%%%:  254-block  1
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  254-block  2
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  254-block  3
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  254-block  4
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    %%%%%:  254-block  5
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  254-block  6
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  254-block  7
+call   19 never executed
+branch 20 never executed
+branch 21 never executed
+    %%%%%:  254-block  8
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    %%%%%:  254-block  9
+call   25 never executed
+branch 26 never executed
+branch 27 never executed
+    %%%%%:  254-block 10
+branch 28 never executed
+branch 29 never executed
+    %%%%%:  254-block 11
+call   30 never executed
+branch 31 never executed
+branch 32 never executed
+    %%%%%:  254-block 12
+call   33 never executed
+branch 34 never executed
+branch 35 never executed
+    %%%%%:  254-block 13
+    $$$$$:  254-block 14
+    $$$$$:  254-block 15
+    $$$$$:  254-block 16
+        -:  255:        "rclcpp",
+        -:  256:        "Couldn't take event info: %s", rcl_get_error_string().str);
+    #####:  257:      return nullptr;
+    %%%%%:  257-block  0
+call    0 never executed
+        -:  258:    }
+    #####:  259:    return std::static_pointer_cast<void>(std::make_shared<EventCallbackInfoT>(callback_info));
+    %%%%%:  259-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  259-block  1
+call    3 never executed
+call    4 never executed
+        -:  260:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE9take_dataEv:
+function _ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE9take_dataEv called 0 returned 0% blocks executed 0%
+    #####:  249:  take_data() override
+        -:  250:  {
+        -:  251:    EventCallbackInfoT callback_info;
+    #####:  252:    rcl_ret_t ret = rcl_take_event(&event_handle_, &callback_info);
+    %%%%%:  252-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  253:    if (ret != RCL_RET_OK) {
+    %%%%%:  253-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  254:      RCUTILS_LOG_ERROR_NAMED(
+    %%%%%:  254-block  0
+branch  0 never executed
+branch  1 never executed
+    %%%%%:  254-block  1
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  254-block  2
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  254-block  3
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  254-block  4
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    %%%%%:  254-block  5
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  254-block  6
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  254-block  7
+call   19 never executed
+branch 20 never executed
+branch 21 never executed
+    %%%%%:  254-block  8
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    %%%%%:  254-block  9
+call   25 never executed
+branch 26 never executed
+branch 27 never executed
+    %%%%%:  254-block 10
+branch 28 never executed
+branch 29 never executed
+    %%%%%:  254-block 11
+call   30 never executed
+branch 31 never executed
+branch 32 never executed
+    %%%%%:  254-block 12
+call   33 never executed
+branch 34 never executed
+branch 35 never executed
+    %%%%%:  254-block 13
+    $$$$$:  254-block 14
+    $$$$$:  254-block 15
+    $$$$$:  254-block 16
+        -:  255:        "rclcpp",
+        -:  256:        "Couldn't take event info: %s", rcl_get_error_string().str);
+    #####:  257:      return nullptr;
+    %%%%%:  257-block  0
+call    0 never executed
+        -:  258:    }
+    #####:  259:    return std::static_pointer_cast<void>(std::make_shared<EventCallbackInfoT>(callback_info));
+    %%%%%:  259-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  259-block  1
+call    3 never executed
+call    4 never executed
+        -:  260:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE9take_dataEv:
+function _ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE9take_dataEv called 0 returned 0% blocks executed 0%
+    #####:  249:  take_data() override
+        -:  250:  {
+        -:  251:    EventCallbackInfoT callback_info;
+    #####:  252:    rcl_ret_t ret = rcl_take_event(&event_handle_, &callback_info);
+    %%%%%:  252-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  253:    if (ret != RCL_RET_OK) {
+    %%%%%:  253-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  254:      RCUTILS_LOG_ERROR_NAMED(
+    %%%%%:  254-block  0
+branch  0 never executed
+branch  1 never executed
+    %%%%%:  254-block  1
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  254-block  2
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  254-block  3
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  254-block  4
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    %%%%%:  254-block  5
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  254-block  6
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  254-block  7
+call   19 never executed
+branch 20 never executed
+branch 21 never executed
+    %%%%%:  254-block  8
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    %%%%%:  254-block  9
+call   25 never executed
+branch 26 never executed
+branch 27 never executed
+    %%%%%:  254-block 10
+branch 28 never executed
+branch 29 never executed
+    %%%%%:  254-block 11
+call   30 never executed
+branch 31 never executed
+branch 32 never executed
+    %%%%%:  254-block 12
+call   33 never executed
+branch 34 never executed
+branch 35 never executed
+    %%%%%:  254-block 13
+    $$$$$:  254-block 14
+    $$$$$:  254-block 15
+    $$$$$:  254-block 16
+        -:  255:        "rclcpp",
+        -:  256:        "Couldn't take event info: %s", rcl_get_error_string().str);
+    #####:  257:      return nullptr;
+    %%%%%:  257-block  0
+call    0 never executed
+        -:  258:    }
+    #####:  259:    return std::static_pointer_cast<void>(std::make_shared<EventCallbackInfoT>(callback_info));
+    %%%%%:  259-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  259-block  1
+call    3 never executed
+call    4 never executed
+        -:  260:  }
+------------------
+        -:  261:
+        -:  262:  std::shared_ptr<void>
+    #####:  263:  take_data_by_entity_id(size_t id) override
+        -:  264:  {
+        -:  265:    (void)id;
+    #####:  266:    return take_data();
+        -:  267:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR36rmw_offered_deadline_missed_status_sEESt10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR36rmw_offered_deadline_missed_status_sEESt10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm called 0 returned 0% blocks executed 0%
+    #####:  263:  take_data_by_entity_id(size_t id) override
+        -:  264:  {
+        -:  265:    (void)id;
+    #####:  266:    return take_data();
+    %%%%%:  266-block  0
+call    0 never executed
+        -:  267:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR28rmw_liveliness_lost_status_sEESt10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR28rmw_liveliness_lost_status_sEESt10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm called 0 returned 0% blocks executed 0%
+    #####:  263:  take_data_by_entity_id(size_t id) override
+        -:  264:  {
+        -:  265:    (void)id;
+    #####:  266:    return take_data();
+    %%%%%:  266-block  0
+call    0 never executed
+        -:  267:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR35rmw_qos_incompatible_event_status_sEESt10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR35rmw_qos_incompatible_event_status_sEESt10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm called 0 returned 0% blocks executed 0%
+    #####:  263:  take_data_by_entity_id(size_t id) override
+        -:  264:  {
+        -:  265:    (void)id;
+    #####:  266:    return take_data();
+    %%%%%:  266-block  0
+call    0 never executed
+        -:  267:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm:
+function _ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm called 0 returned 0% blocks executed 0%
+    #####:  263:  take_data_by_entity_id(size_t id) override
+        -:  264:  {
+        -:  265:    (void)id;
+    #####:  266:    return take_data();
+    %%%%%:  266-block  0
+call    0 never executed
+        -:  267:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm:
+function _ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE22take_data_by_entity_idEm called 0 returned 0% blocks executed 0%
+    #####:  263:  take_data_by_entity_id(size_t id) override
+        -:  264:  {
+        -:  265:    (void)id;
+    #####:  266:    return take_data();
+    %%%%%:  266-block  0
+call    0 never executed
+        -:  267:  }
+------------------
+        -:  268:
+        -:  269:  /// Execute any entities of the Waitable that are ready.
+        -:  270:  void
+    #####:  271:  execute(std::shared_ptr<void> & data) override
+        -:  272:  {
+    #####:  273:    if (!data) {
+    #####:  274:      throw std::runtime_error("'data' is empty");
+        -:  275:    }
+    #####:  276:    auto callback_ptr = std::static_pointer_cast<EventCallbackInfoT>(data);
+    #####:  277:    event_callback_(*callback_ptr);
+    #####:  278:    callback_ptr.reset();
+    #####:  279:  }
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR36rmw_offered_deadline_missed_status_sEESt10shared_ptrI15rcl_publisher_sEE7executeERS6_IvE:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR36rmw_offered_deadline_missed_status_sEESt10shared_ptrI15rcl_publisher_sEE7executeERS6_IvE called 0 returned 0% blocks executed 0%
+    #####:  271:  execute(std::shared_ptr<void> & data) override
+        -:  272:  {
+    #####:  273:    if (!data) {
+    %%%%%:  273-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  274:      throw std::runtime_error("'data' is empty");
+    %%%%%:  274-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  274-block  1
+call    4 never executed
+    $$$$$:  274-block  2
+call    5 never executed
+        -:  275:    }
+    #####:  276:    auto callback_ptr = std::static_pointer_cast<EventCallbackInfoT>(data);
+    %%%%%:  276-block  0
+call    0 never executed
+    #####:  277:    event_callback_(*callback_ptr);
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  278:    callback_ptr.reset();
+    %%%%%:  278-block  0
+call    0 never executed
+    #####:  279:  }
+call    0 never executed
+    $$$$$:  279-block  0
+call    1 never executed
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR28rmw_liveliness_lost_status_sEESt10shared_ptrI15rcl_publisher_sEE7executeERS6_IvE:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR28rmw_liveliness_lost_status_sEESt10shared_ptrI15rcl_publisher_sEE7executeERS6_IvE called 0 returned 0% blocks executed 0%
+    #####:  271:  execute(std::shared_ptr<void> & data) override
+        -:  272:  {
+    #####:  273:    if (!data) {
+    %%%%%:  273-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  274:      throw std::runtime_error("'data' is empty");
+    %%%%%:  274-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  274-block  1
+call    4 never executed
+    $$$$$:  274-block  2
+call    5 never executed
+        -:  275:    }
+    #####:  276:    auto callback_ptr = std::static_pointer_cast<EventCallbackInfoT>(data);
+    %%%%%:  276-block  0
+call    0 never executed
+    #####:  277:    event_callback_(*callback_ptr);
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  278:    callback_ptr.reset();
+    %%%%%:  278-block  0
+call    0 never executed
+    #####:  279:  }
+call    0 never executed
+    $$$$$:  279-block  0
+call    1 never executed
+------------------
+_ZN6rclcpp15QOSEventHandlerISt8functionIFvR35rmw_qos_incompatible_event_status_sEESt10shared_ptrI15rcl_publisher_sEE7executeERS6_IvE:
+function _ZN6rclcpp15QOSEventHandlerISt8functionIFvR35rmw_qos_incompatible_event_status_sEESt10shared_ptrI15rcl_publisher_sEE7executeERS6_IvE called 0 returned 0% blocks executed 0%
+    #####:  271:  execute(std::shared_ptr<void> & data) override
+        -:  272:  {
+    #####:  273:    if (!data) {
+    %%%%%:  273-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  274:      throw std::runtime_error("'data' is empty");
+    %%%%%:  274-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  274-block  1
+call    4 never executed
+    $$$$$:  274-block  2
+call    5 never executed
+        -:  275:    }
+    #####:  276:    auto callback_ptr = std::static_pointer_cast<EventCallbackInfoT>(data);
+    %%%%%:  276-block  0
+call    0 never executed
+    #####:  277:    event_callback_(*callback_ptr);
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  278:    callback_ptr.reset();
+    %%%%%:  278-block  0
+call    0 never executed
+    #####:  279:  }
+call    0 never executed
+    $$$$$:  279-block  0
+call    1 never executed
+------------------
+_ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE7executeERST_IvE:
+function _ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg6Image_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE7executeERST_IvE called 0 returned 0% blocks executed 0%
+    #####:  271:  execute(std::shared_ptr<void> & data) override
+        -:  272:  {
+    #####:  273:    if (!data) {
+    %%%%%:  273-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  274:      throw std::runtime_error("'data' is empty");
+    %%%%%:  274-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  274-block  1
+call    4 never executed
+    $$$$$:  274-block  2
+call    5 never executed
+        -:  275:    }
+    #####:  276:    auto callback_ptr = std::static_pointer_cast<EventCallbackInfoT>(data);
+    %%%%%:  276-block  0
+call    0 never executed
+    #####:  277:    event_callback_(*callback_ptr);
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  278:    callback_ptr.reset();
+    %%%%%:  278-block  0
+call    0 never executed
+    #####:  279:  }
+call    0 never executed
+    $$$$$:  279-block  0
+call    1 never executed
+------------------
+_ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE7executeERST_IvE:
+function _ZN6rclcpp15QOSEventHandlerIZNS_9PublisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_EC4EPNS_15node_interfaces17NodeBaseInterfaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIS5_EEEUlR35rmw_qos_incompatible_event_status_sE_St10shared_ptrI15rcl_publisher_sEE7executeERST_IvE called 0 returned 0% blocks executed 0%
+    #####:  271:  execute(std::shared_ptr<void> & data) override
+        -:  272:  {
+    #####:  273:    if (!data) {
+    %%%%%:  273-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  274:      throw std::runtime_error("'data' is empty");
+    %%%%%:  274-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  274-block  1
+call    4 never executed
+    $$$$$:  274-block  2
+call    5 never executed
+        -:  275:    }
+    #####:  276:    auto callback_ptr = std::static_pointer_cast<EventCallbackInfoT>(data);
+    %%%%%:  276-block  0
+call    0 never executed
+    #####:  277:    event_callback_(*callback_ptr);
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  278:    callback_ptr.reset();
+    %%%%%:  278-block  0
+call    0 never executed
+    #####:  279:  }
+call    0 never executed
+    $$$$$:  279-block  0
+call    1 never executed
+------------------
+        -:  280:
+        -:  281:private:
+        -:  282:  using EventCallbackInfoT = typename std::remove_reference<typename
+        -:  283:      rclcpp::function_traits::function_traits<EventCallbackT>::template argument_type<0>>::type;
+        -:  284:
+        -:  285:  ParentHandleT parent_handle_;
+        -:  286:  EventCallbackT event_callback_;
+        -:  287:};
+        -:  288:
+        -:  289:}  // namespace rclcpp
+        -:  290:
+        -:  291:#endif  // RCLCPP__QOS_EVENT_HPP_

@@ -1,0 +1,133 @@
+[0.000000] (-) TimerEvent: {}
+[0.000161] (hik_camera) JobQueued: {'identifier': 'hik_camera', 'dependencies': OrderedDict()}
+[0.000203] (imgprocess) JobQueued: {'identifier': 'imgprocess', 'dependencies': OrderedDict()}
+[0.000240] (hik_camera) JobStarted: {'identifier': 'hik_camera'}
+[0.005097] (imgprocess) JobStarted: {'identifier': 'imgprocess'}
+[0.007677] (hik_camera) JobProgress: {'identifier': 'hik_camera', 'progress': 'cmake'}
+[0.008321] (hik_camera) JobProgress: {'identifier': 'hik_camera', 'progress': 'build'}
+[0.008680] (hik_camera) Command: {'cmd': ['/usr/local/bin/cmake', '--build', '/home/dcy/ENG/ENG2025/build/hik_camera', '--', '-j16', '-l16'], 'cwd': '/home/dcy/ENG/ENG2025/build/hik_camera', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HISTFILESIZE', '2147450879'), ('HTTPS_PROXY', 'http://127.0.0.1:7897/'), ('no_proxy', 'localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,::1'), ('LANGUAGE', 'zh_CN:zh:en_US:en'), ('USER', 'dcy'), ('LC_TIME', 'zh_CN.UTF-8'), ('all_proxy', 'socks://127.0.0.1:7897/'), ('XDG_SESSION_TYPE', 'x11'), ('ALLUSERSPROFILE', '/opt/MVS/MVFG'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/MVS/lib/64:/opt/MVS/lib/32:/usr/local/cuda-11.8/lib64:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/local/lib'), ('LESS', '-R'), ('HOME', '/home/dcy'), ('CONDA_SHLVL', '0'), ('OLDPWD', '/home/dcy/ENG/ENG2025/src'), ('DESKTOP_SESSION', 'ubuntu'), ('NO_PROXY', 'localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,::1'), ('LSCOLORS', 'Gxfxcxdxdxegedabagacad'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('PAGER', 'less'), ('LC_MONETARY', 'zh_CN.UTF-8'), ('LC_CTYPE', 'zh_CN.UTF-8'), ('SYSTEMD_EXEC_PID', '1799'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_CE_M', ''), ('IM_CONFIG_PHASE', '1'), ('https_proxy', 'http://127.0.0.1:7897/'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'fcitx'), ('LOGNAME', 'dcy'), ('ALL_PROXY', 'socks://127.0.0.1:7897/'), ('OSH', '/home/dcy/.oh-my-bash'), ('http_proxy', 'http://127.0.0.1:7897/'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('PKG_CONFIG_PATH', '/home/dcy/OpenCV/opencv/build/libpkgconfig'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'dcy'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('_CE_CONDA', ''), ('ROS_LOCALHOST_ONLY', '0'), ('WINDOWPATH', '2'), ('MVCAM_SDK_PATH', '/opt/MVS'), ('PATH', '/home/dcy/anaconda3/condabin:/usr/local/cuda-11.8/bin:/home/dcy/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/happyAD:@/tmp/.ICE-unix/1772,unix/happyAD:/tmp/.ICE-unix/1772'), ('MVCAM_GENICAM_CLPROTOCOL', '/opt/MVS/lib/CLProtocol'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'zh_CN.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/4a9cd1a2_4630_4fc9_905c_d113fc3ad189'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('HISTSIZE', '2147450879'), ('LANG', 'zh_CN.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'zh_CN.UTF-8'), ('XMODIFIERS', '@im=fcitx'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.130'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('CONDA_PYTHON_EXE', '/home/dcy/anaconda3/bin/python'), ('SHELL', '/bin/bash'), ('LC_NAME', 'zh_CN.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'zh_CN.UTF-8'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('LC_IDENTIFICATION', 'zh_CN.UTF-8'), ('QT_IM_MODULE', 'fcitx'), ('PWD', '/home/dcy/ENG/ENG2025/build/hik_camera'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('CONDA_EXE', '/home/dcy/anaconda3/bin/conda'), ('CLUTTER_IM_MODULE', 'fcitx'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('HTTP_PROXY', 'http://127.0.0.1:7897/'), ('LC_NUMERIC', 'zh_CN.UTF-8'), ('LC_PAPER', 'zh_CN.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('MVCAM_COMMON_RUNENV', '/opt/MVS/lib'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.011748] (imgprocess) JobProgress: {'identifier': 'imgprocess', 'progress': 'cmake'}
+[0.012452] (imgprocess) JobProgress: {'identifier': 'imgprocess', 'progress': 'build'}
+[0.012671] (imgprocess) Command: {'cmd': ['/usr/local/bin/cmake', '--build', '/home/dcy/ENG/ENG2025/build/imgprocess', '--', '-j16', '-l16'], 'cwd': '/home/dcy/ENG/ENG2025/build/imgprocess', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HISTFILESIZE', '2147450879'), ('HTTPS_PROXY', 'http://127.0.0.1:7897/'), ('no_proxy', 'localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,::1'), ('LANGUAGE', 'zh_CN:zh:en_US:en'), ('USER', 'dcy'), ('LC_TIME', 'zh_CN.UTF-8'), ('all_proxy', 'socks://127.0.0.1:7897/'), ('XDG_SESSION_TYPE', 'x11'), ('ALLUSERSPROFILE', '/opt/MVS/MVFG'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/MVS/lib/64:/opt/MVS/lib/32:/usr/local/cuda-11.8/lib64:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/local/lib'), ('LESS', '-R'), ('HOME', '/home/dcy'), ('CONDA_SHLVL', '0'), ('OLDPWD', '/home/dcy/ENG/ENG2025/src'), ('DESKTOP_SESSION', 'ubuntu'), ('NO_PROXY', 'localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,::1'), ('LSCOLORS', 'Gxfxcxdxdxegedabagacad'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('PAGER', 'less'), ('LC_MONETARY', 'zh_CN.UTF-8'), ('LC_CTYPE', 'zh_CN.UTF-8'), ('SYSTEMD_EXEC_PID', '1799'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_CE_M', ''), ('IM_CONFIG_PHASE', '1'), ('https_proxy', 'http://127.0.0.1:7897/'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'fcitx'), ('LOGNAME', 'dcy'), ('ALL_PROXY', 'socks://127.0.0.1:7897/'), ('OSH', '/home/dcy/.oh-my-bash'), ('http_proxy', 'http://127.0.0.1:7897/'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('PKG_CONFIG_PATH', '/home/dcy/OpenCV/opencv/build/libpkgconfig'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'dcy'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('_CE_CONDA', ''), ('ROS_LOCALHOST_ONLY', '0'), ('WINDOWPATH', '2'), ('MVCAM_SDK_PATH', '/opt/MVS'), ('PATH', '/home/dcy/anaconda3/condabin:/usr/local/cuda-11.8/bin:/home/dcy/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/happyAD:@/tmp/.ICE-unix/1772,unix/happyAD:/tmp/.ICE-unix/1772'), ('MVCAM_GENICAM_CLPROTOCOL', '/opt/MVS/lib/CLProtocol'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'zh_CN.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/4a9cd1a2_4630_4fc9_905c_d113fc3ad189'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('HISTSIZE', '2147450879'), ('LANG', 'zh_CN.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'zh_CN.UTF-8'), ('XMODIFIERS', '@im=fcitx'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.130'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('CONDA_PYTHON_EXE', '/home/dcy/anaconda3/bin/python'), ('SHELL', '/bin/bash'), ('LC_NAME', 'zh_CN.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'zh_CN.UTF-8'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('LC_IDENTIFICATION', 'zh_CN.UTF-8'), ('QT_IM_MODULE', 'fcitx'), ('PWD', '/home/dcy/ENG/ENG2025/build/imgprocess'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('CONDA_EXE', '/home/dcy/anaconda3/bin/conda'), ('CLUTTER_IM_MODULE', 'fcitx'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('HTTP_PROXY', 'http://127.0.0.1:7897/'), ('LC_NUMERIC', 'zh_CN.UTF-8'), ('LC_PAPER', 'zh_CN.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('MVCAM_COMMON_RUNENV', '/opt/MVS/lib'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.047578] (hik_camera) StdoutLine: {'line': b'[ 37%] Built target camera_node\n'}
+[0.048631] (hik_camera) StdoutLine: {'line': b'[ 87%] Built target camera_component\n'}
+[0.048736] (hik_camera) StdoutLine: {'line': b'[100%] Built target camera\n'}
+[0.052174] (hik_camera) CommandEnded: {'returncode': 0}
+[0.058573] (imgprocess) StdoutLine: {'line': b'[ 20%] \x1b[32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o\x1b[0m\n'}
+[0.078949] (hik_camera) JobProgress: {'identifier': 'hik_camera', 'progress': 'install'}
+[0.080872] (hik_camera) Command: {'cmd': ['/usr/local/bin/cmake', '--install', '/home/dcy/ENG/ENG2025/build/hik_camera'], 'cwd': '/home/dcy/ENG/ENG2025/build/hik_camera', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HISTFILESIZE', '2147450879'), ('HTTPS_PROXY', 'http://127.0.0.1:7897/'), ('no_proxy', 'localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,::1'), ('LANGUAGE', 'zh_CN:zh:en_US:en'), ('USER', 'dcy'), ('LC_TIME', 'zh_CN.UTF-8'), ('all_proxy', 'socks://127.0.0.1:7897/'), ('XDG_SESSION_TYPE', 'x11'), ('ALLUSERSPROFILE', '/opt/MVS/MVFG'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/MVS/lib/64:/opt/MVS/lib/32:/usr/local/cuda-11.8/lib64:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/local/lib'), ('LESS', '-R'), ('HOME', '/home/dcy'), ('CONDA_SHLVL', '0'), ('OLDPWD', '/home/dcy/ENG/ENG2025/src'), ('DESKTOP_SESSION', 'ubuntu'), ('NO_PROXY', 'localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,::1'), ('LSCOLORS', 'Gxfxcxdxdxegedabagacad'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('PAGER', 'less'), ('LC_MONETARY', 'zh_CN.UTF-8'), ('LC_CTYPE', 'zh_CN.UTF-8'), ('SYSTEMD_EXEC_PID', '1799'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_CE_M', ''), ('IM_CONFIG_PHASE', '1'), ('https_proxy', 'http://127.0.0.1:7897/'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'fcitx'), ('LOGNAME', 'dcy'), ('ALL_PROXY', 'socks://127.0.0.1:7897/'), ('OSH', '/home/dcy/.oh-my-bash'), ('http_proxy', 'http://127.0.0.1:7897/'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('PKG_CONFIG_PATH', '/home/dcy/OpenCV/opencv/build/libpkgconfig'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'dcy'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('_CE_CONDA', ''), ('ROS_LOCALHOST_ONLY', '0'), ('WINDOWPATH', '2'), ('MVCAM_SDK_PATH', '/opt/MVS'), ('PATH', '/home/dcy/anaconda3/condabin:/usr/local/cuda-11.8/bin:/home/dcy/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/happyAD:@/tmp/.ICE-unix/1772,unix/happyAD:/tmp/.ICE-unix/1772'), ('MVCAM_GENICAM_CLPROTOCOL', '/opt/MVS/lib/CLProtocol'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'zh_CN.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/4a9cd1a2_4630_4fc9_905c_d113fc3ad189'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('HISTSIZE', '2147450879'), ('LANG', 'zh_CN.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'zh_CN.UTF-8'), ('XMODIFIERS', '@im=fcitx'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.130'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('CONDA_PYTHON_EXE', '/home/dcy/anaconda3/bin/python'), ('SHELL', '/bin/bash'), ('LC_NAME', 'zh_CN.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'zh_CN.UTF-8'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('LC_IDENTIFICATION', 'zh_CN.UTF-8'), ('QT_IM_MODULE', 'fcitx'), ('PWD', '/home/dcy/ENG/ENG2025/build/hik_camera'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('CONDA_EXE', '/home/dcy/anaconda3/bin/conda'), ('CLUTTER_IM_MODULE', 'fcitx'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('HTTP_PROXY', 'http://127.0.0.1:7897/'), ('LC_NUMERIC', 'zh_CN.UTF-8'), ('LC_PAPER', 'zh_CN.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('MVCAM_COMMON_RUNENV', '/opt/MVS/lib'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.083448] (hik_camera) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[0.084330] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/lib/hik_camera/camera\n'}
+[0.084446] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/include\n'}
+[0.084571] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/include/hik_camera\n'}
+[0.084630] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/include/hik_camera/hik_camera.h\n'}
+[0.084685] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/library_path.sh\n'}
+[0.084755] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/library_path.dsv\n'}
+[0.085072] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/lib/libcamera_component.so\n'}
+[0.085629] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/lib/hik_camera/camera_node\n'}
+[0.085750] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/ament_index/resource_index/package_run_dependencies/hik_camera\n'}
+[0.085821] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/ament_index/resource_index/parent_prefix_path/hik_camera\n'}
+[0.085869] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/ament_prefix_path.sh\n'}
+[0.085896] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/ament_prefix_path.dsv\n'}
+[0.085937] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/path.sh\n'}
+[0.085986] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/path.dsv\n'}
+[0.086020] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/local_setup.bash\n'}
+[0.086044] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/local_setup.sh\n'}
+[0.086067] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/local_setup.zsh\n'}
+[0.086089] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/local_setup.dsv\n'}
+[0.086112] (hik_camera) StdoutLine: {'line': b'-- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/package.dsv\n'}
+[0.086532] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/ament_index/resource_index/packages/hik_camera\n'}
+[0.086563] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/ament_index/resource_index/rclcpp_components/hik_camera\n'}
+[0.086603] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[0.086647] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[0.086679] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/ament_cmake_export_libraries-extras.cmake\n'}
+[0.086727] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/hik_cameraConfig.cmake\n'}
+[0.086752] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/hik_cameraConfig-version.cmake\n'}
+[0.086776] (hik_camera) StdoutLine: {'line': b'-- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/package.xml\n'}
+[0.087370] (hik_camera) CommandEnded: {'returncode': 0}
+[0.099470] (-) TimerEvent: {}
+[0.130418] (hik_camera) JobEnded: {'identifier': 'hik_camera', 'rc': 0}
+[0.199596] (-) TimerEvent: {}
+[0.299920] (-) TimerEvent: {}
+[0.400597] (-) TimerEvent: {}
+[0.500930] (-) TimerEvent: {}
+[0.601239] (-) TimerEvent: {}
+[0.701541] (-) TimerEvent: {}
+[0.801873] (-) TimerEvent: {}
+[0.902238] (-) TimerEvent: {}
+[1.002559] (-) TimerEvent: {}
+[1.102886] (-) TimerEvent: {}
+[1.203199] (-) TimerEvent: {}
+[1.303510] (-) TimerEvent: {}
+[1.403846] (-) TimerEvent: {}
+[1.504158] (-) TimerEvent: {}
+[1.604484] (-) TimerEvent: {}
+[1.704812] (-) TimerEvent: {}
+[1.805145] (-) TimerEvent: {}
+[1.905478] (-) TimerEvent: {}
+[2.005830] (-) TimerEvent: {}
+[2.106202] (-) TimerEvent: {}
+[2.206531] (-) TimerEvent: {}
+[2.306877] (-) TimerEvent: {}
+[2.407217] (-) TimerEvent: {}
+[2.507541] (-) TimerEvent: {}
+[2.607882] (-) TimerEvent: {}
+[2.708203] (-) TimerEvent: {}
+[2.808527] (-) TimerEvent: {}
+[2.908860] (-) TimerEvent: {}
+[3.009453] (-) TimerEvent: {}
+[3.109790] (-) TimerEvent: {}
+[3.210125] (-) TimerEvent: {}
+[3.310479] (-) TimerEvent: {}
+[3.410822] (-) TimerEvent: {}
+[3.511147] (-) TimerEvent: {}
+[3.611407] (-) TimerEvent: {}
+[3.711666] (-) TimerEvent: {}
+[3.812003] (-) TimerEvent: {}
+[3.912327] (-) TimerEvent: {}
+[4.012649] (-) TimerEvent: {}
+[4.112979] (-) TimerEvent: {}
+[4.213304] (-) TimerEvent: {}
+[4.313624] (-) TimerEvent: {}
+[4.413966] (-) TimerEvent: {}
+[4.514242] (-) TimerEvent: {}
+[4.614584] (-) TimerEvent: {}
+[4.714887] (-) TimerEvent: {}
+[4.815188] (-) TimerEvent: {}
+[4.915490] (-) TimerEvent: {}
+[5.015770] (-) TimerEvent: {}
+[5.116038] (-) TimerEvent: {}
+[5.216365] (-) TimerEvent: {}
+[5.316687] (-) TimerEvent: {}
+[5.417028] (-) TimerEvent: {}
+[5.517350] (-) TimerEvent: {}
+[5.617659] (-) TimerEvent: {}
+[5.717975] (-) TimerEvent: {}
+[5.818647] (-) TimerEvent: {}
+[5.918984] (-) TimerEvent: {}
+[6.019305] (-) TimerEvent: {}
+[6.119621] (-) TimerEvent: {}
+[6.219955] (-) TimerEvent: {}
+[6.320262] (-) TimerEvent: {}
+[6.420581] (-) TimerEvent: {}
+[6.520909] (-) TimerEvent: {}
+[6.621221] (-) TimerEvent: {}
+[6.721529] (-) TimerEvent: {}
+[6.821850] (-) TimerEvent: {}
+[6.922160] (-) TimerEvent: {}
+[7.022484] (-) TimerEvent: {}
+[7.122817] (-) TimerEvent: {}
+[7.223150] (-) TimerEvent: {}
+[7.323471] (-) TimerEvent: {}
+[7.338778] (imgprocess) StdoutLine: {'line': b'[ 40%] \x1b[32m\x1b[1mLinking CXX executable imgprocess\x1b[0m\n'}
+[7.423694] (-) TimerEvent: {}
+[7.524044] (-) TimerEvent: {}
+[7.624379] (-) TimerEvent: {}
+[7.719692] (imgprocess) StderrLine: {'line': b'gmake[2]: *** \xe6\xad\xa3\xe5\x9c\xa8\xe5\x88\xa0\xe9\x99\xa4\xe6\x96\x87\xe4\xbb\xb6\xe2\x80\x9cimgprocess\xe2\x80\x9d\n'}
+[7.719830] (imgprocess) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/imgprocess.dir/build.make:291: imgprocess] \xe4\xb8\xad\xe6\x96\xad\n'}
+[7.720009] (imgprocess) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/imgprocess.dir/all] \xe4\xb8\xad\xe6\x96\xad\n'}
+[7.720188] (imgprocess) StderrLine: {'line': b'gmake: *** [Makefile:146: all] \xe4\xb8\xad\xe6\x96\xad\n'}
+[7.724469] (-) TimerEvent: {}
+[7.724990] (imgprocess) CommandEnded: {'returncode': -2}
+[7.758025] (imgprocess) JobEnded: {'identifier': 'imgprocess', 'rc': 'SIGINT'}
+[7.768342] (-) EventReactorShutdown: {}

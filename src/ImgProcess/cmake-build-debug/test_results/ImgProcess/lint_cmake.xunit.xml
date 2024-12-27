@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite
+  name="ImgProcess.lint_cmake"
+  tests="68"
+  errors="0"
+  failures="60"
+  time="0.007"
+>
+  <testcase
+    name="CMakeLists.txt"
+    classname="ImgProcess.lint_cmake"/>
+  <testcase
+    name="cmake-build-debug/CTestCustom.cmake"
+    classname="ImgProcess.lint_cmake"/>
+  <testcase
+    name="whitespace/eol (cmake-build-debug/CTestTestfile.cmake:1)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Line ends in whitespace"/>
+  </testcase>
+  <testcase
+    name="whitespace/eol (cmake-build-debug/CTestTestfile.cmake:4)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Line ends in whitespace"/>
+  </testcase>
+  <testcase
+    name="whitespace/eol (cmake-build-debug/CTestTestfile.cmake:5)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Line ends in whitespace"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CTestTestfile.cmake:7)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CTestTestfile.cmake:8)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CTestTestfile.cmake:9)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CTestTestfile.cmake:10)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CTestTestfile.cmake:11)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CTestTestfile.cmake:12)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CTestTestfile.cmake:13)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CTestTestfile.cmake:14)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:13)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:51)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:53)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:54)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:56)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:58)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:60)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:61)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:62)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:74)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:78)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:82)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:86)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:90)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:94)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:98)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:102)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:106)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:110)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:114)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:118)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:122)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/cmake_install.cmake:126)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="whitespace/mismatch (cmake-build-debug/cmake_install.cmake:130)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Mismatching spaces inside () after command"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:147)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="whitespace/indent (cmake-build-debug/cmake_install.cmake:149)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Weird indentation; use 2 spaces"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake:9)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake:71)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:9)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:11)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:12)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="whitespace/extra (cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:43)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Extra spaces between 'foreach' and its ()"/>
+  </testcase>
+  <testcase
+    name="whitespace/extra (cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:44)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Extra spaces between 'if' and its ()"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake:82)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="cmake-build-debug/CMakeFiles/3.28.1/CMakeSystem.cmake"
+    classname="ImgProcess.lint_cmake"/>
+  <testcase
+    name="cmake-build-debug/ament_cmake_core/ImgProcessConfig-version.cmake"
+    classname="ImgProcess.lint_cmake"/>
+  <testcase
+    name="cmake-build-debug/ament_cmake_core/ImgProcessConfig.cmake"
+    classname="ImgProcess.lint_cmake"/>
+  <testcase
+    name="whitespace/mismatch (cmake-build-debug/ament_cmake_core/package.cmake:7)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Mismatching spaces inside () after command"/>
+  </testcase>
+  <testcase
+    name="whitespace/mismatch (cmake-build-debug/ament_cmake_core/package.cmake:10)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Mismatching spaces inside () after command"/>
+  </testcase>
+  <testcase
+    name="whitespace/mismatch (cmake-build-debug/ament_cmake_core/package.cmake:11)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Mismatching spaces inside () after command"/>
+  </testcase>
+  <testcase
+    name="cmake-build-debug/ament_cmake_export_dependencies/ament_cmake_export_dependencies-extras.cmake"
+    classname="ImgProcess.lint_cmake"/>
+  <testcase
+    name="cmake-build-debug/ament_cmake_export_include_directories/ament_cmake_export_include_directories-extras.cmake"
+    classname="ImgProcess.lint_cmake"/>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:1)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:2)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:4)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:5)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:6)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:8)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:9)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:10)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:11)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:12)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:13)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="linelength (cmake-build-debug/ament_cmake_package_templates/templates.cmake:14)"
+    classname="ImgProcess.lint_cmake"
+  >
+      <failure message="Lines should be &lt;= 140 characters long"/>
+  </testcase>
+  <testcase
+    name="cmake-build-debug/ament_cmake_uninstall_target/ament_cmake_uninstall_target.cmake"
+    classname="ImgProcess.lint_cmake"/>
+  <system-out>Checked files:
+* CMakeLists.txt
+* cmake-build-debug/CTestCustom.cmake
+* cmake-build-debug/CTestTestfile.cmake
+* cmake-build-debug/cmake_install.cmake
+* cmake-build-debug/CMakeFiles/3.28.1/CMakeCCompiler.cmake
+* cmake-build-debug/CMakeFiles/3.28.1/CMakeCXXCompiler.cmake
+* cmake-build-debug/CMakeFiles/3.28.1/CMakeSystem.cmake
+* cmake-build-debug/ament_cmake_core/ImgProcessConfig-version.cmake
+* cmake-build-debug/ament_cmake_core/ImgProcessConfig.cmake
+* cmake-build-debug/ament_cmake_core/package.cmake
+* cmake-build-debug/ament_cmake_export_dependencies/ament_cmake_export_dependencies-extras.cmake
+* cmake-build-debug/ament_cmake_export_include_directories/ament_cmake_export_include_directories-extras.cmake
+* cmake-build-debug/ament_cmake_package_templates/templates.cmake
+* cmake-build-debug/ament_cmake_uninstall_target/ament_cmake_uninstall_target.cmake</system-out>
+</testsuite>

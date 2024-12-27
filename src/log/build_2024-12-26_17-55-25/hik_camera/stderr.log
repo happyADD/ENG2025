@@ -1,0 +1,11 @@
+gmake[2]: *** [CMakeFiles/camera.dir/build.make:76: CMakeFiles/camera.dir/rclcpp_components/node_main_camera.cpp.o] 中断
+gmake[2]: *** [CMakeFiles/camera_component.dir/build.make:76: CMakeFiles/camera_component.dir/src/camera_component.cpp.o] 中断
+gmake[2]: *** [CMakeFiles/camera_node.dir/build.make:76: CMakeFiles/camera_node.dir/src/camera_node.cpp.o] 中断
+gmake[2]: *** [CMakeFiles/camera_node.dir/build.make:90: CMakeFiles/camera_node.dir/src/hik_camera.cpp.o] 中断
+gmake[2]: *** wait: 没有子进程。 停止。
+gmake[2]: *** 正在等待未完成的任务....
+gmake[2]: *** wait: 没有子进程。 停止。
+gmake[1]: *** [CMakeFiles/Makefile2:193: CMakeFiles/camera.dir/all] 中断
+gmake[1]: *** [CMakeFiles/Makefile2:141: CMakeFiles/camera_node.dir/all] 中断
+gmake[1]: *** [CMakeFiles/Makefile2:167：CMakeFiles/camera_component.dir/all] 错误 2
+gmake: *** [Makefile:146: all] 中断

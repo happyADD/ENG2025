@@ -1,0 +1,86 @@
+[0.008s] Invoking command in '/home/dcy/ENG/ENG2025/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG/ENG2025/src/hik_camera -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG/ENG2025/install/hik_camera
+[0.046s] -- The C compiler identification is GNU 11.4.0
+[0.087s] -- The CXX compiler identification is GNU 11.4.0
+[0.097s] -- Detecting C compiler ABI info
+[0.141s] -- Detecting C compiler ABI info - done
+[0.147s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.148s] -- Detecting C compile features
+[0.148s] -- Detecting C compile features - done
+[0.150s] -- Detecting CXX compiler ABI info
+[0.200s] -- Detecting CXX compiler ABI info - done
+[0.206s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.206s] -- Detecting CXX compile features
+[0.206s] -- Detecting CXX compile features - done
+[0.208s] -- Found ament_cmake_auto: 1.3.9 (/opt/ros/humble/share/ament_cmake_auto/cmake)
+[0.405s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.523s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.526s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.532s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.541s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.554s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.598s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.599s] -- Found rmw_fastrtps_cpp: 6.2.6 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.674s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.693s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.727s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.734s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[0.783s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[0.783s] -- Found Threads: TRUE  
+[1.008s] -- Found ament_lint_auto: 0.12.11 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.026s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.026s] -- Configured cppcheck include dirs: /home/dcy/ENG/ENG2025/src/hik_camera/include
+[1.026s] -- Configured cppcheck exclude dirs and/or files: 
+[1.029s] -- Added test 'lint_cmake' to check CMake code style
+[1.038s] -- Added test 'uncrustify' to check C / C++ code style
+[1.038s] -- Configured uncrustify additional arguments: 
+[1.039s] -- Added test 'xmllint' to check XML markup files
+[1.041s] -- Configuring done (1.0s)
+[1.053s] -- Generating done (0.0s)
+[1.054s] -- Build files have been written to: /home/dcy/ENG/ENG2025/build/hik_camera
+[1.060s] Invoked command in '/home/dcy/ENG/ENG2025/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG/ENG2025/src/hik_camera -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG/ENG2025/install/hik_camera
+[1.061s] Invoking command in '/home/dcy/ENG/ENG2025/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/hik_camera -- -j16 -l16
+[1.079s] [ 12%] [32mBuilding CXX object CMakeFiles/camera_node.dir/src/camera_node.cpp.o[0m
+[1.079s] [ 25%] [32mBuilding CXX object CMakeFiles/camera_node.dir/src/hik_camera.cpp.o[0m
+[1.080s] [ 37%] [32mBuilding CXX object CMakeFiles/camera_component.dir/src/hik_camera.cpp.o[0m
+[1.080s] [ 50%] [32mBuilding CXX object CMakeFiles/camera.dir/rclcpp_components/node_main_camera.cpp.o[0m
+[1.080s] [ 62%] [32mBuilding CXX object CMakeFiles/camera_component.dir/src/camera_component.cpp.o[0m
+[3.108s] [ 75%] [32m[1mLinking CXX executable camera[0m
+[3.180s] [ 75%] Built target camera
+[4.193s] [ 87%] [32m[1mLinking CXX executable camera_node[0m
+[4.207s] [100%] [32m[1mLinking CXX shared library libcamera_component.so[0m
+[4.334s] [100%] Built target camera_node
+[4.339s] [100%] Built target camera_component
+[4.343s] Invoked command in '/home/dcy/ENG/ENG2025/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/hik_camera -- -j16 -l16
+[4.373s] Invoking command in '/home/dcy/ENG/ENG2025/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG/ENG2025/build/hik_camera
+[4.374s] -- Install configuration: ""
+[4.375s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/lib/hik_camera/camera
+[4.375s] -- Set runtime path of "/home/dcy/ENG/ENG2025/install/hik_camera/lib/hik_camera/camera" to ""
+[4.375s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/include
+[4.376s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/include/hik_camera
+[4.376s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/include/hik_camera/hik_camera.h
+[4.376s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/library_path.sh
+[4.376s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/library_path.dsv
+[4.376s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/lib/libcamera_component.so
+[4.379s] -- Set runtime path of "/home/dcy/ENG/ENG2025/install/hik_camera/lib/libcamera_component.so" to ""
+[4.379s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/lib/hik_camera/camera_node
+[4.380s] -- Set runtime path of "/home/dcy/ENG/ENG2025/install/hik_camera/lib/hik_camera/camera_node" to ""
+[4.380s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/ament_index/resource_index/package_run_dependencies/hik_camera
+[4.380s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/ament_index/resource_index/parent_prefix_path/hik_camera
+[4.381s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/ament_prefix_path.sh
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/ament_prefix_path.dsv
+[4.381s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/path.sh
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/environment/path.dsv
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/local_setup.bash
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/local_setup.sh
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/local_setup.zsh
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/local_setup.dsv
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/package.dsv
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/ament_index/resource_index/packages/hik_camera
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/ament_index/resource_index/rclcpp_components/hik_camera
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/ament_cmake_export_dependencies-extras.cmake
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/ament_cmake_export_include_directories-extras.cmake
+[4.381s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/ament_cmake_export_libraries-extras.cmake
+[4.382s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/hik_cameraConfig.cmake
+[4.382s] -- Installing: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/cmake/hik_cameraConfig-version.cmake
+[4.382s] -- Up-to-date: /home/dcy/ENG/ENG2025/install/hik_camera/share/hik_camera/package.xml
+[4.383s] Invoked command in '/home/dcy/ENG/ENG2025/build/hik_camera' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG/ENG2025/build/hik_camera

@@ -1,0 +1,169 @@
+        -:    0:Source:/opt/ros/humble/include/std_msgs/std_msgs/msg/detail/header__struct.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// generated from rosidl_generator_cpp/resource/idl__struct.hpp.em
+        -:    2:// with input from std_msgs:msg/Header.idl
+        -:    3:// generated code does not contain a copyright notice
+        -:    4:
+        -:    5:#ifndef STD_MSGS__MSG__DETAIL__HEADER__STRUCT_HPP_
+        -:    6:#define STD_MSGS__MSG__DETAIL__HEADER__STRUCT_HPP_
+        -:    7:
+        -:    8:#include <algorithm>
+        -:    9:#include <array>
+        -:   10:#include <memory>
+        -:   11:#include <string>
+        -:   12:#include <vector>
+        -:   13:
+        -:   14:#include "rosidl_runtime_cpp/bounded_vector.hpp"
+        -:   15:#include "rosidl_runtime_cpp/message_initialization.hpp"
+        -:   16:
+        -:   17:
+        -:   18:// Include directives for member types
+        -:   19:// Member 'stamp'
+        -:   20:#include "builtin_interfaces/msg/detail/time__struct.hpp"
+        -:   21:
+        -:   22:#ifndef _WIN32
+        -:   23:# define DEPRECATED__std_msgs__msg__Header __attribute__((deprecated))
+        -:   24:#else
+        -:   25:# define DEPRECATED__std_msgs__msg__Header __declspec(deprecated)
+        -:   26:#endif
+        -:   27:
+        -:   28:namespace std_msgs
+        -:   29:{
+        -:   30:
+        -:   31:namespace msg
+        -:   32:{
+        -:   33:
+        -:   34:// message struct
+        -:   35:template<class ContainerAllocator>
+        -:   36:struct Header_
+        -:   37:{
+        -:   38:  using Type = Header_<ContainerAllocator>;
+        -:   39:
+function _ZN8std_msgs3msg7Header_ISaIvEEC2EN18rosidl_runtime_cpp21MessageInitializationE called 102 returned 100% blocks executed 75%
+      102:   40:  explicit Header_(rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
+      102:   41:  : stamp(_init)
+      102:   41-block  0
+call    0 returned 102
+call    1 returned 102
+        -:   42:  {
+     102*:   43:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+branch  0 taken 0 (fallthrough)
+branch  1 taken 102
+    %%%%%:   43-block  0
+branch  2 never executed
+branch  3 never executed
+        -:   44:      rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
+        -:   45:    {
+      102:   46:      this->frame_id = "";
+      102:   46-block  0
+call    0 returned 102
+branch  1 taken 102 (fallthrough)
+branch  2 taken 0 (throw)
+        -:   47:    }
+      102:   48:  }
+      102:   48-block  0
+    $$$$$:   48-block  1
+call    0 never executed
+        -:   49:
+        -:   50:  explicit Header_(const ContainerAllocator & _alloc, rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
+        -:   51:  : stamp(_alloc, _init),
+        -:   52:    frame_id(_alloc)
+        -:   53:  {
+        -:   54:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+        -:   55:      rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
+        -:   56:    {
+        -:   57:      this->frame_id = "";
+        -:   58:    }
+        -:   59:  }
+        -:   60:
+        -:   61:  // field types and members
+        -:   62:  using _stamp_type =
+        -:   63:    builtin_interfaces::msg::Time_<ContainerAllocator>;
+        -:   64:  _stamp_type stamp;
+        -:   65:  using _frame_id_type =
+        -:   66:    std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>;
+        -:   67:  _frame_id_type frame_id;
+        -:   68:
+        -:   69:  // setters for named parameter idiom
+        -:   70:  Type & set__stamp(
+        -:   71:    const builtin_interfaces::msg::Time_<ContainerAllocator> & _arg)
+        -:   72:  {
+        -:   73:    this->stamp = _arg;
+        -:   74:    return *this;
+        -:   75:  }
+        -:   76:  Type & set__frame_id(
+        -:   77:    const std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> & _arg)
+        -:   78:  {
+        -:   79:    this->frame_id = _arg;
+        -:   80:    return *this;
+        -:   81:  }
+        -:   82:
+        -:   83:  // constant declarations
+        -:   84:
+        -:   85:  // pointer types
+        -:   86:  using RawPtr =
+        -:   87:    std_msgs::msg::Header_<ContainerAllocator> *;
+        -:   88:  using ConstRawPtr =
+        -:   89:    const std_msgs::msg::Header_<ContainerAllocator> *;
+        -:   90:  using SharedPtr =
+        -:   91:    std::shared_ptr<std_msgs::msg::Header_<ContainerAllocator>>;
+        -:   92:  using ConstSharedPtr =
+        -:   93:    std::shared_ptr<std_msgs::msg::Header_<ContainerAllocator> const>;
+        -:   94:
+        -:   95:  template<typename Deleter = std::default_delete<
+        -:   96:      std_msgs::msg::Header_<ContainerAllocator>>>
+        -:   97:  using UniquePtrWithDeleter =
+        -:   98:    std::unique_ptr<std_msgs::msg::Header_<ContainerAllocator>, Deleter>;
+        -:   99:
+        -:  100:  using UniquePtr = UniquePtrWithDeleter<>;
+        -:  101:
+        -:  102:  template<typename Deleter = std::default_delete<
+        -:  103:      std_msgs::msg::Header_<ContainerAllocator>>>
+        -:  104:  using ConstUniquePtrWithDeleter =
+        -:  105:    std::unique_ptr<std_msgs::msg::Header_<ContainerAllocator> const, Deleter>;
+        -:  106:  using ConstUniquePtr = ConstUniquePtrWithDeleter<>;
+        -:  107:
+        -:  108:  using WeakPtr =
+        -:  109:    std::weak_ptr<std_msgs::msg::Header_<ContainerAllocator>>;
+        -:  110:  using ConstWeakPtr =
+        -:  111:    std::weak_ptr<std_msgs::msg::Header_<ContainerAllocator> const>;
+        -:  112:
+        -:  113:  // pointer types similar to ROS 1, use SharedPtr / ConstSharedPtr instead
+        -:  114:  // NOTE: Can't use 'using' here because GNU C++ can't parse attributes properly
+        -:  115:  typedef DEPRECATED__std_msgs__msg__Header
+        -:  116:    std::shared_ptr<std_msgs::msg::Header_<ContainerAllocator>>
+        -:  117:    Ptr;
+        -:  118:  typedef DEPRECATED__std_msgs__msg__Header
+        -:  119:    std::shared_ptr<std_msgs::msg::Header_<ContainerAllocator> const>
+        -:  120:    ConstPtr;
+        -:  121:
+        -:  122:  // comparison operators
+        -:  123:  bool operator==(const Header_ & other) const
+        -:  124:  {
+        -:  125:    if (this->stamp != other.stamp) {
+        -:  126:      return false;
+        -:  127:    }
+        -:  128:    if (this->frame_id != other.frame_id) {
+        -:  129:      return false;
+        -:  130:    }
+        -:  131:    return true;
+        -:  132:  }
+        -:  133:  bool operator!=(const Header_ & other) const
+        -:  134:  {
+        -:  135:    return !this->operator==(other);
+        -:  136:  }
+        -:  137:};  // struct Header_
+        -:  138:
+        -:  139:// alias to use template instance with default allocator
+        -:  140:using Header =
+        -:  141:  std_msgs::msg::Header_<std::allocator<void>>;
+        -:  142:
+        -:  143:// constant definitions
+        -:  144:
+        -:  145:}  // namespace msg
+        -:  146:
+        -:  147:}  // namespace std_msgs
+        -:  148:
+        -:  149:#endif  // STD_MSGS__MSG__DETAIL__HEADER__STRUCT_HPP_

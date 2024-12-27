@@ -1,0 +1,380 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/exceptions/exceptions.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2016 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__EXCEPTIONS__EXCEPTIONS_HPP_
+        -:   16:#define RCLCPP__EXCEPTIONS__EXCEPTIONS_HPP_
+        -:   17:
+        -:   18:#include <stdexcept>
+        -:   19:#include <string>
+        -:   20:#include <vector>
+        -:   21:
+        -:   22:#include "rcl/error_handling.h"
+        -:   23:#include "rcl/types.h"
+        -:   24:#include "rclcpp/visibility_control.hpp"
+        -:   25:
+        -:   26:#include "rcpputils/join.hpp"
+        -:   27:
+        -:   28:namespace rclcpp
+        -:   29:{
+        -:   30:namespace exceptions
+        -:   31:{
+        -:   32:
+        -:   33:/// Thrown when a method is trying to use a node, but it is invalid.
+        -:   34:class InvalidNodeError : public std::runtime_error
+        -:   35:{
+        -:   36:public:
+        -:   37:  InvalidNodeError()
+        -:   38:  : std::runtime_error("node is invalid") {}
+        -:   39:};
+        -:   40:
+        -:   41:/// Thrown when a any kind of name (node, namespace, topic, etc.) is invalid.
+        -:   42:class NameValidationError : public std::invalid_argument
+        -:   43:{
+        -:   44:public:
+        -:   45:  NameValidationError(
+        -:   46:    const char * name_type_,
+        -:   47:    const char * name_,
+        -:   48:    const char * error_msg_,
+        -:   49:    size_t invalid_index_)
+        -:   50:  : std::invalid_argument(format_error(name_type_, name_, error_msg_, invalid_index_)),
+        -:   51:    name_type(name_type_), name(name_), error_msg(error_msg_), invalid_index(invalid_index_)
+        -:   52:  {}
+        -:   53:
+        -:   54:  static std::string
+        -:   55:  format_error(
+        -:   56:    const char * name_type,
+        -:   57:    const char * name,
+        -:   58:    const char * error_msg,
+        -:   59:    size_t invalid_index);
+        -:   60:
+        -:   61:  const std::string name_type;
+        -:   62:  const std::string name;
+        -:   63:  const std::string error_msg;
+        -:   64:  const size_t invalid_index;
+        -:   65:};
+        -:   66:
+        -:   67:/// Thrown when a node name is invalid.
+        -:   68:class InvalidNodeNameError : public NameValidationError
+        -:   69:{
+        -:   70:public:
+        -:   71:  InvalidNodeNameError(const char * node_name, const char * error_msg, size_t invalid_index)
+        -:   72:  : NameValidationError("node name", node_name, error_msg, invalid_index)
+        -:   73:  {}
+        -:   74:};
+        -:   75:
+        -:   76:/// Thrown when a node namespace is invalid.
+        -:   77:class InvalidNamespaceError : public NameValidationError
+        -:   78:{
+        -:   79:public:
+        -:   80:  InvalidNamespaceError(const char * namespace_, const char * error_msg, size_t invalid_index)
+        -:   81:  : NameValidationError("namespace", namespace_, error_msg, invalid_index)
+        -:   82:  {}
+        -:   83:};
+        -:   84:
+        -:   85:/// Thrown when a topic name is invalid.
+        -:   86:class InvalidTopicNameError : public NameValidationError
+        -:   87:{
+        -:   88:public:
+        -:   89:  InvalidTopicNameError(const char * namespace_, const char * error_msg, size_t invalid_index)
+        -:   90:  : NameValidationError("topic name", namespace_, error_msg, invalid_index)
+        -:   91:  {}
+        -:   92:};
+        -:   93:
+        -:   94:/// Thrown when a service name is invalid.
+        -:   95:class InvalidServiceNameError : public NameValidationError
+        -:   96:{
+        -:   97:public:
+        -:   98:  InvalidServiceNameError(const char * namespace_, const char * error_msg, size_t invalid_index)
+        -:   99:  : NameValidationError("service name", namespace_, error_msg, invalid_index)
+        -:  100:  {}
+        -:  101:};
+        -:  102:
+        -:  103:class UnimplementedError : public std::runtime_error
+        -:  104:{
+        -:  105:public:
+        -:  106:  UnimplementedError()
+        -:  107:  : std::runtime_error("This code is unimplemented.") {}
+        -:  108:  explicit UnimplementedError(const std::string & msg)
+        -:  109:  : std::runtime_error(msg) {}
+        -:  110:};
+        -:  111:
+        -:  112:typedef void (* reset_error_function_t)();
+        -:  113:
+        -:  114:/// Throw a C++ std::exception which was created based on an rcl error.
+        -:  115:/**
+        -:  116: * Passing nullptr for reset_error is safe and will avoid calling any function
+        -:  117: * to reset the error.
+        -:  118: *
+        -:  119: * \param ret the return code for the current error state
+        -:  120: * \param prefix string to prefix to the error if applicable (not all errors have custom messages)
+        -:  121: * \param error_state error state to create exception from, if nullptr rcl_get_error_state is used
+        -:  122: * \param reset_error function to be called before throwing which whill clear the error state
+        -:  123: * \throws std::invalid_argument if ret is RCL_RET_OK
+        -:  124: * \throws std::runtime_error if the rcl_get_error_state returns 0
+        -:  125: * \throws RCLErrorBase some child class exception based on ret
+        -:  126: */
+        -:  127:/* *INDENT-OFF* */  // Uncrustify cannot yet understand [[noreturn]] properly
+        -:  128:RCLCPP_PUBLIC
+        -:  129:void
+        -:  130:throw_from_rcl_error [[noreturn]] (
+        -:  131:  rcl_ret_t ret,
+        -:  132:  const std::string & prefix = "",
+        -:  133:  const rcl_error_state_t * error_state = nullptr,
+        -:  134:  reset_error_function_t reset_error = rcl_reset_error);
+        -:  135:/* *INDENT-ON* */
+        -:  136:
+        -:  137:class RCLErrorBase
+        -:  138:{
+        -:  139:public:
+        -:  140:  RCLCPP_PUBLIC
+        -:  141:  RCLErrorBase(rcl_ret_t ret, const rcl_error_state_t * error_state);
+    #####:  142:  virtual ~RCLErrorBase() {}
+------------------
+_ZN6rclcpp10exceptions12RCLErrorBaseD0Ev:
+function _ZN6rclcpp10exceptions12RCLErrorBaseD0Ev called 0 returned 0% blocks executed 0%
+    #####:  142:  virtual ~RCLErrorBase() {}
+    %%%%%:  142-block  0
+call    0 never executed
+call    1 never executed
+------------------
+_ZN6rclcpp10exceptions12RCLErrorBaseD2Ev:
+function _ZN6rclcpp10exceptions12RCLErrorBaseD2Ev called 0 returned 0% blocks executed 0%
+    #####:  142:  virtual ~RCLErrorBase() {}
+    %%%%%:  142-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+------------------
+        -:  143:
+        -:  144:  rcl_ret_t ret;
+        -:  145:  std::string message;
+        -:  146:  std::string file;
+        -:  147:  size_t line;
+        -:  148:  std::string formatted_message;
+        -:  149:};
+        -:  150:
+        -:  151:/// Created when the return code does not match one of the other specialized exceptions.
+        -:  152:class RCLError : public RCLErrorBase, public std::runtime_error
+        -:  153:{
+        -:  154:public:
+        -:  155:  RCLCPP_PUBLIC
+        -:  156:  RCLError(rcl_ret_t ret, const rcl_error_state_t * error_state, const std::string & prefix);
+        -:  157:  RCLCPP_PUBLIC
+        -:  158:  RCLError(const RCLErrorBase & base_exc, const std::string & prefix);
+        -:  159:};
+        -:  160:
+        -:  161:/// Created when the ret is RCL_RET_BAD_ALLOC.
+        -:  162:class RCLBadAlloc : public RCLErrorBase, public std::bad_alloc
+        -:  163:{
+        -:  164:public:
+        -:  165:  RCLCPP_PUBLIC
+        -:  166:  RCLBadAlloc(rcl_ret_t ret, const rcl_error_state_t * error_state);
+        -:  167:  RCLCPP_PUBLIC
+        -:  168:  explicit RCLBadAlloc(const RCLErrorBase & base_exc);
+        -:  169:};
+        -:  170:
+        -:  171:/// Created when the ret is RCL_RET_INVALID_ARGUMENT.
+        -:  172:class RCLInvalidArgument : public RCLErrorBase, public std::invalid_argument
+        -:  173:{
+        -:  174:public:
+        -:  175:  RCLCPP_PUBLIC
+        -:  176:  RCLInvalidArgument(
+        -:  177:    rcl_ret_t ret,
+        -:  178:    const rcl_error_state_t * error_state,
+        -:  179:    const std::string & prefix);
+        -:  180:  RCLCPP_PUBLIC
+        -:  181:  RCLInvalidArgument(const RCLErrorBase & base_exc, const std::string & prefix);
+        -:  182:};
+        -:  183:
+        -:  184:/// Created when the ret is RCL_RET_INVALID_ROS_ARGS.
+        -:  185:class RCLInvalidROSArgsError : public RCLErrorBase, public std::runtime_error
+        -:  186:{
+        -:  187:public:
+        -:  188:  RCLCPP_PUBLIC
+        -:  189:  RCLInvalidROSArgsError(
+        -:  190:    rcl_ret_t ret, const rcl_error_state_t * error_state, const std::string & prefix);
+        -:  191:  RCLCPP_PUBLIC
+        -:  192:  RCLInvalidROSArgsError(const RCLErrorBase & base_exc, const std::string & prefix);
+        -:  193:};
+        -:  194:
+        -:  195:/// Thrown when unparsed ROS specific arguments are found.
+        -:  196:class UnknownROSArgsError : public std::runtime_error
+        -:  197:{
+        -:  198:public:
+        -:  199:  explicit UnknownROSArgsError(std::vector<std::string> && unknown_ros_args_in)
+        -:  200:  : std::runtime_error(
+        -:  201:      "found unknown ROS arguments: '" + rcpputils::join(unknown_ros_args_in, "', '") + "'"),
+        -:  202:    unknown_ros_args(unknown_ros_args_in)
+        -:  203:  {
+        -:  204:  }
+        -:  205:
+        -:  206:  const std::vector<std::string> unknown_ros_args;
+        -:  207:};
+        -:  208:
+        -:  209:/// Thrown when an invalid rclcpp::Event object or SharedPtr is encountered.
+        -:  210:class InvalidEventError : public std::runtime_error
+        -:  211:{
+        -:  212:public:
+        -:  213:  InvalidEventError()
+        -:  214:  : std::runtime_error("event is invalid") {}
+        -:  215:};
+        -:  216:
+        -:  217:/// Thrown when an unregistered rclcpp::Event is encountered where a registered one was expected.
+        -:  218:class EventNotRegisteredError : public std::runtime_error
+        -:  219:{
+        -:  220:public:
+        -:  221:  EventNotRegisteredError()
+        -:  222:  : std::runtime_error("event already registered") {}
+        -:  223:};
+        -:  224:
+        -:  225:/// Thrown if passed parameters are inconsistent or invalid
+        -:  226:class InvalidParametersException : public std::runtime_error
+        -:  227:{
+        -:  228:public:
+        -:  229:  // Inherit constructors from runtime_error.
+        -:  230:  using std::runtime_error::runtime_error;
+        -:  231:};
+        -:  232:
+        -:  233:/// Thrown if passed parameter value is invalid.
+        -:  234:class InvalidParameterValueException : public std::runtime_error
+        -:  235:{
+        -:  236:  // Inherit constructors from runtime_error.
+        -:  237:  using std::runtime_error::runtime_error;
+        -:  238:};
+        -:  239:
+        -:  240:/// Thrown if requested parameter type is invalid.
+        -:  241:/**
+        -:  242: * Essentially the same as rclcpp::ParameterTypeException, but with parameter
+        -:  243: * name in the error message.
+        -:  244: */
+        -:  245:class InvalidParameterTypeException : public std::runtime_error
+        -:  246:{
+        -:  247:public:
+        -:  248:  /// Construct an instance.
+        -:  249:  /**
+        -:  250:   * \param[in] name the name of the parameter.
+        -:  251:   * \param[in] message custom exception message.
+        -:  252:   */
+        -:  253:  RCLCPP_PUBLIC
+function _ZN6rclcpp10exceptions29InvalidParameterTypeExceptionC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_ called 0 returned 0% blocks executed 0%
+    #####:  254:  InvalidParameterTypeException(const std::string & name, const std::string message)
+    #####:  255:  : std::runtime_error("parameter '" + name + "' has invalid type: " + message)
+    %%%%%:  255-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  255-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  255-block  2
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  255-block  3
+call   10 never executed
+call   11 never executed
+call   12 never executed
+    $$$$$:  255-block  4
+call   13 never executed
+    $$$$$:  255-block  5
+    $$$$$:  255-block  6
+call   14 never executed
+    $$$$$:  255-block  7
+    $$$$$:  255-block  8
+call   15 never executed
+    #####:  256:  {}
+        -:  257:};
+        -:  258:
+        -:  259:/// Thrown if user attempts to create an uninitialized statically typed parameter
+        -:  260:/**
+        -:  261: * (see https://github.com/ros2/rclcpp/issues/1691)
+        -:  262: */
+        -:  263:class UninitializedStaticallyTypedParameterException : public std::runtime_error
+        -:  264:{
+        -:  265:public:
+        -:  266:  /// Construct an instance.
+        -:  267:  /**
+        -:  268:   * \param[in] name the name of the parameter.
+        -:  269:   */
+        -:  270:  RCLCPP_PUBLIC
+        -:  271:  explicit UninitializedStaticallyTypedParameterException(const std::string & name)
+        -:  272:  : std::runtime_error("Statically typed parameter '" + name + "' must be initialized.")
+        -:  273:  {}
+        -:  274:};
+        -:  275:
+        -:  276:/// Thrown if parameter is already declared.
+        -:  277:class ParameterAlreadyDeclaredException : public std::runtime_error
+        -:  278:{
+        -:  279:  // Inherit constructors from runtime_error.
+        -:  280:  using std::runtime_error::runtime_error;
+        -:  281:};
+        -:  282:
+        -:  283:/// Thrown if parameter is not declared, e.g. either set or get was called without first declaring.
+        -:  284:class ParameterNotDeclaredException : public std::runtime_error
+        -:  285:{
+        -:  286:  // Inherit constructors from runtime_error.
+        -:  287:  using std::runtime_error::runtime_error;
+        -:  288:};
+        -:  289:
+        -:  290:/// Thrown if parameter is immutable and therefore cannot be undeclared.
+        -:  291:class ParameterImmutableException : public std::runtime_error
+        -:  292:{
+        -:  293:  // Inherit constructors from runtime_error.
+        -:  294:  using std::runtime_error::runtime_error;
+        -:  295:};
+        -:  296:
+        -:  297:/// Thrown if parameter is modified while in a set callback.
+        -:  298:class ParameterModifiedInCallbackException : public std::runtime_error
+        -:  299:{
+        -:  300:  // Inherit constructors from runtime_error.
+        -:  301:  using std::runtime_error::runtime_error;
+        -:  302:};
+        -:  303:
+        -:  304:/// Thrown when an uninitialized parameter is accessed.
+        -:  305:class ParameterUninitializedException : public std::runtime_error
+        -:  306:{
+        -:  307:public:
+        -:  308:  /// Construct an instance.
+        -:  309:  /**
+        -:  310:   * \param[in] name the name of the parameter.
+        -:  311:   */
+        -:  312:  explicit ParameterUninitializedException(const std::string & name)
+        -:  313:  : std::runtime_error("parameter '" + name + "' is not initialized")
+        -:  314:  {}
+        -:  315:};
+        -:  316:
+        -:  317:/// Thrown if the QoS overrides provided aren't valid.
+        -:  318:class InvalidQosOverridesException : public std::runtime_error
+        -:  319:{
+        -:  320:  // Inherit constructors from runtime_error.
+        -:  321:  using std::runtime_error::runtime_error;
+        -:  322:};
+        -:  323:
+        -:  324:/// Thrown if a QoS compatibility check fails.
+        -:  325:class QoSCheckCompatibleException : public std::runtime_error
+        -:  326:{
+        -:  327:  // Inherit constructors from runtime_error.
+        -:  328:  using std::runtime_error::runtime_error;
+        -:  329:};
+        -:  330:
+        -:  331:}  // namespace exceptions
+        -:  332:}  // namespace rclcpp
+        -:  333:
+        -:  334:#endif  // RCLCPP__EXCEPTIONS__EXCEPTIONS_HPP_

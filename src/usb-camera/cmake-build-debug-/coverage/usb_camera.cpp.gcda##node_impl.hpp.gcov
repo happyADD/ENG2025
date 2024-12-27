@@ -1,0 +1,773 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/node_impl.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2014 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__NODE_IMPL_HPP_
+        -:   16:#define RCLCPP__NODE_IMPL_HPP_
+        -:   17:
+        -:   18:#include <rmw/error_handling.h>
+        -:   19:#include <rmw/rmw.h>
+        -:   20:
+        -:   21:#include <algorithm>
+        -:   22:#include <chrono>
+        -:   23:#include <cstdlib>
+        -:   24:#include <iostream>
+        -:   25:#include <limits>
+        -:   26:#include <map>
+        -:   27:#include <memory>
+        -:   28:#include <sstream>
+        -:   29:#include <stdexcept>
+        -:   30:#include <string>
+        -:   31:#include <utility>
+        -:   32:#include <vector>
+        -:   33:
+        -:   34:#include "rcl/publisher.h"
+        -:   35:#include "rcl/subscription.h"
+        -:   36:
+        -:   37:#include "rclcpp/contexts/default_context.hpp"
+        -:   38:#include "rclcpp/create_client.hpp"
+        -:   39:#include "rclcpp/create_generic_publisher.hpp"
+        -:   40:#include "rclcpp/create_generic_subscription.hpp"
+        -:   41:#include "rclcpp/create_publisher.hpp"
+        -:   42:#include "rclcpp/create_service.hpp"
+        -:   43:#include "rclcpp/create_subscription.hpp"
+        -:   44:#include "rclcpp/create_timer.hpp"
+        -:   45:#include "rclcpp/detail/resolve_enable_topic_statistics.hpp"
+        -:   46:#include "rclcpp/parameter.hpp"
+        -:   47:#include "rclcpp/qos.hpp"
+        -:   48:#include "rclcpp/timer.hpp"
+        -:   49:#include "rclcpp/type_support_decl.hpp"
+        -:   50:#include "rclcpp/visibility_control.hpp"
+        -:   51:
+        -:   52:#ifndef RCLCPP__NODE_HPP_
+        -:   53:#include "node.hpp"
+        -:   54:#endif
+        -:   55:
+        -:   56:namespace rclcpp
+        -:   57:{
+        -:   58:
+        -:   59:RCLCPP_LOCAL
+        -:   60:inline
+        -:   61:std::string
+function _ZN6rclcpp30extend_name_with_sub_namespaceERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_ called 4 returned 100% blocks executed 35%
+        4:   62:extend_name_with_sub_namespace(const std::string & name, const std::string & sub_namespace)
+        -:   63:{
+        4:   64:  std::string name_with_sub_namespace(name);
+        4:   64-block  0
+call    0 returned 4
+       4*:   65:  if (sub_namespace != "" && name.front() != '/' && name.front() != '~') {
+call    0 returned 4
+branch  1 taken 4 (fallthrough)
+branch  2 taken 0 (throw)
+        4:   65-block  0
+branch  3 taken 0 (fallthrough)
+branch  4 taken 4
+    %%%%%:   65-block  1
+call    5 never executed
+branch  6 never executed
+branch  7 never executed
+    %%%%%:   65-block  2
+call    8 never executed
+branch  9 never executed
+branch 10 never executed
+    %%%%%:   65-block  3
+        4:   65-block  4
+        4:   65-block  5
+branch 11 taken 0 (fallthrough)
+branch 12 taken 4
+    #####:   66:    name_with_sub_namespace = sub_namespace + "/" + name;
+    %%%%%:   66-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:   66-block  1
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:   66-block  2
+call    6 never executed
+call    7 never executed
+call    8 never executed
+    $$$$$:   66-block  3
+call    9 never executed
+    $$$$$:   66-block  4
+        -:   67:  }
+        4:   68:  return name_with_sub_namespace;
+        4:   68-block  0
+        4:   68-block  1
+    =====:   69:}
+    $$$$$:   69-block  0
+call    0 never executed
+        -:   70:
+        -:   71:template<typename MessageT, typename AllocatorT, typename PublisherT>
+        -:   72:std::shared_ptr<PublisherT>
+        2:   73:Node::create_publisher(
+        -:   74:  const std::string & topic_name,
+        -:   75:  const rclcpp::QoS & qos,
+        -:   76:  const PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:   77:{
+        -:   78:  return rclcpp::create_publisher<MessageT, AllocatorT, PublisherT>(
+        -:   79:    *this,
+        -:   80:    extend_name_with_sub_namespace(topic_name, this->get_sub_namespace()),
+        -:   81:    qos,
+        2:   82:    options);
+        -:   83:}
+------------------
+_ZN6rclcpp4Node16create_publisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_NS_9PublisherIS6_S5_EEEESt10shared_ptrIT1_ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIT0_EE:
+function _ZN6rclcpp4Node16create_publisherIN11sensor_msgs3msg11CameraInfo_ISaIvEEES5_NS_9PublisherIS6_S5_EEEESt10shared_ptrIT1_ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIT0_EE called 1 returned 100% blocks executed 78%
+        1:   73:Node::create_publisher(
+        -:   74:  const std::string & topic_name,
+        -:   75:  const rclcpp::QoS & qos,
+        -:   76:  const PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:   77:{
+        -:   78:  return rclcpp::create_publisher<MessageT, AllocatorT, PublisherT>(
+        -:   79:    *this,
+        -:   80:    extend_name_with_sub_namespace(topic_name, this->get_sub_namespace()),
+        -:   81:    qos,
+        1:   82:    options);
+        1:   82-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+branch  3 taken 1 (fallthrough)
+branch  4 taken 0 (throw)
+        1:   82-block  1
+call    5 returned 1
+        1:   82-block  2
+    $$$$$:   82-block  3
+call    6 never executed
+        -:   83:}
+------------------
+_ZN6rclcpp4Node16create_publisherIN11sensor_msgs3msg6Image_ISaIvEEES5_NS_9PublisherIS6_S5_EEEESt10shared_ptrIT1_ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIT0_EE:
+function _ZN6rclcpp4Node16create_publisherIN11sensor_msgs3msg6Image_ISaIvEEES5_NS_9PublisherIS6_S5_EEEESt10shared_ptrIT1_ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3QoSERKNS_29PublisherOptionsWithAllocatorIT0_EE called 1 returned 100% blocks executed 78%
+        1:   73:Node::create_publisher(
+        -:   74:  const std::string & topic_name,
+        -:   75:  const rclcpp::QoS & qos,
+        -:   76:  const PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:   77:{
+        -:   78:  return rclcpp::create_publisher<MessageT, AllocatorT, PublisherT>(
+        -:   79:    *this,
+        -:   80:    extend_name_with_sub_namespace(topic_name, this->get_sub_namespace()),
+        -:   81:    qos,
+        1:   82:    options);
+        1:   82-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+branch  3 taken 1 (fallthrough)
+branch  4 taken 0 (throw)
+        1:   82-block  1
+call    5 returned 1
+        1:   82-block  2
+    $$$$$:   82-block  3
+call    6 never executed
+        -:   83:}
+------------------
+        -:   84:
+        -:   85:template<
+        -:   86:  typename MessageT,
+        -:   87:  typename CallbackT,
+        -:   88:  typename AllocatorT,
+        -:   89:  typename SubscriptionT,
+        -:   90:  typename MessageMemoryStrategyT>
+        -:   91:std::shared_ptr<SubscriptionT>
+        -:   92:Node::create_subscription(
+        -:   93:  const std::string & topic_name,
+        -:   94:  const rclcpp::QoS & qos,
+        -:   95:  CallbackT && callback,
+        -:   96:  const SubscriptionOptionsWithAllocator<AllocatorT> & options,
+        -:   97:  typename MessageMemoryStrategyT::SharedPtr msg_mem_strat)
+        -:   98:{
+        -:   99:  return rclcpp::create_subscription<MessageT>(
+        -:  100:    *this,
+        -:  101:    extend_name_with_sub_namespace(topic_name, this->get_sub_namespace()),
+        -:  102:    qos,
+        -:  103:    std::forward<CallbackT>(callback),
+        -:  104:    options,
+        -:  105:    msg_mem_strat);
+        -:  106:}
+        -:  107:
+        -:  108:template<typename DurationRepT, typename DurationT, typename CallbackT>
+        -:  109:typename rclcpp::WallTimer<CallbackT>::SharedPtr
+function _ZN6rclcpp4Node17create_wall_timerIdSt5ratioILl1ELl1EESt5_BindIFM10usb_cameraFvvEPS5_EEEENS_9WallTimerIT1_XLDnEEE9SharedPtrENSt6chrono8durationIT_T0_EESC_St10shared_ptrINS_13CallbackGroupEE called 1 returned 100% blocks executed 77%
+        1:  110:Node::create_wall_timer(
+        -:  111:  std::chrono::duration<DurationRepT, DurationT> period,
+        -:  112:  CallbackT callback,
+        -:  113:  rclcpp::CallbackGroup::SharedPtr group)
+        -:  114:{
+        -:  115:  return rclcpp::create_wall_timer(
+        -:  116:    period,
+        1:  117:    std::move(callback),
+call    0 returned 1
+        -:  118:    group,
+        -:  119:    this->node_base_.get(),
+        2:  120:    this->node_timers_.get());
+        1:  120-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+call    3 returned 1
+call    4 returned 1
+branch  5 taken 1 (fallthrough)
+branch  6 taken 0 (throw)
+        1:  120-block  1
+call    7 returned 1
+        1:  120-block  2
+    $$$$$:  120-block  3
+    $$$$$:  120-block  4
+call    8 never executed
+        -:  121:}
+        -:  122:
+        -:  123:template<typename ServiceT>
+        -:  124:typename Client<ServiceT>::SharedPtr
+        -:  125:Node::create_client(
+        -:  126:  const std::string & service_name,
+        -:  127:  const rmw_qos_profile_t & qos_profile,
+        -:  128:  rclcpp::CallbackGroup::SharedPtr group)
+        -:  129:{
+        -:  130:  return rclcpp::create_client<ServiceT>(
+        -:  131:    node_base_,
+        -:  132:    node_graph_,
+        -:  133:    node_services_,
+        -:  134:    extend_name_with_sub_namespace(service_name, this->get_sub_namespace()),
+        -:  135:    qos_profile,
+        -:  136:    group);
+        -:  137:}
+        -:  138:
+        -:  139:template<typename ServiceT, typename CallbackT>
+        -:  140:typename rclcpp::Service<ServiceT>::SharedPtr
+        -:  141:Node::create_service(
+        -:  142:  const std::string & service_name,
+        -:  143:  CallbackT && callback,
+        -:  144:  const rmw_qos_profile_t & qos_profile,
+        -:  145:  rclcpp::CallbackGroup::SharedPtr group)
+        -:  146:{
+        -:  147:  return rclcpp::create_service<ServiceT, CallbackT>(
+        -:  148:    node_base_,
+        -:  149:    node_services_,
+        -:  150:    extend_name_with_sub_namespace(service_name, this->get_sub_namespace()),
+        -:  151:    std::forward<CallbackT>(callback),
+        -:  152:    qos_profile,
+        -:  153:    group);
+        -:  154:}
+        -:  155:
+        -:  156:template<typename AllocatorT>
+        -:  157:std::shared_ptr<rclcpp::GenericPublisher>
+        -:  158:Node::create_generic_publisher(
+        -:  159:  const std::string & topic_name,
+        -:  160:  const std::string & topic_type,
+        -:  161:  const rclcpp::QoS & qos,
+        -:  162:  const rclcpp::PublisherOptionsWithAllocator<AllocatorT> & options)
+        -:  163:{
+        -:  164:  return rclcpp::create_generic_publisher(
+        -:  165:    node_topics_,
+        -:  166:    extend_name_with_sub_namespace(topic_name, this->get_sub_namespace()),
+        -:  167:    topic_type,
+        -:  168:    qos,
+        -:  169:    options
+        -:  170:  );
+        -:  171:}
+        -:  172:
+        -:  173:template<typename AllocatorT>
+        -:  174:std::shared_ptr<rclcpp::GenericSubscription>
+        -:  175:Node::create_generic_subscription(
+        -:  176:  const std::string & topic_name,
+        -:  177:  const std::string & topic_type,
+        -:  178:  const rclcpp::QoS & qos,
+        -:  179:  std::function<void(std::shared_ptr<rclcpp::SerializedMessage>)> callback,
+        -:  180:  const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT> & options)
+        -:  181:{
+        -:  182:  return rclcpp::create_generic_subscription(
+        -:  183:    node_topics_,
+        -:  184:    extend_name_with_sub_namespace(topic_name, this->get_sub_namespace()),
+        -:  185:    topic_type,
+        -:  186:    qos,
+        -:  187:    std::move(callback),
+        -:  188:    options
+        -:  189:  );
+        -:  190:}
+        -:  191:
+        -:  192:
+        -:  193:template<typename ParameterT>
+        -:  194:auto
+       11:  195:Node::declare_parameter(
+        -:  196:  const std::string & name,
+        -:  197:  const ParameterT & default_value,
+        -:  198:  const rcl_interfaces::msg::ParameterDescriptor & parameter_descriptor,
+        -:  199:  bool ignore_override)
+        -:  200:{
+        -:  201:  try {
+       11:  202:    return this->declare_parameter(
+        -:  203:      name,
+       22:  204:      rclcpp::ParameterValue(default_value),
+        -:  205:      parameter_descriptor,
+        -:  206:      ignore_override
+       22:  207:    ).get<ParameterT>();
+    =====:  208:  } catch (const ParameterTypeException & ex) {
+    =====:  209:    throw exceptions::InvalidParameterTypeException(name, ex.what());
+        -:  210:  }
+        -:  211:}
+------------------
+_ZN6rclcpp4Node17declare_parameterISt6vectorIdSaIdEEEEDaRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKT_RKN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEEb:
+function _ZN6rclcpp4Node17declare_parameterISt6vectorIdSaIdEEEEDaRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKT_RKN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEEb called 2 returned 100% blocks executed 28%
+        2:  195:Node::declare_parameter(
+        -:  196:  const std::string & name,
+        -:  197:  const ParameterT & default_value,
+        -:  198:  const rcl_interfaces::msg::ParameterDescriptor & parameter_descriptor,
+        -:  199:  bool ignore_override)
+        -:  200:{
+        -:  201:  try {
+        2:  202:    return this->declare_parameter(
+        2:  202-block  0
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        -:  203:      name,
+        4:  204:      rclcpp::ParameterValue(default_value),
+        2:  204-block  0
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        2:  204-block  1
+call    3 returned 2
+    $$$$$:  204-block  2
+call    4 never executed
+    $$$$$:  204-block  3
+        -:  205:      parameter_descriptor,
+        -:  206:      ignore_override
+        4:  207:    ).get<ParameterT>();
+        2:  207-block  0
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        2:  207-block  1
+call    3 returned 2
+branch  4 taken 2 (fallthrough)
+branch  5 taken 0 (throw)
+        2:  207-block  2
+    =====:  208:  } catch (const ParameterTypeException & ex) {
+    $$$$$:  208-block  0
+branch  0 never executed
+branch  1 never executed
+    $$$$$:  208-block  1
+call    2 never executed
+    $$$$$:  208-block  2
+call    3 never executed
+    =====:  209:    throw exceptions::InvalidParameterTypeException(name, ex.what());
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:  209-block  0
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    $$$$$:  209-block  1
+call    9 never executed
+call   10 never executed
+call   11 never executed
+    $$$$$:  209-block  2
+call   12 never executed
+    $$$$$:  209-block  3
+    $$$$$:  209-block  4
+call   13 never executed
+    $$$$$:  209-block  5
+    $$$$$:  209-block  6
+call   14 never executed
+        -:  210:  }
+        -:  211:}
+------------------
+_ZN6rclcpp4Node17declare_parameterIA7_cEEDaRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKT_RKN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEEb:
+function _ZN6rclcpp4Node17declare_parameterIA7_cEEDaRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKT_RKN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEEb called 1 returned 100% blocks executed 28%
+        1:  195:Node::declare_parameter(
+        -:  196:  const std::string & name,
+        -:  197:  const ParameterT & default_value,
+        -:  198:  const rcl_interfaces::msg::ParameterDescriptor & parameter_descriptor,
+        -:  199:  bool ignore_override)
+        -:  200:{
+        -:  201:  try {
+        1:  202:    return this->declare_parameter(
+        1:  202-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        -:  203:      name,
+        2:  204:      rclcpp::ParameterValue(default_value),
+        1:  204-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  204-block  1
+call    3 returned 1
+    $$$$$:  204-block  2
+call    4 never executed
+    $$$$$:  204-block  3
+        -:  205:      parameter_descriptor,
+        -:  206:      ignore_override
+        2:  207:    ).get<ParameterT>();
+        1:  207-block  0
+call    0 returned 1
+branch  1 taken 1 (fallthrough)
+branch  2 taken 0 (throw)
+        1:  207-block  1
+call    3 returned 1
+branch  4 taken 1 (fallthrough)
+branch  5 taken 0 (throw)
+        1:  207-block  2
+    =====:  208:  } catch (const ParameterTypeException & ex) {
+    $$$$$:  208-block  0
+branch  0 never executed
+branch  1 never executed
+    $$$$$:  208-block  1
+call    2 never executed
+    $$$$$:  208-block  2
+call    3 never executed
+    =====:  209:    throw exceptions::InvalidParameterTypeException(name, ex.what());
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:  209-block  0
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    $$$$$:  209-block  1
+call    9 never executed
+call   10 never executed
+call   11 never executed
+    $$$$$:  209-block  2
+call   12 never executed
+    $$$$$:  209-block  3
+    $$$$$:  209-block  4
+call   13 never executed
+    $$$$$:  209-block  5
+    $$$$$:  209-block  6
+call   14 never executed
+        -:  210:  }
+        -:  211:}
+------------------
+_ZN6rclcpp4Node17declare_parameterIdEEDaRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKT_RKN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEEb:
+function _ZN6rclcpp4Node17declare_parameterIdEEDaRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKT_RKN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEEb called 3 returned 100% blocks executed 23%
+        3:  195:Node::declare_parameter(
+        -:  196:  const std::string & name,
+        -:  197:  const ParameterT & default_value,
+        -:  198:  const rcl_interfaces::msg::ParameterDescriptor & parameter_descriptor,
+        -:  199:  bool ignore_override)
+        -:  200:{
+        -:  201:  try {
+        3:  202:    return this->declare_parameter(
+        3:  202-block  0
+call    0 returned 3
+branch  1 taken 3 (fallthrough)
+branch  2 taken 0 (throw)
+        -:  203:      name,
+        6:  204:      rclcpp::ParameterValue(default_value),
+        3:  204-block  0
+call    0 returned 3
+branch  1 taken 3 (fallthrough)
+branch  2 taken 0 (throw)
+    $$$$$:  204-block  1
+call    3 never executed
+    $$$$$:  204-block  2
+        -:  205:      parameter_descriptor,
+        -:  206:      ignore_override
+        6:  207:    ).get<ParameterT>();
+        3:  207-block  0
+call    0 returned 3
+branch  1 taken 3 (fallthrough)
+branch  2 taken 0 (throw)
+        3:  207-block  1
+call    3 returned 3
+        3:  207-block  2
+    =====:  208:  } catch (const ParameterTypeException & ex) {
+    $$$$$:  208-block  0
+branch  0 never executed
+branch  1 never executed
+    $$$$$:  208-block  1
+call    2 never executed
+    $$$$$:  208-block  2
+call    3 never executed
+    =====:  209:    throw exceptions::InvalidParameterTypeException(name, ex.what());
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:  209-block  0
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    $$$$$:  209-block  1
+call    9 never executed
+call   10 never executed
+call   11 never executed
+    $$$$$:  209-block  2
+call   12 never executed
+    $$$$$:  209-block  3
+    $$$$$:  209-block  4
+call   13 never executed
+    $$$$$:  209-block  5
+    $$$$$:  209-block  6
+call   14 never executed
+        -:  210:  }
+        -:  211:}
+------------------
+_ZN6rclcpp4Node17declare_parameterIiEEDaRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKT_RKN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEEb:
+function _ZN6rclcpp4Node17declare_parameterIiEEDaRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKT_RKN14rcl_interfaces3msg20ParameterDescriptor_ISaIvEEEb called 5 returned 100% blocks executed 23%
+        5:  195:Node::declare_parameter(
+        -:  196:  const std::string & name,
+        -:  197:  const ParameterT & default_value,
+        -:  198:  const rcl_interfaces::msg::ParameterDescriptor & parameter_descriptor,
+        -:  199:  bool ignore_override)
+        -:  200:{
+        -:  201:  try {
+        5:  202:    return this->declare_parameter(
+        5:  202-block  0
+call    0 returned 5
+branch  1 taken 5 (fallthrough)
+branch  2 taken 0 (throw)
+        -:  203:      name,
+       10:  204:      rclcpp::ParameterValue(default_value),
+        5:  204-block  0
+call    0 returned 5
+branch  1 taken 5 (fallthrough)
+branch  2 taken 0 (throw)
+    $$$$$:  204-block  1
+call    3 never executed
+    $$$$$:  204-block  2
+        -:  205:      parameter_descriptor,
+        -:  206:      ignore_override
+       10:  207:    ).get<ParameterT>();
+        5:  207-block  0
+call    0 returned 5
+branch  1 taken 5 (fallthrough)
+branch  2 taken 0 (throw)
+        5:  207-block  1
+call    3 returned 5
+        5:  207-block  2
+    =====:  208:  } catch (const ParameterTypeException & ex) {
+    $$$$$:  208-block  0
+branch  0 never executed
+branch  1 never executed
+    $$$$$:  208-block  1
+call    2 never executed
+    $$$$$:  208-block  2
+call    3 never executed
+    =====:  209:    throw exceptions::InvalidParameterTypeException(name, ex.what());
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:  209-block  0
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    $$$$$:  209-block  1
+call    9 never executed
+call   10 never executed
+call   11 never executed
+    $$$$$:  209-block  2
+call   12 never executed
+    $$$$$:  209-block  3
+    $$$$$:  209-block  4
+call   13 never executed
+    $$$$$:  209-block  5
+    $$$$$:  209-block  6
+call   14 never executed
+        -:  210:  }
+        -:  211:}
+------------------
+        -:  212:
+        -:  213:template<typename ParameterT>
+        -:  214:auto
+        -:  215:Node::declare_parameter(
+        -:  216:  const std::string & name,
+        -:  217:  const rcl_interfaces::msg::ParameterDescriptor & parameter_descriptor,
+        -:  218:  bool ignore_override)
+        -:  219:{
+        -:  220:  // get advantage of parameter value template magic to get
+        -:  221:  // the correct rclcpp::ParameterType from ParameterT
+        -:  222:  rclcpp::ParameterValue value{ParameterT{}};
+        -:  223:  try {
+        -:  224:    return this->declare_parameter(
+        -:  225:      name,
+        -:  226:      value.get_type(),
+        -:  227:      parameter_descriptor,
+        -:  228:      ignore_override
+        -:  229:    ).get<ParameterT>();
+        -:  230:  } catch (const ParameterTypeException &) {
+        -:  231:    throw exceptions::UninitializedStaticallyTypedParameterException(name);
+        -:  232:  }
+        -:  233:}
+        -:  234:
+        -:  235:template<typename ParameterT>
+        -:  236:std::vector<ParameterT>
+        -:  237:Node::declare_parameters(
+        -:  238:  const std::string & namespace_,
+        -:  239:  const std::map<std::string, ParameterT> & parameters,
+        -:  240:  bool ignore_overrides)
+        -:  241:{
+        -:  242:  std::vector<ParameterT> result;
+        -:  243:  std::string normalized_namespace = namespace_.empty() ? "" : (namespace_ + ".");
+        -:  244:  std::transform(
+        -:  245:    parameters.begin(), parameters.end(), std::back_inserter(result),
+        -:  246:    [this, &normalized_namespace, ignore_overrides](auto element) {
+        -:  247:      return this->declare_parameter(
+        -:  248:        normalized_namespace + element.first,
+        -:  249:        element.second,
+        -:  250:        rcl_interfaces::msg::ParameterDescriptor(),
+        -:  251:        ignore_overrides);
+        -:  252:    }
+        -:  253:  );
+        -:  254:  return result;
+        -:  255:}
+        -:  256:
+        -:  257:template<typename ParameterT>
+        -:  258:std::vector<ParameterT>
+        -:  259:Node::declare_parameters(
+        -:  260:  const std::string & namespace_,
+        -:  261:  const std::map<
+        -:  262:    std::string,
+        -:  263:    std::pair<ParameterT, rcl_interfaces::msg::ParameterDescriptor>
+        -:  264:  > & parameters,
+        -:  265:  bool ignore_overrides)
+        -:  266:{
+        -:  267:  std::vector<ParameterT> result;
+        -:  268:  std::string normalized_namespace = namespace_.empty() ? "" : (namespace_ + ".");
+        -:  269:  std::transform(
+        -:  270:    parameters.begin(), parameters.end(), std::back_inserter(result),
+        -:  271:    [this, &normalized_namespace, ignore_overrides](auto element) {
+        -:  272:      return static_cast<ParameterT>(
+        -:  273:        this->declare_parameter(
+        -:  274:          normalized_namespace + element.first,
+        -:  275:          element.second.first,
+        -:  276:          element.second.second,
+        -:  277:          ignore_overrides)
+        -:  278:      );
+        -:  279:    }
+        -:  280:  );
+        -:  281:  return result;
+        -:  282:}
+        -:  283:
+        -:  284:template<typename ParameterT>
+        -:  285:bool
+function _ZNK6rclcpp4Node13get_parameterISt6vectorIdSaIdEEEEbRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERT_ called 2 returned 100% blocks executed 78%
+        2:  286:Node::get_parameter(const std::string & name, ParameterT & parameter) const
+        -:  287:{
+        2:  288:  std::string sub_name = extend_name_with_sub_namespace(name, this->get_sub_namespace());
+        2:  288-block  0
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        2:  288-block  1
+call    3 returned 2
+branch  4 taken 2 (fallthrough)
+branch  5 taken 0 (throw)
+        -:  289:
+        2:  290:  rclcpp::Parameter parameter_variant;
+        2:  290-block  0
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        -:  291:
+        2:  292:  bool result = get_parameter(sub_name, parameter_variant);
+        2:  292-block  0
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        2:  293:  if (result) {
+        2:  293-block  0
+branch  0 taken 2 (fallthrough)
+branch  1 taken 0
+        2:  294:    parameter = static_cast<ParameterT>(parameter_variant.get_value<ParameterT>());
+        2:  294-block  0
+call    0 returned 2
+branch  1 taken 2 (fallthrough)
+branch  2 taken 0 (throw)
+        2:  294-block  1
+call    3 returned 2
+call    4 returned 2
+        -:  295:  }
+        -:  296:
+        2:  297:  return result;
+        2:  297-block  0
+        2:  298:}
+        2:  298-block  0
+call    0 returned 2
+call    1 returned 2
+    $$$$$:  298-block  1
+call    2 never executed
+    $$$$$:  298-block  2
+call    3 never executed
+        -:  299:
+        -:  300:template<typename ParameterT>
+        -:  301:bool
+        -:  302:Node::get_parameter_or(
+        -:  303:  const std::string & name,
+        -:  304:  ParameterT & parameter,
+        -:  305:  const ParameterT & alternative_value) const
+        -:  306:{
+        -:  307:  std::string sub_name = extend_name_with_sub_namespace(name, this->get_sub_namespace());
+        -:  308:
+        -:  309:  bool got_parameter = get_parameter(sub_name, parameter);
+        -:  310:  if (!got_parameter) {
+        -:  311:    parameter = alternative_value;
+        -:  312:  }
+        -:  313:  return got_parameter;
+        -:  314:}
+        -:  315:
+        -:  316:template<typename ParameterT>
+        -:  317:ParameterT
+        -:  318:Node::get_parameter_or(
+        -:  319:  const std::string & name,
+        -:  320:  const ParameterT & alternative_value) const
+        -:  321:{
+        -:  322:  ParameterT parameter;
+        -:  323:  get_parameter_or(name, parameter, alternative_value);
+        -:  324:  return parameter;
+        -:  325:}
+        -:  326:
+        -:  327:// this is a partially-specialized version of get_parameter above,
+        -:  328:// where our concrete type for ParameterT is std::map, but the to-be-determined
+        -:  329:// type is the value in the map.
+        -:  330:template<typename ParameterT>
+        -:  331:bool
+        -:  332:Node::get_parameters(
+        -:  333:  const std::string & prefix,
+        -:  334:  std::map<std::string, ParameterT> & values) const
+        -:  335:{
+        -:  336:  std::map<std::string, rclcpp::Parameter> params;
+        -:  337:  bool result = node_parameters_->get_parameters_by_prefix(prefix, params);
+        -:  338:  if (result) {
+        -:  339:    for (const auto & param : params) {
+        -:  340:      values[param.first] = static_cast<ParameterT>(param.second.get_value<ParameterT>());
+        -:  341:    }
+        -:  342:  }
+        -:  343:
+        -:  344:  return result;
+        -:  345:}
+        -:  346:
+        -:  347:}  // namespace rclcpp
+        -:  348:
+        -:  349:#endif  // RCLCPP__NODE_IMPL_HPP_

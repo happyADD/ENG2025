@@ -1,0 +1,1263 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/experimental/intra_process_manager.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2019 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__EXPERIMENTAL__INTRA_PROCESS_MANAGER_HPP_
+        -:   16:#define RCLCPP__EXPERIMENTAL__INTRA_PROCESS_MANAGER_HPP_
+        -:   17:
+        -:   18:#include <rmw/types.h>
+        -:   19:
+        -:   20:#include <shared_mutex>
+        -:   21:
+        -:   22:#include <iterator>
+        -:   23:#include <memory>
+        -:   24:#include <stdexcept>
+        -:   25:#include <unordered_map>
+        -:   26:#include <utility>
+        -:   27:#include <vector>
+        -:   28:#include <typeinfo>
+        -:   29:
+        -:   30:#include "rclcpp/allocator/allocator_deleter.hpp"
+        -:   31:#include "rclcpp/experimental/ros_message_intra_process_buffer.hpp"
+        -:   32:#include "rclcpp/experimental/subscription_intra_process.hpp"
+        -:   33:#include "rclcpp/experimental/subscription_intra_process_base.hpp"
+        -:   34:#include "rclcpp/experimental/subscription_intra_process_buffer.hpp"
+        -:   35:#include "rclcpp/logger.hpp"
+        -:   36:#include "rclcpp/logging.hpp"
+        -:   37:#include "rclcpp/macros.hpp"
+        -:   38:#include "rclcpp/publisher_base.hpp"
+        -:   39:#include "rclcpp/type_adapter.hpp"
+        -:   40:#include "rclcpp/visibility_control.hpp"
+        -:   41:
+        -:   42:namespace rclcpp
+        -:   43:{
+        -:   44:
+        -:   45:namespace experimental
+        -:   46:{
+        -:   47:
+        -:   48:/// This class performs intra process communication between nodes.
+        -:   49:/**
+        -:   50: * This class is used in the creation of publishers and subscriptions.
+        -:   51: * A singleton instance of this class is owned by a rclcpp::Context and a
+        -:   52: * rclcpp::Node can use an associated Context to get an instance of this class.
+        -:   53: * Nodes which do not have a common Context will not exchange intra process
+        -:   54: * messages because they do not share access to the same instance of this class.
+        -:   55: *
+        -:   56: * When a Node creates a subscription, it can also create a helper class,
+        -:   57: * called SubscriptionIntraProcess, meant to receive intra process messages.
+        -:   58: * It can be registered with this class.
+        -:   59: * It is also allocated an id which is unique among all publishers
+        -:   60: * and subscriptions in this process and that is associated to the subscription.
+        -:   61: *
+        -:   62: * When a Node creates a publisher, as with subscriptions, a helper class can
+        -:   63: * be registered with this class.
+        -:   64: * This is required in order to publish intra-process messages.
+        -:   65: * It is also allocated an id which is unique among all publishers
+        -:   66: * and subscriptions in this process and that is associated to the publisher.
+        -:   67: *
+        -:   68: * When a publisher or a subscription are registered, this class checks to see
+        -:   69: * which other subscriptions or publishers it will communicate with,
+        -:   70: * i.e. they have the same topic and compatible QoS.
+        -:   71: *
+        -:   72: * When the user publishes a message, if intra-process communication is enabled
+        -:   73: * on the publisher, the message is given to this class.
+        -:   74: * Using the publisher id, a list of recipients for the message is selected.
+        -:   75: * For each subscription in the list, this class stores the message, whether
+        -:   76: * sharing ownership or making a copy, in a buffer associated with the
+        -:   77: * subscription helper class.
+        -:   78: *
+        -:   79: * The subscription helper class contains a buffer where published
+        -:   80: * intra-process messages are stored until they are taken from the subscription.
+        -:   81: * Depending on the data type stored in the buffer, the subscription helper
+        -:   82: * class can request either shared or exclusive ownership on the message.
+        -:   83: *
+        -:   84: * Thus, when an intra-process message is published, this class knows how many
+        -:   85: * intra-process subscriptions needs it and how many require ownership.
+        -:   86: * This information allows this class to operate efficiently by performing the
+        -:   87: * fewest number of copies of the message required.
+        -:   88: *
+        -:   89: * This class is neither CopyConstructable nor CopyAssignable.
+        -:   90: */
+        -:   91:class IntraProcessManager
+        -:   92:{
+        -:   93:private:
+        -:   94:  RCLCPP_DISABLE_COPY(IntraProcessManager)
+        -:   95:
+        -:   96:public:
+        -:   97:  RCLCPP_SMART_PTR_DEFINITIONS(IntraProcessManager)
+        -:   98:
+        -:   99:  RCLCPP_PUBLIC
+        -:  100:  IntraProcessManager();
+        -:  101:
+        -:  102:  RCLCPP_PUBLIC
+        -:  103:  virtual ~IntraProcessManager();
+        -:  104:
+        -:  105:  /// Register a subscription with the manager, returns subscriptions unique id.
+        -:  106:  /**
+        -:  107:   * This method stores the subscription intra process object, together with
+        -:  108:   * the information of its wrapped subscription (i.e. topic name and QoS).
+        -:  109:   *
+        -:  110:   * In addition this generates a unique intra process id for the subscription.
+        -:  111:   *
+        -:  112:   * \param subscription the SubscriptionIntraProcess to register.
+        -:  113:   * \return an unsigned 64-bit integer which is the subscription's unique id.
+        -:  114:   */
+        -:  115:  RCLCPP_PUBLIC
+        -:  116:  uint64_t
+        -:  117:  add_subscription(rclcpp::experimental::SubscriptionIntraProcessBase::SharedPtr subscription);
+        -:  118:
+        -:  119:  /// Unregister a subscription using the subscription's unique id.
+        -:  120:  /**
+        -:  121:   * This method does not allocate memory.
+        -:  122:   *
+        -:  123:   * \param intra_process_subscription_id id of the subscription to remove.
+        -:  124:   */
+        -:  125:  RCLCPP_PUBLIC
+        -:  126:  void
+        -:  127:  remove_subscription(uint64_t intra_process_subscription_id);
+        -:  128:
+        -:  129:  /// Register a publisher with the manager, returns the publisher unique id.
+        -:  130:  /**
+        -:  131:   * This method stores the publisher intra process object, together with
+        -:  132:   * the information of its wrapped publisher (i.e. topic name and QoS).
+        -:  133:   *
+        -:  134:   * In addition this generates a unique intra process id for the publisher.
+        -:  135:   *
+        -:  136:   * \param publisher publisher to be registered with the manager.
+        -:  137:   * \return an unsigned 64-bit integer which is the publisher's unique id.
+        -:  138:   */
+        -:  139:  RCLCPP_PUBLIC
+        -:  140:  uint64_t
+        -:  141:  add_publisher(rclcpp::PublisherBase::SharedPtr publisher);
+        -:  142:
+        -:  143:  /// Unregister a publisher using the publisher's unique id.
+        -:  144:  /**
+        -:  145:   * This method does not allocate memory.
+        -:  146:   *
+        -:  147:   * \param intra_process_publisher_id id of the publisher to remove.
+        -:  148:   */
+        -:  149:  RCLCPP_PUBLIC
+        -:  150:  void
+        -:  151:  remove_publisher(uint64_t intra_process_publisher_id);
+        -:  152:
+        -:  153:  /// Publishes an intra-process message, passed as a unique pointer.
+        -:  154:  /**
+        -:  155:   * This is one of the two methods for publishing intra-process.
+        -:  156:   *
+        -:  157:   * Using the intra-process publisher id, a list of recipients is obtained.
+        -:  158:   * This list is split in half, depending whether they require ownership or not.
+        -:  159:   *
+        -:  160:   * This particular method takes a unique pointer as input.
+        -:  161:   * The pointer can be promoted to a shared pointer and passed to all the subscriptions
+        -:  162:   * that do not require ownership.
+        -:  163:   * In case of subscriptions requiring ownership, the message will be copied for all of
+        -:  164:   * them except the last one, when ownership can be transferred.
+        -:  165:   *
+        -:  166:   * This method can save an additional copy compared to the shared pointer one.
+        -:  167:   *
+        -:  168:   * This method can throw an exception if the publisher id is not found or
+        -:  169:   * if the publisher shared_ptr given to add_publisher has gone out of scope.
+        -:  170:   *
+        -:  171:   * This method does allocate memory.
+        -:  172:   *
+        -:  173:   * \param intra_process_publisher_id the id of the publisher of this message.
+        -:  174:   * \param message the message that is being stored.
+        -:  175:   * \param allocator for allocations when buffering messages.
+        -:  176:   */
+        -:  177:  template<
+        -:  178:    typename MessageT,
+        -:  179:    typename ROSMessageType,
+        -:  180:    typename Alloc,
+        -:  181:    typename Deleter = std::default_delete<MessageT>
+        -:  182:  >
+        -:  183:  void
+function _ZN6rclcpp12experimental19IntraProcessManager24do_intra_process_publishIN11sensor_msgs3msg11CameraInfo_ISaIvEEES7_S6_St14default_deleteIS7_EEEvmSt10unique_ptrIT_T2_ERNS_9allocator11AllocRebindISB_E14allocator_typeE called 0 returned 0% blocks executed 0%
+    #####:  184:  do_intra_process_publish(
+        -:  185:    uint64_t intra_process_publisher_id,
+        -:  186:    std::unique_ptr<MessageT, Deleter> message,
+        -:  187:    typename allocator::AllocRebind<MessageT, Alloc>::allocator_type & allocator)
+        -:  188:  {
+        -:  189:    using MessageAllocTraits = allocator::AllocRebind<MessageT, Alloc>;
+        -:  190:    using MessageAllocatorT = typename MessageAllocTraits::allocator_type;
+        -:  191:
+    #####:  192:    std::shared_lock<std::shared_timed_mutex> lock(mutex_);
+    %%%%%:  192-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  193:
+    #####:  194:    auto publisher_it = pub_to_subs_.find(intra_process_publisher_id);
+    %%%%%:  194-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  195:    if (publisher_it == pub_to_subs_.end()) {
+    %%%%%:  195-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  196:      // Publisher is either invalid or no longer exists.
+    #####:  197:      RCLCPP_WARN(
+    %%%%%:  197-block  0
+branch  0 never executed
+branch  1 never executed
+    %%%%%:  197-block  1
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  197-block  2
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  197-block  3
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  197-block  4
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    %%%%%:  197-block  5
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  197-block  6
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  197-block  7
+call   19 never executed
+branch 20 never executed
+branch 21 never executed
+    %%%%%:  197-block  8
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    %%%%%:  197-block  9
+call   25 never executed
+call   26 never executed
+branch 27 never executed
+branch 28 never executed
+    %%%%%:  197-block 10
+call   29 never executed
+branch 30 never executed
+branch 31 never executed
+    %%%%%:  197-block 11
+call   32 never executed
+call   33 never executed
+branch 34 never executed
+branch 35 never executed
+    %%%%%:  197-block 12
+call   36 never executed
+call   37 never executed
+call   38 never executed
+branch 39 never executed
+branch 40 never executed
+    %%%%%:  197-block 13
+call   41 never executed
+call   42 never executed
+branch 43 never executed
+branch 44 never executed
+    %%%%%:  197-block 14
+call   45 never executed
+branch 46 never executed
+branch 47 never executed
+    %%%%%:  197-block 15
+call   48 never executed
+call   49 never executed
+branch 50 never executed
+branch 51 never executed
+    %%%%%:  197-block 16
+call   52 never executed
+call   53 never executed
+call   54 never executed
+    $$$$$:  197-block 17
+    $$$$$:  197-block 18
+    $$$$$:  197-block 19
+call   55 never executed
+    $$$$$:  197-block 20
+    $$$$$:  197-block 21
+call   56 never executed
+    $$$$$:  197-block 22
+    $$$$$:  197-block 23
+call   57 never executed
+    $$$$$:  197-block 24
+    $$$$$:  197-block 25
+call   58 never executed
+    $$$$$:  197-block 26
+    $$$$$:  197-block 27
+call   59 never executed
+    $$$$$:  197-block 28
+    $$$$$:  197-block 29
+call   60 never executed
+    $$$$$:  197-block 30
+        -:  198:        rclcpp::get_logger("rclcpp"),
+        -:  199:        "Calling do_intra_process_publish for invalid or no longer existing publisher id");
+    #####:  200:      return;
+    %%%%%:  200-block  0
+        -:  201:    }
+    #####:  202:    const auto & sub_ids = publisher_it->second;
+    %%%%%:  202-block  0
+call    0 never executed
+        -:  203:
+    #####:  204:    if (sub_ids.take_ownership_subscriptions.empty()) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  205:      // None of the buffers require ownership, so we promote the pointer
+    #####:  206:      std::shared_ptr<MessageT> msg = std::move(message);
+    %%%%%:  206-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  207:
+    #####:  208:      this->template add_shared_msg_to_buffers<MessageT, Alloc, Deleter, ROSMessageType>(
+    %%%%%:  208-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  208-block  1
+call    4 never executed
+call    5 never executed
+    $$$$$:  208-block  2
+call    6 never executed
+    $$$$$:  208-block  3
+    $$$$$:  208-block  4
+call    7 never executed
+    $$$$$:  208-block  5
+    #####:  209:        msg, sub_ids.take_shared_subscriptions);
+    %%%%%:  209-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  210:    } else if (!sub_ids.take_ownership_subscriptions.empty() && // NOLINT
+call    0 never executed
+    %%%%%:  210-block  0
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  210-block  1
+    %%%%%:  210-block  2
+    %%%%%:  210-block  3
+branch  6 never executed
+branch  7 never executed
+    $$$$$:  210-block  4
+call    8 never executed
+    #####:  211:      sub_ids.take_shared_subscriptions.size() <= 1)
+    %%%%%:  211-block  0
+call    0 never executed
+        -:  212:    {
+        -:  213:      // There is at maximum 1 buffer that does not require ownership.
+        -:  214:      // So this case is equivalent to all the buffers requiring ownership
+        -:  215:
+        -:  216:      // Merge the two vector of ids into a unique one
+    #####:  217:      std::vector<uint64_t> concatenated_vector(sub_ids.take_shared_subscriptions);
+    %%%%%:  217-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  218:      concatenated_vector.insert(
+    %%%%%:  218-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    $$$$$:  218-block  1
+    #####:  219:        concatenated_vector.end(),
+call    0 never executed
+    $$$$$:  219-block  0
+        -:  220:        sub_ids.take_ownership_subscriptions.begin(),
+        -:  221:        sub_ids.take_ownership_subscriptions.end());
+    #####:  222:      this->template add_owned_msg_to_buffers<MessageT, Alloc, Deleter, ROSMessageType>(
+    %%%%%:  222-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+call    3 never executed
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  222-block  1
+call    7 never executed
+call    8 never executed
+    $$$$$:  222-block  2
+call    9 never executed
+    $$$$$:  222-block  3
+    $$$$$:  222-block  4
+call   10 never executed
+    $$$$$:  222-block  5
+    #####:  223:        std::move(message),
+    %%%%%:  223-block  0
+call    0 never executed
+        -:  224:        concatenated_vector,
+        -:  225:        allocator);
+    #####:  226:    } else if (!sub_ids.take_ownership_subscriptions.empty() && // NOLINT
+call    0 never executed
+    %%%%%:  226-block  0
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  226-block  1
+    %%%%%:  226-block  2
+    %%%%%:  226-block  3
+branch  6 never executed
+branch  7 never executed
+    $$$$$:  226-block  4
+call    8 never executed
+    #####:  227:      sub_ids.take_shared_subscriptions.size() > 1)
+    %%%%%:  227-block  0
+call    0 never executed
+        -:  228:    {
+        -:  229:      // Construct a new shared pointer from the message
+        -:  230:      // for the buffers that do not require ownership
+    #####:  231:      auto shared_msg = std::allocate_shared<MessageT, MessageAllocatorT>(allocator, *message);
+    %%%%%:  231-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  232:
+    #####:  233:      this->template add_shared_msg_to_buffers<MessageT, Alloc, Deleter, ROSMessageType>(
+    %%%%%:  233-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  233-block  1
+call    4 never executed
+call    5 never executed
+    $$$$$:  233-block  2
+call    6 never executed
+    $$$$$:  233-block  3
+    $$$$$:  233-block  4
+call    7 never executed
+    $$$$$:  233-block  5
+    #####:  234:        shared_msg, sub_ids.take_shared_subscriptions);
+    %%%%%:  234-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  235:      this->template add_owned_msg_to_buffers<MessageT, Alloc, Deleter, ROSMessageType>(
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  235-block  0
+call    4 never executed
+call    5 never executed
+    $$$$$:  235-block  1
+call    6 never executed
+    $$$$$:  235-block  2
+    $$$$$:  235-block  3
+call    7 never executed
+    $$$$$:  235-block  4
+    #####:  236:        std::move(message), sub_ids.take_ownership_subscriptions, allocator);
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:  236-block  0
+call    3 never executed
+    #####:  237:    }
+call    0 never executed
+    $$$$$:  237-block  0
+call    1 never executed
+    #####:  238:  }
+    %%%%%:  238-block  0
+    %%%%%:  238-block  1
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    $$$$$:  238-block  2
+call    3 never executed
+        -:  239:
+        -:  240:  template<
+        -:  241:    typename MessageT,
+        -:  242:    typename ROSMessageType,
+        -:  243:    typename Alloc,
+        -:  244:    typename Deleter = std::default_delete<MessageT>
+        -:  245:  >
+        -:  246:  std::shared_ptr<const MessageT>
+function _ZN6rclcpp12experimental19IntraProcessManager42do_intra_process_publish_and_return_sharedIN11sensor_msgs3msg11CameraInfo_ISaIvEEES7_S6_St14default_deleteIS7_EEESt10shared_ptrIKT_EmSt10unique_ptrISB_T2_ERNS_9allocator11AllocRebindISB_E14allocator_typeE called 0 returned 0% blocks executed 0%
+    #####:  247:  do_intra_process_publish_and_return_shared(
+        -:  248:    uint64_t intra_process_publisher_id,
+        -:  249:    std::unique_ptr<MessageT, Deleter> message,
+        -:  250:    typename allocator::AllocRebind<MessageT, Alloc>::allocator_type & allocator)
+        -:  251:  {
+        -:  252:    using MessageAllocTraits = allocator::AllocRebind<MessageT, Alloc>;
+        -:  253:    using MessageAllocatorT = typename MessageAllocTraits::allocator_type;
+        -:  254:
+    #####:  255:    std::shared_lock<std::shared_timed_mutex> lock(mutex_);
+    %%%%%:  255-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  256:
+    #####:  257:    auto publisher_it = pub_to_subs_.find(intra_process_publisher_id);
+    %%%%%:  257-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  258:    if (publisher_it == pub_to_subs_.end()) {
+    %%%%%:  258-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  259:      // Publisher is either invalid or no longer exists.
+    #####:  260:      RCLCPP_WARN(
+    %%%%%:  260-block  0
+branch  0 never executed
+branch  1 never executed
+    %%%%%:  260-block  1
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  260-block  2
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  260-block  3
+call    7 never executed
+branch  8 never executed
+branch  9 never executed
+    %%%%%:  260-block  4
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    %%%%%:  260-block  5
+call   13 never executed
+branch 14 never executed
+branch 15 never executed
+    %%%%%:  260-block  6
+call   16 never executed
+branch 17 never executed
+branch 18 never executed
+    %%%%%:  260-block  7
+call   19 never executed
+branch 20 never executed
+branch 21 never executed
+    %%%%%:  260-block  8
+call   22 never executed
+branch 23 never executed
+branch 24 never executed
+    %%%%%:  260-block  9
+call   25 never executed
+call   26 never executed
+branch 27 never executed
+branch 28 never executed
+    %%%%%:  260-block 10
+call   29 never executed
+branch 30 never executed
+branch 31 never executed
+    %%%%%:  260-block 11
+call   32 never executed
+call   33 never executed
+branch 34 never executed
+branch 35 never executed
+    %%%%%:  260-block 12
+call   36 never executed
+call   37 never executed
+call   38 never executed
+branch 39 never executed
+branch 40 never executed
+    %%%%%:  260-block 13
+call   41 never executed
+call   42 never executed
+branch 43 never executed
+branch 44 never executed
+    %%%%%:  260-block 14
+call   45 never executed
+branch 46 never executed
+branch 47 never executed
+    %%%%%:  260-block 15
+call   48 never executed
+call   49 never executed
+branch 50 never executed
+branch 51 never executed
+    %%%%%:  260-block 16
+call   52 never executed
+call   53 never executed
+call   54 never executed
+    $$$$$:  260-block 17
+    $$$$$:  260-block 18
+    $$$$$:  260-block 19
+call   55 never executed
+    $$$$$:  260-block 20
+    $$$$$:  260-block 21
+call   56 never executed
+    $$$$$:  260-block 22
+    $$$$$:  260-block 23
+call   57 never executed
+    $$$$$:  260-block 24
+    $$$$$:  260-block 25
+call   58 never executed
+    $$$$$:  260-block 26
+    $$$$$:  260-block 27
+call   59 never executed
+    $$$$$:  260-block 28
+    $$$$$:  260-block 29
+call   60 never executed
+    $$$$$:  260-block 30
+        -:  261:        rclcpp::get_logger("rclcpp"),
+        -:  262:        "Calling do_intra_process_publish for invalid or no longer existing publisher id");
+    #####:  263:      return nullptr;
+    %%%%%:  263-block  0
+call    0 never executed
+        -:  264:    }
+    #####:  265:    const auto & sub_ids = publisher_it->second;
+    %%%%%:  265-block  0
+call    0 never executed
+        -:  266:
+    #####:  267:    if (sub_ids.take_ownership_subscriptions.empty()) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  268:      // If there are no owning, just convert to shared.
+    #####:  269:      std::shared_ptr<MessageT> shared_msg = std::move(message);
+    %%%%%:  269-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  270:      if (!sub_ids.take_shared_subscriptions.empty()) {
+    %%%%%:  270-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  271:        this->template add_shared_msg_to_buffers<MessageT, Alloc, Deleter, ROSMessageType>(
+    %%%%%:  271-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  271-block  1
+call    4 never executed
+call    5 never executed
+    $$$$$:  271-block  2
+call    6 never executed
+    $$$$$:  271-block  3
+    $$$$$:  271-block  4
+call    7 never executed
+    $$$$$:  271-block  5
+    #####:  272:          shared_msg, sub_ids.take_shared_subscriptions);
+    %%%%%:  272-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  273:      }
+    #####:  274:      return shared_msg;
+    %%%%%:  274-block  0
+call    0 never executed
+    #####:  275:    } else {
+call    0 never executed
+    $$$$$:  275-block  0
+call    1 never executed
+        -:  276:      // Construct a new shared pointer from the message for the buffers that
+        -:  277:      // do not require ownership and to return.
+    #####:  278:      auto shared_msg = std::allocate_shared<MessageT, MessageAllocatorT>(allocator, *message);
+    %%%%%:  278-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  279:
+    #####:  280:      if (!sub_ids.take_shared_subscriptions.empty()) {
+    %%%%%:  280-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  281:        this->template add_shared_msg_to_buffers<MessageT, Alloc, Deleter, ROSMessageType>(
+    %%%%%:  281-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  281-block  1
+call    4 never executed
+call    5 never executed
+    $$$$$:  281-block  2
+call    6 never executed
+    $$$$$:  281-block  3
+    $$$$$:  281-block  4
+call    7 never executed
+    $$$$$:  281-block  5
+        -:  282:          shared_msg,
+    #####:  283:          sub_ids.take_shared_subscriptions);
+    %%%%%:  283-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  284:      }
+    #####:  285:      if (!sub_ids.take_ownership_subscriptions.empty()) {
+    %%%%%:  285-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  286:        this->template add_owned_msg_to_buffers<MessageT, Alloc, Deleter, ROSMessageType>(
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  286-block  0
+call    4 never executed
+call    5 never executed
+    $$$$$:  286-block  1
+call    6 never executed
+    $$$$$:  286-block  2
+    $$$$$:  286-block  3
+call    7 never executed
+    $$$$$:  286-block  4
+    #####:  287:          std::move(message),
+    %%%%%:  287-block  0
+call    0 never executed
+    #####:  288:          sub_ids.take_ownership_subscriptions,
+    %%%%%:  288-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  289:          allocator);
+        -:  290:      }
+    #####:  291:      return shared_msg;
+    %%%%%:  291-block  0
+call    0 never executed
+    #####:  292:    }
+call    0 never executed
+    $$$$$:  292-block  0
+call    1 never executed
+    #####:  293:  }
+    %%%%%:  293-block  0
+call    0 never executed
+    $$$$$:  293-block  1
+call    1 never executed
+        -:  294:
+        -:  295:  /// Return true if the given rmw_gid_t matches any stored Publishers.
+        -:  296:  RCLCPP_PUBLIC
+        -:  297:  bool
+        -:  298:  matches_any_publishers(const rmw_gid_t * id) const;
+        -:  299:
+        -:  300:  /// Return the number of intraprocess subscriptions that are matched with a given publisher id.
+        -:  301:  RCLCPP_PUBLIC
+        -:  302:  size_t
+        -:  303:  get_subscription_count(uint64_t intra_process_publisher_id) const;
+        -:  304:
+        -:  305:  RCLCPP_PUBLIC
+        -:  306:  rclcpp::experimental::SubscriptionIntraProcessBase::SharedPtr
+        -:  307:  get_subscription_intra_process(uint64_t intra_process_subscription_id);
+        -:  308:
+        -:  309:private:
+        -:  310:  struct SplittedSubscriptions
+        -:  311:  {
+        -:  312:    std::vector<uint64_t> take_shared_subscriptions;
+        -:  313:    std::vector<uint64_t> take_ownership_subscriptions;
+        -:  314:  };
+        -:  315:
+        -:  316:  using SubscriptionMap =
+        -:  317:    std::unordered_map<uint64_t, rclcpp::experimental::SubscriptionIntraProcessBase::WeakPtr>;
+        -:  318:
+        -:  319:  using PublisherMap =
+        -:  320:    std::unordered_map<uint64_t, rclcpp::PublisherBase::WeakPtr>;
+        -:  321:
+        -:  322:  using PublisherToSubscriptionIdsMap =
+        -:  323:    std::unordered_map<uint64_t, SplittedSubscriptions>;
+        -:  324:
+        -:  325:  RCLCPP_PUBLIC
+        -:  326:  static
+        -:  327:  uint64_t
+        -:  328:  get_next_unique_id();
+        -:  329:
+        -:  330:  RCLCPP_PUBLIC
+        -:  331:  void
+        -:  332:  insert_sub_id_for_pub(uint64_t sub_id, uint64_t pub_id, bool use_take_shared_method);
+        -:  333:
+        -:  334:  RCLCPP_PUBLIC
+        -:  335:  bool
+        -:  336:  can_communicate(
+        -:  337:    rclcpp::PublisherBase::SharedPtr pub,
+        -:  338:    rclcpp::experimental::SubscriptionIntraProcessBase::SharedPtr sub) const;
+        -:  339:
+        -:  340:  template<
+        -:  341:    typename MessageT,
+        -:  342:    typename Alloc,
+        -:  343:    typename Deleter,
+        -:  344:    typename ROSMessageType>
+        -:  345:  void
+function _ZN6rclcpp12experimental19IntraProcessManager25add_shared_msg_to_buffersIN11sensor_msgs3msg11CameraInfo_ISaIvEEES6_St14default_deleteIS7_ES7_EEvSt10shared_ptrIKT_ESt6vectorImSaImEE called 0 returned 0% blocks executed 0%
+    #####:  346:  add_shared_msg_to_buffers(
+        -:  347:    std::shared_ptr<const MessageT> message,
+        -:  348:    std::vector<uint64_t> subscription_ids)
+        -:  349:  {
+        -:  350:    using ROSMessageTypeAllocatorTraits = allocator::AllocRebind<ROSMessageType, Alloc>;
+        -:  351:    using ROSMessageTypeAllocator = typename ROSMessageTypeAllocatorTraits::allocator_type;
+        -:  352:    using ROSMessageTypeDeleter = allocator::Deleter<ROSMessageTypeAllocator, ROSMessageType>;
+        -:  353:
+        -:  354:    using PublishedType = typename rclcpp::TypeAdapter<MessageT>::custom_type;
+        -:  355:    using PublishedTypeAllocatorTraits = allocator::AllocRebind<PublishedType, Alloc>;
+        -:  356:    using PublishedTypeAllocator = typename PublishedTypeAllocatorTraits::allocator_type;
+        -:  357:    using PublishedTypeDeleter = allocator::Deleter<PublishedTypeAllocator, PublishedType>;
+        -:  358:
+    #####:  359:    for (auto id : subscription_ids) {
+    %%%%%:  359-block  0
+call    0 never executed
+call    1 never executed
+    %%%%%:  359-block  1
+call    2 never executed
+    %%%%%:  359-block  2
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  359-block  3
+    %%%%%:  359-block  4
+call    6 never executed
+branch  7 never executed
+branch  8 never executed
+    %%%%%:  359-block  5
+call    9 never executed
+    %%%%%:  359-block  6
+call   10 never executed
+branch 11 never executed
+branch 12 never executed
+    $$$$$:  359-block  7
+call   13 never executed
+    $$$$$:  359-block  8
+call   14 never executed
+    $$$$$:  359-block  9
+call   15 never executed
+    #####:  360:      auto subscription_it = subscriptions_.find(id);
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  361:      if (subscription_it == subscriptions_.end()) {
+    %%%%%:  361-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  362:        throw std::runtime_error("subscription has unexpectedly gone out of scope");
+    %%%%%:  362-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  362-block  1
+call    4 never executed
+    $$$$$:  362-block  2
+call    5 never executed
+        -:  363:      }
+    #####:  364:      auto subscription_base = subscription_it->second.lock();
+    %%%%%:  364-block  0
+call    0 never executed
+call    1 never executed
+    #####:  365:      if (subscription_base == nullptr) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  366:        subscriptions_.erase(id);
+    %%%%%:  366-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  367:        continue;
+    %%%%%:  367-block  0
+        -:  368:      }
+        -:  369:
+    #####:  370:      auto subscription = std::dynamic_pointer_cast<
+    %%%%%:  370-block  0
+call    0 never executed
+        -:  371:        rclcpp::experimental::SubscriptionIntraProcessBuffer<PublishedType,
+        -:  372:        PublishedTypeAllocator, PublishedTypeDeleter, ROSMessageType>
+        -:  373:        >(subscription_base);
+    #####:  374:      if (subscription != nullptr) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  375:        subscription->provide_intra_process_data(message);
+    %%%%%:  375-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  375-block  1
+call    5 never executed
+    $$$$$:  375-block  2
+call    6 never executed
+    $$$$$:  375-block  3
+    #####:  376:        continue;
+        -:  377:      }
+        -:  378:
+    #####:  379:      auto ros_message_subscription = std::dynamic_pointer_cast<
+    %%%%%:  379-block  0
+call    0 never executed
+        -:  380:        rclcpp::experimental::SubscriptionROSMsgIntraProcessBuffer<ROSMessageType,
+        -:  381:        ROSMessageTypeAllocator, ROSMessageTypeDeleter>
+        -:  382:        >(subscription_base);
+    #####:  383:      if (nullptr == ros_message_subscription) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  384:        throw std::runtime_error(
+    %%%%%:  384-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  384-block  1
+call    4 never executed
+    $$$$$:  384-block  2
+call    5 never executed
+        -:  385:                "failed to dynamic cast SubscriptionIntraProcessBase to "
+        -:  386:                "SubscriptionIntraProcessBuffer<MessageT, Alloc, Deleter>, or to "
+        -:  387:                "SubscriptionROSMsgIntraProcessBuffer<ROSMessageType,ROSMessageTypeAllocator,"
+        -:  388:                "ROSMessageTypeDeleter> which can happen when the publisher and "
+        -:  389:                "subscription use different allocator types, which is not supported");
+        -:  390:      }
+        -:  391:
+        -:  392:      if constexpr (rclcpp::TypeAdapter<MessageT>::is_specialized::value) {
+        -:  393:        ROSMessageType ros_msg;
+        -:  394:        rclcpp::TypeAdapter<MessageT>::convert_to_ros_message(*message, ros_msg);
+        -:  395:        ros_message_subscription->provide_intra_process_message(
+        -:  396:          std::make_shared<ROSMessageType>(ros_msg));
+        -:  397:      } else {
+        -:  398:        if constexpr (std::is_same<MessageT, ROSMessageType>::value) {
+    #####:  399:          ros_message_subscription->provide_intra_process_message(message);
+    %%%%%:  399-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  399-block  1
+call    5 never executed
+call    6 never executed
+    $$$$$:  399-block  2
+call    7 never executed
+    $$$$$:  399-block  3
+        -:  400:        } else {
+        -:  401:          if constexpr (std::is_same<typename rclcpp::TypeAdapter<MessageT,
+        -:  402:            ROSMessageType>::ros_message_type, ROSMessageType>::value)
+        -:  403:          {
+        -:  404:            ROSMessageType ros_msg;
+        -:  405:            rclcpp::TypeAdapter<MessageT, ROSMessageType>::convert_to_ros_message(
+        -:  406:              *message, ros_msg);
+        -:  407:            ros_message_subscription->provide_intra_process_message(
+        -:  408:              std::make_shared<ROSMessageType>(ros_msg));
+        -:  409:          }
+        -:  410:        }
+        -:  411:      }
+        -:  412:    }
+    #####:  413:  }
+    %%%%%:  413-block  0
+        -:  414:
+        -:  415:  template<
+        -:  416:    typename MessageT,
+        -:  417:    typename Alloc,
+        -:  418:    typename Deleter,
+        -:  419:    typename ROSMessageType>
+        -:  420:  void
+function _ZN6rclcpp12experimental19IntraProcessManager24add_owned_msg_to_buffersIN11sensor_msgs3msg11CameraInfo_ISaIvEEES6_St14default_deleteIS7_ES7_EEvSt10unique_ptrIT_T1_ESt6vectorImSaImEERNS_9allocator11AllocRebindISB_E14allocator_typeE called 0 returned 0% blocks executed 0%
+    #####:  421:  add_owned_msg_to_buffers(
+        -:  422:    std::unique_ptr<MessageT, Deleter> message,
+        -:  423:    std::vector<uint64_t> subscription_ids,
+        -:  424:    typename allocator::AllocRebind<MessageT, Alloc>::allocator_type & allocator)
+        -:  425:  {
+        -:  426:    using MessageAllocTraits = allocator::AllocRebind<MessageT, Alloc>;
+        -:  427:    using MessageUniquePtr = std::unique_ptr<MessageT, Deleter>;
+        -:  428:
+        -:  429:    using ROSMessageTypeAllocatorTraits = allocator::AllocRebind<ROSMessageType, Alloc>;
+        -:  430:    using ROSMessageTypeAllocator = typename ROSMessageTypeAllocatorTraits::allocator_type;
+        -:  431:    using ROSMessageTypeDeleter = allocator::Deleter<ROSMessageTypeAllocator, ROSMessageType>;
+        -:  432:
+        -:  433:    using PublishedType = typename rclcpp::TypeAdapter<MessageT>::custom_type;
+        -:  434:    using PublishedTypeAllocatorTraits = allocator::AllocRebind<PublishedType, Alloc>;
+        -:  435:    using PublishedTypeAllocator = typename PublishedTypeAllocatorTraits::allocator_type;
+        -:  436:    using PublishedTypeDeleter = allocator::Deleter<PublishedTypeAllocator, PublishedType>;
+        -:  437:
+    #####:  438:    for (auto it = subscription_ids.begin(); it != subscription_ids.end(); it++) {
+    %%%%%:  438-block  0
+call    0 never executed
+    %%%%%:  438-block  1
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  438-block  2
+    %%%%%:  438-block  3
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+    %%%%%:  438-block  4
+    %%%%%:  438-block  5
+call    8 never executed
+branch  9 never executed
+branch 10 never executed
+branch 11 never executed
+    %%%%%:  438-block  6
+call   12 never executed
+    %%%%%:  438-block  7
+call   13 never executed
+call   14 never executed
+branch 15 never executed
+branch 16 never executed
+    $$$$$:  438-block  8
+call   17 never executed
+    $$$$$:  438-block  9
+call   18 never executed
+    $$$$$:  438-block 10
+call   19 never executed
+    #####:  439:      auto subscription_it = subscriptions_.find(*it);
+    %%%%%:  439-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  440:      if (subscription_it == subscriptions_.end()) {
+    %%%%%:  440-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  441:        throw std::runtime_error("subscription has unexpectedly gone out of scope");
+    %%%%%:  441-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  441-block  1
+call    4 never executed
+    $$$$$:  441-block  2
+call    5 never executed
+        -:  442:      }
+    #####:  443:      auto subscription_base = subscription_it->second.lock();
+    %%%%%:  443-block  0
+call    0 never executed
+call    1 never executed
+    #####:  444:      if (subscription_base == nullptr) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  445:        subscriptions_.erase(subscription_it);
+    %%%%%:  445-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  446:        continue;
+    %%%%%:  446-block  0
+        -:  447:      }
+        -:  448:
+    #####:  449:      auto subscription = std::dynamic_pointer_cast<
+    %%%%%:  449-block  0
+call    0 never executed
+        -:  450:        rclcpp::experimental::SubscriptionIntraProcessBuffer<PublishedType,
+        -:  451:        PublishedTypeAllocator, PublishedTypeDeleter, ROSMessageType>
+        -:  452:        >(subscription_base);
+    #####:  453:      if (subscription != nullptr) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  454:        if (std::next(it) == subscription_ids.end()) {
+    %%%%%:  454-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  454-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    $$$$$:  454-block  2
+        -:  455:          // If this is the last subscription, give up ownership
+    #####:  456:          subscription->provide_intra_process_data(std::move(message));
+    %%%%%:  456-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  456-block  1
+call    6 never executed
+    $$$$$:  456-block  2
+call    7 never executed
+    $$$$$:  456-block  3
+        -:  457:          // Last message delivered, break from for loop
+    #####:  458:          break;
+        -:  459:        } else {
+        -:  460:          // Copy the message since we have additional subscriptions to serve
+    #####:  461:          Deleter deleter = message.get_deleter();
+    %%%%%:  461-block  0
+call    0 never executed
+    #####:  462:          auto ptr = MessageAllocTraits::allocate(allocator, 1);
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  463:          MessageAllocTraits::construct(allocator, ptr, *message);
+    %%%%%:  463-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  464:
+    #####:  465:          subscription->provide_intra_process_data(std::move(MessageUniquePtr(ptr, deleter)));
+    %%%%%:  465-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    %%%%%:  465-block  1
+call    7 never executed
+call    8 never executed
+    $$$$$:  465-block  2
+call    9 never executed
+    $$$$$:  465-block  3
+    $$$$$:  465-block  4
+call   10 never executed
+    $$$$$:  465-block  5
+        -:  466:        }
+        -:  467:
+    #####:  468:        continue;
+    #####:  469:      }
+        -:  470:
+    #####:  471:      auto ros_message_subscription = std::dynamic_pointer_cast<
+    %%%%%:  471-block  0
+call    0 never executed
+        -:  472:        rclcpp::experimental::SubscriptionROSMsgIntraProcessBuffer<ROSMessageType,
+        -:  473:        ROSMessageTypeAllocator, ROSMessageTypeDeleter>
+        -:  474:        >(subscription_base);
+    #####:  475:      if (nullptr == ros_message_subscription) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  476:        throw std::runtime_error(
+    %%%%%:  476-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  476-block  1
+call    4 never executed
+    $$$$$:  476-block  2
+call    5 never executed
+        -:  477:                "failed to dynamic cast SubscriptionIntraProcessBase to "
+        -:  478:                "SubscriptionIntraProcessBuffer<MessageT, Alloc, Deleter>, or to "
+        -:  479:                "SubscriptionROSMsgIntraProcessBuffer<ROSMessageType,ROSMessageTypeAllocator,"
+        -:  480:                "ROSMessageTypeDeleter> which can happen when the publisher and "
+        -:  481:                "subscription use different allocator types, which is not supported");
+        -:  482:      }
+        -:  483:
+        -:  484:      if constexpr (rclcpp::TypeAdapter<MessageT, ROSMessageType>::is_specialized::value) {
+        -:  485:        ROSMessageTypeAllocator ros_message_alloc(allocator);
+        -:  486:        auto ptr = ROSMessageTypeAllocatorTraits::allocate(ros_message_alloc, 1);
+        -:  487:        ROSMessageTypeAllocatorTraits::construct(ros_message_alloc, ptr);
+        -:  488:        ROSMessageTypeDeleter deleter;
+        -:  489:        allocator::set_allocator_for_deleter(&deleter, &allocator);
+        -:  490:        rclcpp::TypeAdapter<MessageT, ROSMessageType>::convert_to_ros_message(*message, *ptr);
+        -:  491:        auto ros_msg = std::unique_ptr<ROSMessageType, ROSMessageTypeDeleter>(ptr, deleter);
+        -:  492:        ros_message_subscription->provide_intra_process_message(std::move(ros_msg));
+        -:  493:      } else {
+        -:  494:        if constexpr (std::is_same<MessageT, ROSMessageType>::value) {
+    #####:  495:          if (std::next(it) == subscription_ids.end()) {
+    %%%%%:  495-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+    %%%%%:  495-block  1
+call    4 never executed
+branch  5 never executed
+branch  6 never executed
+    $$$$$:  495-block  2
+        -:  496:            // If this is the last subscription, give up ownership
+    #####:  497:            ros_message_subscription->provide_intra_process_message(std::move(message));
+    %%%%%:  497-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+call    3 never executed
+branch  4 never executed
+branch  5 never executed
+    %%%%%:  497-block  1
+call    6 never executed
+    $$$$$:  497-block  2
+call    7 never executed
+    $$$$$:  497-block  3
+        -:  498:            // Last message delivered, break from for loop
+    #####:  499:            break;
+        -:  500:          } else {
+        -:  501:            // Copy the message since we have additional subscriptions to serve
+    #####:  502:            Deleter deleter = message.get_deleter();
+    %%%%%:  502-block  0
+call    0 never executed
+    #####:  503:            allocator::set_allocator_for_deleter(&deleter, &allocator);
+call    0 never executed
+    #####:  504:            auto ptr = MessageAllocTraits::allocate(allocator, 1);
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  505:            MessageAllocTraits::construct(allocator, ptr, *message);
+    %%%%%:  505-block  0
+call    0 never executed
+call    1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  506:
+    #####:  507:            ros_message_subscription->provide_intra_process_message(
+    %%%%%:  507-block  0
+call    0 never executed
+call    1 never executed
+call    2 never executed
+branch  3 never executed
+branch  4 never executed
+    %%%%%:  507-block  1
+call    5 never executed
+    $$$$$:  507-block  2
+call    6 never executed
+    $$$$$:  507-block  3
+    #####:  508:              std::move(MessageUniquePtr(ptr, deleter)));
+call    0 never executed
+call    1 never executed
+call    2 never executed
+    $$$$$:  508-block  0
+call    3 never executed
+    $$$$$:  508-block  1
+        -:  509:          }
+        -:  510:        }
+        -:  511:      }
+        -:  512:    }
+    #####:  513:  }
+    %%%%%:  513-block  0
+        -:  514:
+        -:  515:  PublisherToSubscriptionIdsMap pub_to_subs_;
+        -:  516:  SubscriptionMap subscriptions_;
+        -:  517:  PublisherMap publishers_;
+        -:  518:
+        -:  519:  mutable std::shared_timed_mutex mutex_;
+        -:  520:};
+        -:  521:
+        -:  522:}  // namespace experimental
+        -:  523:}  // namespace rclcpp
+        -:  524:
+        -:  525:#endif  // RCLCPP__EXPERIMENTAL__INTRA_PROCESS_MANAGER_HPP_

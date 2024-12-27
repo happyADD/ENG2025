@@ -1,0 +1,849 @@
+        -:    0:Source:/opt/ros/humble/include/rosidl_runtime_cpp/rosidl_runtime_cpp/bounded_vector.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2016 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef ROSIDL_RUNTIME_CPP__BOUNDED_VECTOR_HPP_
+        -:   16:#define ROSIDL_RUNTIME_CPP__BOUNDED_VECTOR_HPP_
+        -:   17:
+        -:   18:#include <algorithm>
+        -:   19:#include <memory>
+        -:   20:#include <stdexcept>
+        -:   21:#include <utility>
+        -:   22:#include <vector>
+        -:   23:
+        -:   24:namespace rosidl_runtime_cpp
+        -:   25:{
+        -:   26:
+        -:   27:/// A container based on std::vector but with an upper bound.
+        -:   28:/**
+        -:   29: * Meets the same requirements as std::vector.
+        -:   30: *
+        -:   31: * \param Tp Type of element
+        -:   32: * \param UpperBound The upper bound for the number of elements
+        -:   33: * \param Alloc Allocator type, defaults to std::allocator<Tp>
+        -:   34: */
+        -:   35:template<typename Tp, std::size_t UpperBound, typename Alloc = std::allocator<Tp>>
+        -:   36:class BoundedVector
+        -:   37:  : protected std::vector<Tp, Alloc>
+        -:   38:{
+        -:   39:  using Base = std::vector<Tp, Alloc>;
+        -:   40:
+        -:   41:public:
+        -:   42:  using typename Base::value_type;
+        -:   43:  using typename Base::pointer;
+        -:   44:  using typename Base::const_pointer;
+        -:   45:  using typename Base::reference;
+        -:   46:  using typename Base::const_reference;
+        -:   47:  using typename Base::iterator;
+        -:   48:  using typename Base::const_iterator;
+        -:   49:  using typename Base::const_reverse_iterator;
+        -:   50:  using typename Base::reverse_iterator;
+        -:   51:  using typename Base::size_type;
+        -:   52:  using typename Base::difference_type;
+        -:   53:  using typename Base::allocator_type;
+        -:   54:
+        -:   55:  /// Create a %BoundedVector with no elements.
+       22:   56:  BoundedVector()
+        -:   57:  noexcept (std::is_nothrow_default_constructible<Alloc>::value)
+       22:   58:  : Base()
+       22:   59:  {}
+------------------
+_ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg13IntegerRange_ISaIvEEELm1ESaIS5_EEC2Ev:
+function _ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg13IntegerRange_ISaIvEEELm1ESaIS5_EEC2Ev called 11 returned 100% blocks executed 100%
+       11:   56:  BoundedVector()
+        -:   57:  noexcept (std::is_nothrow_default_constructible<Alloc>::value)
+       11:   58:  : Base()
+       11:   58-block  0
+call    0 returned 11
+       11:   59:  {}
+------------------
+_ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg19FloatingPointRange_ISaIvEEELm1ESaIS5_EEC2Ev:
+function _ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg19FloatingPointRange_ISaIvEEELm1ESaIS5_EEC2Ev called 11 returned 100% blocks executed 100%
+       11:   56:  BoundedVector()
+        -:   57:  noexcept (std::is_nothrow_default_constructible<Alloc>::value)
+       11:   58:  : Base()
+       11:   58-block  0
+call    0 returned 11
+       11:   59:  {}
+------------------
+        -:   60:
+        -:   61:  /// Creates a %BoundedVector with no elements.
+        -:   62:  /**
+        -:   63:   * \param a An allocator object
+        -:   64:   */
+        -:   65:  explicit
+        -:   66:  BoundedVector(
+        -:   67:    const typename Base::allocator_type & a)
+        -:   68:  noexcept
+        -:   69:  : Base(a)
+        -:   70:  {}
+        -:   71:
+        -:   72:  /// Create a %BoundedVector with default constructed elements.
+        -:   73:  /**
+        -:   74:   * This constructor fills the %BoundedVector with @a n default
+        -:   75:   * constructed elements.
+        -:   76:   *
+        -:   77:   * \param n The number of elements to initially create
+        -:   78:   * \param a An allocator
+        -:   79:   */
+        -:   80:  explicit
+        -:   81:  BoundedVector(
+        -:   82:    typename Base::size_type n,
+        -:   83:    const typename Base::allocator_type & a = allocator_type())
+        -:   84:  : Base(n, a)
+        -:   85:  {
+        -:   86:    if (n > UpperBound) {
+        -:   87:      throw std::length_error("Exceeded upper bound");
+        -:   88:    }
+        -:   89:  }
+        -:   90:
+        -:   91:  /// Create a %BoundedVector with copies of an exemplar element.
+        -:   92:  /**
+        -:   93:   * This constructor fills the %BoundedVector with @a n copies of @a value.
+        -:   94:   *
+        -:   95:   * \param n The number of elements to initially create
+        -:   96:   * \param value An element to copy
+        -:   97:   * \param a An allocator
+        -:   98:   */
+        -:   99:  BoundedVector(
+        -:  100:    typename Base::size_type n,
+        -:  101:    const typename Base::value_type & value,
+        -:  102:    const typename Base::allocator_type & a = allocator_type())
+        -:  103:  : Base(n, value, a)
+        -:  104:  {
+        -:  105:    if (n > UpperBound) {
+        -:  106:      throw std::length_error("Exceeded upper bound");
+        -:  107:    }
+        -:  108:  }
+        -:  109:
+        -:  110:  /// %BoundedVector copy constructor.
+        -:  111:  /**
+        -:  112:   * The newly-created %BoundedVector uses a copy of the allocation
+        -:  113:   * object used by @a x.
+        -:  114:   * All the elements of @a x are copied, but any extra memory in
+        -:  115:   * @a x (for fast expansion) will not be copied.
+        -:  116:   *
+        -:  117:   * \param x A %BoundedVector of identical element and allocator types
+        -:  118:   */
+    #####:  119:  BoundedVector(
+        -:  120:    const BoundedVector & x)
+    #####:  121:  : Base(x)
+    #####:  122:  {}
+------------------
+_ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg13IntegerRange_ISaIvEEELm1ESaIS5_EEC2ERKS7_:
+function _ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg13IntegerRange_ISaIvEEELm1ESaIS5_EEC2ERKS7_ called 0 returned 0% blocks executed 0%
+    #####:  119:  BoundedVector(
+        -:  120:    const BoundedVector & x)
+    #####:  121:  : Base(x)
+    %%%%%:  121-block  0
+call    0 never executed
+    #####:  122:  {}
+------------------
+_ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg19FloatingPointRange_ISaIvEEELm1ESaIS5_EEC2ERKS7_:
+function _ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg19FloatingPointRange_ISaIvEEELm1ESaIS5_EEC2ERKS7_ called 0 returned 0% blocks executed 0%
+    #####:  119:  BoundedVector(
+        -:  120:    const BoundedVector & x)
+    #####:  121:  : Base(x)
+    %%%%%:  121-block  0
+call    0 never executed
+    #####:  122:  {}
+------------------
+        -:  123:
+        -:  124:  /// %BoundedVector move constructor.
+        -:  125:  /**
+        -:  126:   * The newly-created %BoundedVector contains the exact contents of @a x.
+        -:  127:   * The contents of @a x are a valid, but unspecified %BoundedVector.
+        -:  128:   *
+        -:  129:   * \param x A %BoundedVector of identical element and allocator types
+        -:  130:   */
+        -:  131:  BoundedVector(BoundedVector && x) noexcept
+        -:  132:  : Base(std::move(x))
+        -:  133:  {}
+        -:  134:
+        -:  135:  /// Copy constructor with alternative allocator
+        -:  136:  BoundedVector(const BoundedVector & x, const typename Base::allocator_type & a)
+        -:  137:  : Base(x, a)
+        -:  138:  {}
+        -:  139:
+        -:  140:  /// Build a %BoundedVector from an initializer list.
+        -:  141:  /**
+        -:  142:   * Create a %BoundedVector consisting of copies of the elements in the
+        -:  143:   * initializer_list @a l.
+        -:  144:   *
+        -:  145:   * This will call the element type's copy constructor N times
+        -:  146:   * (where N is @a l.size()) and do no memory reallocation.
+        -:  147:   *
+        -:  148:   * \param l An initializer_list
+        -:  149:   * \param a An allocator
+        -:  150:   */
+        -:  151:  BoundedVector(
+        -:  152:    std::initializer_list<typename Base::value_type> l,
+        -:  153:    const typename Base::allocator_type & a = typename Base::allocator_type())
+        -:  154:  : Base(l, a)
+        -:  155:  {
+        -:  156:    if (l.size() > UpperBound) {
+        -:  157:      throw std::length_error("Exceeded upper bound");
+        -:  158:    }
+        -:  159:  }
+        -:  160:
+        -:  161:  /// Build a %BoundedVector from a range.
+        -:  162:  /**
+        -:  163:   * Create a %BoundedVector consisting of copies of the elements from
+        -:  164:   * [first,last).
+        -:  165:   *
+        -:  166:   * If the iterators are forward, bidirectional, or random-access, then
+        -:  167:   * this will call the elements' copy constructor N times (where N is
+        -:  168:   * distance(first,last)) and do no memory reallocation.
+        -:  169:   * But if only input iterators are used, then this will do at most 2N
+        -:  170:   * calls to the copy constructor, and logN memory reallocations.
+        -:  171:   *
+        -:  172:   * \param first An input iterator
+        -:  173:   * \param last An input iterator
+        -:  174:   * \param a An allocator
+        -:  175:   */
+        -:  176:  template<
+        -:  177:    typename InputIterator
+        -:  178:  >
+        -:  179:  BoundedVector(
+        -:  180:    InputIterator first,
+        -:  181:    InputIterator last,
+        -:  182:    const typename Base::allocator_type & a = allocator_type())
+        -:  183:  : Base(first, last, a)
+        -:  184:  {
+        -:  185:    if (size() > UpperBound) {
+        -:  186:      throw std::length_error("Exceeded upper bound");
+        -:  187:    }
+        -:  188:  }
+        -:  189:
+        -:  190:  /// The dtor only erases the elements.
+        -:  191:  /**
+        -:  192:   * Note that if the elements themselves are pointers, the pointed-to
+        -:  193:   * memory is not touched in any way.
+        -:  194:   * Managing the pointer is the user's responsibility.
+        -:  195:   */
+       22:  196:  ~BoundedVector() noexcept
+       22:  197:  {}
+------------------
+_ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg13IntegerRange_ISaIvEEELm1ESaIS5_EED2Ev:
+function _ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg13IntegerRange_ISaIvEEELm1ESaIS5_EED2Ev called 11 returned 100% blocks executed 100%
+       11:  196:  ~BoundedVector() noexcept
+       11:  197:  {}
+       11:  197-block  0
+call    0 returned 11
+------------------
+_ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg19FloatingPointRange_ISaIvEEELm1ESaIS5_EED2Ev:
+function _ZN18rosidl_runtime_cpp13BoundedVectorIN14rcl_interfaces3msg19FloatingPointRange_ISaIvEEELm1ESaIS5_EED2Ev called 11 returned 100% blocks executed 100%
+       11:  196:  ~BoundedVector() noexcept
+       11:  197:  {}
+       11:  197-block  0
+call    0 returned 11
+------------------
+        -:  198:
+        -:  199:  /// %BoundedVector assignment operator.
+        -:  200:  /**
+        -:  201:   * All the elements of @a x are copied, but any extra memory in
+        -:  202:   * @a x (for fast expansion) will not be copied.
+        -:  203:   * Unlike the copy constructor, the allocator object is not copied.
+        -:  204:   *
+        -:  205:   * \param x A %BoundedVector of identical element and allocator types
+        -:  206:   */
+        -:  207:  BoundedVector &
+        -:  208:  operator=(const BoundedVector & x)
+        -:  209:  {
+        -:  210:    (void)Base::operator=(x);
+        -:  211:    return *this;
+        -:  212:  }
+        -:  213:
+        -:  214:  /// %BoundedVector move assignment operator
+        -:  215:  /**
+        -:  216:   * \param x A %BoundedVector of identical element and allocator types.
+        -:  217:   */
+        -:  218:  BoundedVector &
+        -:  219:  operator=(BoundedVector && x)
+        -:  220:  {
+        -:  221:    (void)Base::operator=(std::move(x));
+        -:  222:    return *this;
+        -:  223:  }
+        -:  224:
+        -:  225:  /// %BoundedVector list assignment operator.
+        -:  226:  /**
+        -:  227:   * This function fills a %BoundedVector with copies of the elements in
+        -:  228:   * the initializer list @a l.
+        -:  229:   *
+        -:  230:   * Note that the assignment completely changes the %BoundedVector and
+        -:  231:   * that the resulting %BoundedVector's size is the same as the number
+        -:  232:   * of elements assigned.
+        -:  233:   * Old data may be lost.
+        -:  234:   *
+        -:  235:   * \param l An initializer_list
+        -:  236:   */
+        -:  237:  BoundedVector &
+        -:  238:  operator=(std::initializer_list<typename Base::value_type> l)
+        -:  239:  {
+        -:  240:    if (l.size() > UpperBound) {
+        -:  241:      throw std::length_error("Exceeded upper bound");
+        -:  242:    }
+        -:  243:    Base::operator=(l);
+        -:  244:    return *this;
+        -:  245:  }
+        -:  246:
+        -:  247:  /// Assign a given value to a %BoundedVector.
+        -:  248:  /**
+        -:  249:   * This function fills a %BoundedVector with @a n copies of the
+        -:  250:   * given value.
+        -:  251:   * Note that the assignment completely changes the %BoundedVector and
+        -:  252:   * that the resulting %BoundedVector's size is the same as the number
+        -:  253:   * of elements assigned.
+        -:  254:   * Old data may be lost.
+        -:  255:   *
+        -:  256:   * \param n Number of elements to be assigned
+        -:  257:   * \param val Value to be assigned
+        -:  258:   */
+        -:  259:  void
+        -:  260:  assign(
+        -:  261:    typename Base::size_type n,
+        -:  262:    const typename Base::value_type & val)
+        -:  263:  {
+        -:  264:    if (n > UpperBound) {
+        -:  265:      throw std::length_error("Exceeded upper bound");
+        -:  266:    }
+        -:  267:    Base::assign(n, val);
+        -:  268:  }
+        -:  269:
+        -:  270:  /// Assign a range to a %BoundedVector.
+        -:  271:  /**
+        -:  272:   * This function fills a %BoundedVector with copies of the elements in
+        -:  273:   * the range [first,last).
+        -:  274:   *
+        -:  275:   * Note that the assignment completely changes the %BoundedVector and
+        -:  276:   * that the resulting %BoundedVector's size is the same as the number
+        -:  277:   * of elements assigned.
+        -:  278:   * Old data may be lost.
+        -:  279:   *
+        -:  280:   * \param first An input iterator
+        -:  281:   * \param last   An input iterator
+        -:  282:   */
+        -:  283:  template<
+        -:  284:    typename InputIterator
+        -:  285:  >
+        -:  286:  void
+        -:  287:  assign(InputIterator first, InputIterator last)
+        -:  288:  {
+        -:  289:    using cat = typename std::iterator_traits<InputIterator>::iterator_category;
+        -:  290:    do_assign(first, last, cat());
+        -:  291:  }
+        -:  292:
+        -:  293:  /// Assign an initializer list to a %BoundedVector.
+        -:  294:  /**
+        -:  295:   * This function fills a %BoundedVector with copies of the elements in
+        -:  296:   * the initializer list @a l.
+        -:  297:   *
+        -:  298:   * Note that the assignment completely changes the %BoundedVector and
+        -:  299:   * that the resulting %BoundedVector's size is the same as the number
+        -:  300:   * of elements assigned.
+        -:  301:   * Old data may be lost.
+        -:  302:   *
+        -:  303:   * \param l An initializer_list
+        -:  304:   */
+        -:  305:  void
+        -:  306:  assign(std::initializer_list<typename Base::value_type> l)
+        -:  307:  {
+        -:  308:    if (l.size() > UpperBound) {
+        -:  309:      throw std::length_error("Exceeded upper bound");
+        -:  310:    }
+        -:  311:    Base::assign(l);
+        -:  312:  }
+        -:  313:
+        -:  314:  using Base::begin;
+        -:  315:  using Base::end;
+        -:  316:  using Base::rbegin;
+        -:  317:  using Base::rend;
+        -:  318:  using Base::cbegin;
+        -:  319:  using Base::cend;
+        -:  320:  using Base::crbegin;
+        -:  321:  using Base::crend;
+        -:  322:  using Base::size;
+        -:  323:
+        -:  324:  /** Returns the size() of the largest possible %BoundedVector.  */
+        -:  325:  typename Base::size_type
+        -:  326:  max_size() const noexcept
+        -:  327:  {
+        -:  328:    return std::min(UpperBound, Base::max_size());
+        -:  329:  }
+        -:  330:
+        -:  331:  /// Resize the %BoundedVector to the specified number of elements.
+        -:  332:  /**
+        -:  333:   * This function will %resize the %BoundedVector to the specified
+        -:  334:   * number of elements.
+        -:  335:   * If the number is smaller than the %BoundedVector's current size the
+        -:  336:   * %BoundedVector is truncated, otherwise default constructed elements
+        -:  337:   * are appended.
+        -:  338:   *
+        -:  339:   * \param new_size Number of elements the %BoundedVector should contain
+        -:  340:   */
+        -:  341:  void
+        -:  342:  resize(typename Base::size_type new_size)
+        -:  343:  {
+        -:  344:    if (new_size > UpperBound) {
+        -:  345:      throw std::length_error("Exceeded upper bound");
+        -:  346:    }
+        -:  347:    Base::resize(new_size);
+        -:  348:  }
+        -:  349:
+        -:  350:  /// Resize the %BoundedVector to the specified number of elements.
+        -:  351:  /**
+        -:  352:   * This function will %resize the %BoundedVector to the specified
+        -:  353:   * number of elements.
+        -:  354:   * If the number is smaller than the %BoundedVector's current size the
+        -:  355:   * %BoundedVector is truncated, otherwise the %BoundedVector is
+        -:  356:   * extended and new elements are populated with given data.
+        -:  357:   *
+        -:  358:   * \param new_size Number of elements the %BoundedVector should contain
+        -:  359:   * \param x Data with which new elements should be populated
+        -:  360:   */
+        -:  361:  void
+        -:  362:  resize(
+        -:  363:    typename Base::size_type new_size,
+        -:  364:    const typename Base::value_type & x)
+        -:  365:  {
+        -:  366:    if (new_size > UpperBound) {
+        -:  367:      throw std::length_error("Exceeded upper bound");
+        -:  368:    }
+        -:  369:    Base::resize(new_size, x);
+        -:  370:  }
+        -:  371:
+        -:  372:  using Base::shrink_to_fit;
+        -:  373:  using Base::capacity;
+        -:  374:  using Base::empty;
+        -:  375:
+        -:  376:  /// Attempt to preallocate enough memory for specified number of elements.
+        -:  377:  /**
+        -:  378:   * This function attempts to reserve enough memory for the
+        -:  379:   * %BoundedVector to hold the specified number of elements.
+        -:  380:   * If the number requested is more than max_size(), length_error is
+        -:  381:   * thrown.
+        -:  382:   *
+        -:  383:   * The advantage of this function is that if optimal code is a
+        -:  384:   * necessity and the user can determine the number of elements that
+        -:  385:   * will be required, the user can reserve the memory in %advance, and
+        -:  386:   * thus prevent a possible reallocation of memory and copying of
+        -:  387:   * %BoundedVector data.
+        -:  388:   *
+        -:  389:   * \param n Number of elements required
+        -:  390:   * @throw std::length_error If @a n exceeds @c max_size()
+        -:  391:   */
+        -:  392:  void
+        -:  393:  reserve(typename Base::size_type n)
+        -:  394:  {
+        -:  395:    if (n > UpperBound) {
+        -:  396:      throw std::length_error("Exceeded upper bound");
+        -:  397:    }
+        -:  398:    Base::reserve(n);
+        -:  399:  }
+        -:  400:
+        -:  401:  using Base::operator[];
+        -:  402:  using Base::at;
+        -:  403:  using Base::front;
+        -:  404:  using Base::back;
+        -:  405:
+        -:  406:  /// Return a pointer such that [data(), data() + size()) is a valid range.
+        -:  407:  /**
+        -:  408:   * For a non-empty %BoundedVector, data() == &front().
+        -:  409:   */
+        -:  410:  template<
+        -:  411:    typename T,
+        -:  412:    typename std::enable_if<
+        -:  413:      !std::is_same<T, Tp>::value &&
+        -:  414:      !std::is_same<T, bool>::value
+        -:  415:    >::type * = nullptr
+        -:  416:  >
+        -:  417:  T *
+        -:  418:  data() noexcept
+        -:  419:  {
+        -:  420:    return Base::data();
+        -:  421:  }
+        -:  422:
+        -:  423:  template<
+        -:  424:    typename T,
+        -:  425:    typename std::enable_if<
+        -:  426:      !std::is_same<T, Tp>::value &&
+        -:  427:      !std::is_same<T, bool>::value
+        -:  428:    >::type * = nullptr
+        -:  429:  >
+        -:  430:  const T *
+        -:  431:  data() const noexcept
+        -:  432:  {
+        -:  433:    return Base::data();
+        -:  434:  }
+        -:  435:
+        -:  436:  /// Add data to the end of the %BoundedVector.
+        -:  437:  /**
+        -:  438:   * This is a typical stack operation.
+        -:  439:   * The function creates an element at the end of the %BoundedVector
+        -:  440:   * and assigns the given data to it.
+        -:  441:   * Due to the nature of a %BoundedVector this operation can be done in
+        -:  442:   * constant time if the %BoundedVector has preallocated space
+        -:  443:   * available.
+        -:  444:   *
+        -:  445:   * \param x Data to be added
+        -:  446:   */
+        -:  447:  void
+        -:  448:  push_back(const typename Base::value_type & x)
+        -:  449:  {
+        -:  450:    if (size() >= UpperBound) {
+        -:  451:      throw std::length_error("Exceeded upper bound");
+        -:  452:    }
+        -:  453:    Base::push_back(x);
+        -:  454:  }
+        -:  455:
+        -:  456:  void
+        -:  457:  push_back(typename Base::value_type && x)
+        -:  458:  {
+        -:  459:    if (size() >= UpperBound) {
+        -:  460:      throw std::length_error("Exceeded upper bound");
+        -:  461:    }
+        -:  462:    Base::push_back(x);
+        -:  463:  }
+        -:  464:
+        -:  465:  /// Add data to the end of the %BoundedVector.
+        -:  466:  /**
+        -:  467:   * This is a typical stack operation.
+        -:  468:   * The function creates an element at the end of the %BoundedVector
+        -:  469:   * and assigns the given data to it.
+        -:  470:   * Due to the nature of a %BoundedVector this operation can be done in
+        -:  471:   * constant time if the %BoundedVector has preallocated space
+        -:  472:   * available.
+        -:  473:   *
+        -:  474:   * \param args Arguments to be forwarded to the constructor of Tp
+        -:  475:   */
+        -:  476:  template<typename ... Args>
+        -:  477:  auto
+        -:  478:  emplace_back(Args && ... args)
+        -:  479:  {
+        -:  480:    if (size() >= UpperBound) {
+        -:  481:      throw std::length_error("Exceeded upper bound");
+        -:  482:    }
+        -:  483:    return Base::emplace_back(std::forward<Args>(args)...);
+        -:  484:  }
+        -:  485:
+        -:  486:  /// Insert an object in %BoundedVector before specified iterator.
+        -:  487:  /**
+        -:  488:   * This function will insert an object of type T constructed with
+        -:  489:   * T(std::forward<Args>(args)...) before the specified location.
+        -:  490:   * Note that this kind of operation could be expensive for a
+        -:  491:   * %BoundedVector and if it is frequently used the user should
+        -:  492:   * consider using std::list.
+        -:  493:   *
+        -:  494:   * \param position A const_iterator into the %BoundedVector
+        -:  495:   * \param args Arguments
+        -:  496:   * \return An iterator that points to the inserted data
+        -:  497:   */
+        -:  498:  template<typename ... Args>
+        -:  499:  typename Base::iterator
+        -:  500:  emplace(
+        -:  501:    typename Base::const_iterator position,
+        -:  502:    Args && ... args)
+        -:  503:  {
+        -:  504:    if (size() >= UpperBound) {
+        -:  505:      throw std::length_error("Exceeded upper bound");
+        -:  506:    }
+        -:  507:    return Base::emplace(position, std::forward<Args>(args) ...);
+        -:  508:  }
+        -:  509:
+        -:  510:  /// Insert given value into %BoundedVector before specified iterator.
+        -:  511:  /**
+        -:  512:   * This function will insert a copy of the given value before the
+        -:  513:   * specified location.
+        -:  514:   * Note that this kind of operation could be expensive for a
+        -:  515:   * %BoundedVector and if it is frequently used the user should
+        -:  516:   * consider using std::list.
+        -:  517:   *
+        -:  518:   * \param position A const_iterator into the %BoundedVector
+        -:  519:   * \param x Data to be inserted
+        -:  520:   * \return An iterator that points to the inserted data
+        -:  521:   */
+        -:  522:  typename Base::iterator
+        -:  523:  insert(
+        -:  524:    typename Base::const_iterator position,
+        -:  525:    const typename Base::value_type & x)
+        -:  526:  {
+        -:  527:    if (size() >= UpperBound) {
+        -:  528:      throw std::length_error("Exceeded upper bound");
+        -:  529:    }
+        -:  530:    return Base::insert(position, x);
+        -:  531:  }
+        -:  532:
+        -:  533:  /// Insert given rvalue into %BoundedVector before specified iterator.
+        -:  534:  /**
+        -:  535:   * This function will insert a copy of the given rvalue before the
+        -:  536:   * specified location.
+        -:  537:   * Note that this kind of operation could be expensive for a
+        -:  538:   * %BoundedVector and if it is frequently used the user should
+        -:  539:   * consider using std::list.
+        -:  540:   *
+        -:  541:   * \param position A const_iterator into the %BoundedVector
+        -:  542:   * \param x Data to be inserted
+        -:  543:   * \return An iterator that points to the inserted data
+        -:  544:   */
+        -:  545:  typename Base::iterator
+        -:  546:  insert(
+        -:  547:    typename Base::const_iterator position,
+        -:  548:    typename Base::value_type && x)
+        -:  549:  {
+        -:  550:    if (size() >= UpperBound) {
+        -:  551:      throw std::length_error("Exceeded upper bound");
+        -:  552:    }
+        -:  553:    return Base::insert(position, x);
+        -:  554:  }
+        -:  555:
+        -:  556:  /// Insert an initializer_list into the %BoundedVector.
+        -:  557:  /**
+        -:  558:   * This function will insert copies of the data in the
+        -:  559:   * initializer_list @a l into the %BoundedVector before the location
+        -:  560:   * specified by @a position.
+        -:  561:   *
+        -:  562:   * Note that this kind of operation could be expensive for a
+        -:  563:   * %BoundedVector and if it is frequently used the user should
+        -:  564:   * consider using std::list.
+        -:  565:   *
+        -:  566:   * \param position An iterator into the %BoundedVector
+        -:  567:   * \param l An initializer_list
+        -:  568:   */
+        -:  569:  typename Base::iterator
+        -:  570:  insert(
+        -:  571:    typename Base::const_iterator position,
+        -:  572:    std::initializer_list<typename Base::value_type> l)
+        -:  573:  {
+        -:  574:    if (size() + l.size() > UpperBound) {
+        -:  575:      throw std::length_error("Exceeded upper bound");
+        -:  576:    }
+        -:  577:    return Base::insert(position, l);
+        -:  578:  }
+        -:  579:
+        -:  580:  /// Insert a number of copies of given data into the %BoundedVector.
+        -:  581:  /**
+        -:  582:   * This function will insert a specified number of copies of the given
+        -:  583:   * data before the location specified by @a position.
+        -:  584:   *
+        -:  585:   * Note that this kind of operation could be expensive for a
+        -:  586:   * %BoundedVector and if it is frequently used the user should
+        -:  587:   * consider using std::list.
+        -:  588:   *
+        -:  589:   * \param position A const_iterator into the %BoundedVector
+        -:  590:   * \param n Number of elements to be inserted
+        -:  591:   * \param x Data to be inserted
+        -:  592:   * \return An iterator that points to the inserted data
+        -:  593:   */
+        -:  594:  typename Base::iterator
+        -:  595:  insert(
+        -:  596:    typename Base::const_iterator position,
+        -:  597:    typename Base::size_type n,
+        -:  598:    const typename Base::value_type & x)
+        -:  599:  {
+        -:  600:    if (size() + n > UpperBound) {
+        -:  601:      throw std::length_error("Exceeded upper bound");
+        -:  602:    }
+        -:  603:    return Base::insert(position, n, x);
+        -:  604:  }
+        -:  605:
+        -:  606:  /// Insert a range into the %BoundedVector.
+        -:  607:  /**
+        -:  608:   * This function will insert copies of the data in the range
+        -:  609:   * [first,last) into the %BoundedVector before the location
+        -:  610:   * specified by @a pos.
+        -:  611:   *
+        -:  612:   * Note that this kind of operation could be expensive for a
+        -:  613:   * %BoundedVector and if it is frequently used the user should
+        -:  614:   * consider using std::list.
+        -:  615:   *
+        -:  616:   * \param position A const_iterator into the %BoundedVector
+        -:  617:   * \param first An input iterator
+        -:  618:   * \param last   An input iterator
+        -:  619:   * \return An iterator that points to the inserted data
+        -:  620:   */
+        -:  621:  template<
+        -:  622:    typename InputIterator
+        -:  623:  >
+        -:  624:  typename Base::iterator
+        -:  625:  insert(
+        -:  626:    typename Base::const_iterator position,
+        -:  627:    InputIterator first,
+        -:  628:    InputIterator last)
+        -:  629:  {
+        -:  630:    using cat = typename std::iterator_traits<InputIterator>::iterator_category;
+        -:  631:    return do_insert(position, first, last, cat());
+        -:  632:  }
+        -:  633:
+        -:  634:  using Base::erase;
+        -:  635:  using Base::pop_back;
+        -:  636:  using Base::clear;
+        -:  637:
+        -:  638:private:
+        -:  639:  /// Assign elements from an input range.
+        -:  640:  template<
+        -:  641:    typename InputIterator
+        -:  642:  >
+        -:  643:  void
+        -:  644:  do_assign(InputIterator first, InputIterator last, std::input_iterator_tag)
+        -:  645:  {
+        -:  646:    BoundedVector(first, last).swap(*this);
+        -:  647:  }
+        -:  648:
+        -:  649:  /// Assign elements from a forward range.
+        -:  650:  template<
+        -:  651:    typename FwdIterator
+        -:  652:  >
+        -:  653:  void
+        -:  654:  do_assign(FwdIterator first, FwdIterator last, std::forward_iterator_tag)
+        -:  655:  {
+        -:  656:    if (static_cast<std::size_t>(std::distance(first, last)) > UpperBound) {
+        -:  657:      throw std::length_error("Exceeded upper bound");
+        -:  658:    }
+        -:  659:    Base::assign(first, last);
+        -:  660:  }
+        -:  661:
+        -:  662:  // Insert each value at the end and then rotate them to the desired position.
+        -:  663:  // If the bound is exceeded, the inserted elements are removed again.
+        -:  664:  template<
+        -:  665:    typename InputIterator
+        -:  666:  >
+        -:  667:  typename Base::iterator
+        -:  668:  do_insert(
+        -:  669:    typename Base::const_iterator position,
+        -:  670:    InputIterator first,
+        -:  671:    InputIterator last,
+        -:  672:    std::input_iterator_tag)
+        -:  673:  {
+        -:  674:    const auto orig_size = size();
+        -:  675:    const auto idx = position - cbegin();
+        -:  676:    try {
+        -:  677:      while (first != last) {
+        -:  678:        push_back(*first++);
+        -:  679:      }
+        -:  680:    } catch (const std::length_error &) {
+        -:  681:      Base::resize(orig_size);
+        -:  682:      throw;
+        -:  683:    }
+        -:  684:    auto pos = begin() + idx;
+        -:  685:    std::rotate(pos, begin() + orig_size, end());
+        -:  686:    return begin() + idx;
+        -:  687:  }
+        -:  688:
+        -:  689:  template<
+        -:  690:    typename FwdIterator
+        -:  691:  >
+        -:  692:  typename Base::iterator
+        -:  693:  do_insert(
+        -:  694:    typename Base::const_iterator position,
+        -:  695:    FwdIterator first,
+        -:  696:    FwdIterator last,
+        -:  697:    std::forward_iterator_tag)
+        -:  698:  {
+        -:  699:    auto dist = std::distance(first, last);
+        -:  700:    if ((dist < 0) || (size() + static_cast<size_t>(dist) > UpperBound)) {
+        -:  701:      throw std::length_error("Exceeded upper bound");
+        -:  702:    }
+        -:  703:    return Base::insert(position, first, last);
+        -:  704:  }
+        -:  705:
+        -:  706:  /// Vector equality comparison.
+        -:  707:  /**
+        -:  708:   * This is an equivalence relation.
+        -:  709:   * It is linear in the size of the vectors.
+        -:  710:   * Vectors are considered equivalent if their sizes are equal, and if
+        -:  711:   * corresponding elements compare equal.
+        -:  712:   *
+        -:  713:   * \param x A %BoundedVector
+        -:  714:   * \param y A %BoundedVector of the same type as @a x
+        -:  715:   * \return True if the size and elements of the vectors are equal
+        -:  716:  */
+        -:  717:  friend bool
+        -:  718:  operator==(
+        -:  719:    const BoundedVector & x,
+        -:  720:    const BoundedVector & y)
+        -:  721:  {
+        -:  722:    return static_cast<const Base &>(x) == static_cast<const Base &>(y);
+        -:  723:  }
+        -:  724:
+        -:  725:  /// Vector ordering relation.
+        -:  726:  /**
+        -:  727:   * This is a total ordering relation.
+        -:  728:   * It is linear in the size of the vectors.
+        -:  729:   * The elements must be comparable with @c <.
+        -:  730:   *
+        -:  731:   * See std::lexicographical_compare() for how the determination is made.
+        -:  732:   *
+        -:  733:   * \param x A %BoundedVector
+        -:  734:   * \param y A %BoundedVector of the same type as @a x
+        -:  735:   * @return True if @a x is lexicographically less than @a y
+        -:  736:  */
+        -:  737:  friend bool
+        -:  738:  operator<(
+        -:  739:    const BoundedVector & x,
+        -:  740:    const BoundedVector & y)
+        -:  741:  {
+        -:  742:    return static_cast<const Base &>(x) < static_cast<const Base &>(y);
+        -:  743:  }
+        -:  744:
+        -:  745:  /// Based on operator==
+        -:  746:  friend bool
+        -:  747:  operator!=(
+        -:  748:    const BoundedVector & x,
+        -:  749:    const BoundedVector & y)
+        -:  750:  {
+        -:  751:    return static_cast<const Base &>(x) != static_cast<const Base &>(y);
+        -:  752:  }
+        -:  753:
+        -:  754:  /// Based on operator<
+        -:  755:  friend bool
+        -:  756:  operator>(
+        -:  757:    const BoundedVector & x,
+        -:  758:    const BoundedVector & y)
+        -:  759:  {
+        -:  760:    return static_cast<const Base &>(x) > static_cast<const Base &>(y);
+        -:  761:  }
+        -:  762:
+        -:  763:  /// Based on operator<
+        -:  764:  friend bool
+        -:  765:  operator<=(
+        -:  766:    const BoundedVector & x,
+        -:  767:    const BoundedVector & y)
+        -:  768:  {
+        -:  769:    return static_cast<const Base &>(x) <= static_cast<const Base &>(y);
+        -:  770:  }
+        -:  771:
+        -:  772:  /// Based on operator<
+        -:  773:  friend bool
+        -:  774:  operator>=(
+        -:  775:    const BoundedVector & x,
+        -:  776:    const BoundedVector & y)
+        -:  777:  {
+        -:  778:    return static_cast<const Base &>(x) >= static_cast<const Base &>(y);
+        -:  779:  }
+        -:  780:};
+        -:  781:
+        -:  782:/// See rosidl_runtime_cpp::BoundedVector::swap().
+        -:  783:template<typename Tp, std::size_t UpperBound, typename Alloc>
+        -:  784:inline void
+        -:  785:swap(BoundedVector<Tp, UpperBound, Alloc> & x, BoundedVector<Tp, UpperBound, Alloc> & y)
+        -:  786:{
+        -:  787:  x.swap(y);
+        -:  788:}
+        -:  789:
+        -:  790:}  // namespace rosidl_runtime_cpp
+        -:  791:
+        -:  792:#endif  // ROSIDL_RUNTIME_CPP__BOUNDED_VECTOR_HPP_

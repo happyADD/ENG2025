@@ -1,0 +1,199 @@
+        -:    0:Source:/opt/ros/humble/include/sensor_msgs/sensor_msgs/msg/detail/region_of_interest__struct.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// generated from rosidl_generator_cpp/resource/idl__struct.hpp.em
+        -:    2:// with input from sensor_msgs:msg/RegionOfInterest.idl
+        -:    3:// generated code does not contain a copyright notice
+        -:    4:
+        -:    5:#ifndef SENSOR_MSGS__MSG__DETAIL__REGION_OF_INTEREST__STRUCT_HPP_
+        -:    6:#define SENSOR_MSGS__MSG__DETAIL__REGION_OF_INTEREST__STRUCT_HPP_
+        -:    7:
+        -:    8:#include <algorithm>
+        -:    9:#include <array>
+        -:   10:#include <memory>
+        -:   11:#include <string>
+        -:   12:#include <vector>
+        -:   13:
+        -:   14:#include "rosidl_runtime_cpp/bounded_vector.hpp"
+        -:   15:#include "rosidl_runtime_cpp/message_initialization.hpp"
+        -:   16:
+        -:   17:
+        -:   18:#ifndef _WIN32
+        -:   19:# define DEPRECATED__sensor_msgs__msg__RegionOfInterest __attribute__((deprecated))
+        -:   20:#else
+        -:   21:# define DEPRECATED__sensor_msgs__msg__RegionOfInterest __declspec(deprecated)
+        -:   22:#endif
+        -:   23:
+        -:   24:namespace sensor_msgs
+        -:   25:{
+        -:   26:
+        -:   27:namespace msg
+        -:   28:{
+        -:   29:
+        -:   30:// message struct
+        -:   31:template<class ContainerAllocator>
+        -:   32:struct RegionOfInterest_
+        -:   33:{
+        -:   34:  using Type = RegionOfInterest_<ContainerAllocator>;
+        -:   35:
+function _ZN11sensor_msgs3msg17RegionOfInterest_ISaIvEEC2EN18rosidl_runtime_cpp21MessageInitializationE called 34 returned 100% blocks executed 75%
+       34:   36:  explicit RegionOfInterest_(rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
+        -:   37:  {
+      34*:   38:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+       34:   38-block  0
+branch  0 taken 0 (fallthrough)
+branch  1 taken 34
+    %%%%%:   38-block  1
+branch  2 never executed
+branch  3 never executed
+        -:   39:      rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
+        -:   40:    {
+       34:   41:      this->x_offset = 0ul;
+       34:   42:      this->y_offset = 0ul;
+       34:   43:      this->height = 0ul;
+       34:   44:      this->width = 0ul;
+       34:   45:      this->do_rectify = false;
+       34:   45-block  0
+        -:   46:    }
+       34:   47:  }
+        -:   48:
+        -:   49:  explicit RegionOfInterest_(const ContainerAllocator & _alloc, rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
+        -:   50:  {
+        -:   51:    (void)_alloc;
+        -:   52:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+        -:   53:      rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
+        -:   54:    {
+        -:   55:      this->x_offset = 0ul;
+        -:   56:      this->y_offset = 0ul;
+        -:   57:      this->height = 0ul;
+        -:   58:      this->width = 0ul;
+        -:   59:      this->do_rectify = false;
+        -:   60:    }
+        -:   61:  }
+        -:   62:
+        -:   63:  // field types and members
+        -:   64:  using _x_offset_type =
+        -:   65:    uint32_t;
+        -:   66:  _x_offset_type x_offset;
+        -:   67:  using _y_offset_type =
+        -:   68:    uint32_t;
+        -:   69:  _y_offset_type y_offset;
+        -:   70:  using _height_type =
+        -:   71:    uint32_t;
+        -:   72:  _height_type height;
+        -:   73:  using _width_type =
+        -:   74:    uint32_t;
+        -:   75:  _width_type width;
+        -:   76:  using _do_rectify_type =
+        -:   77:    bool;
+        -:   78:  _do_rectify_type do_rectify;
+        -:   79:
+        -:   80:  // setters for named parameter idiom
+        -:   81:  Type & set__x_offset(
+        -:   82:    const uint32_t & _arg)
+        -:   83:  {
+        -:   84:    this->x_offset = _arg;
+        -:   85:    return *this;
+        -:   86:  }
+        -:   87:  Type & set__y_offset(
+        -:   88:    const uint32_t & _arg)
+        -:   89:  {
+        -:   90:    this->y_offset = _arg;
+        -:   91:    return *this;
+        -:   92:  }
+        -:   93:  Type & set__height(
+        -:   94:    const uint32_t & _arg)
+        -:   95:  {
+        -:   96:    this->height = _arg;
+        -:   97:    return *this;
+        -:   98:  }
+        -:   99:  Type & set__width(
+        -:  100:    const uint32_t & _arg)
+        -:  101:  {
+        -:  102:    this->width = _arg;
+        -:  103:    return *this;
+        -:  104:  }
+        -:  105:  Type & set__do_rectify(
+        -:  106:    const bool & _arg)
+        -:  107:  {
+        -:  108:    this->do_rectify = _arg;
+        -:  109:    return *this;
+        -:  110:  }
+        -:  111:
+        -:  112:  // constant declarations
+        -:  113:
+        -:  114:  // pointer types
+        -:  115:  using RawPtr =
+        -:  116:    sensor_msgs::msg::RegionOfInterest_<ContainerAllocator> *;
+        -:  117:  using ConstRawPtr =
+        -:  118:    const sensor_msgs::msg::RegionOfInterest_<ContainerAllocator> *;
+        -:  119:  using SharedPtr =
+        -:  120:    std::shared_ptr<sensor_msgs::msg::RegionOfInterest_<ContainerAllocator>>;
+        -:  121:  using ConstSharedPtr =
+        -:  122:    std::shared_ptr<sensor_msgs::msg::RegionOfInterest_<ContainerAllocator> const>;
+        -:  123:
+        -:  124:  template<typename Deleter = std::default_delete<
+        -:  125:      sensor_msgs::msg::RegionOfInterest_<ContainerAllocator>>>
+        -:  126:  using UniquePtrWithDeleter =
+        -:  127:    std::unique_ptr<sensor_msgs::msg::RegionOfInterest_<ContainerAllocator>, Deleter>;
+        -:  128:
+        -:  129:  using UniquePtr = UniquePtrWithDeleter<>;
+        -:  130:
+        -:  131:  template<typename Deleter = std::default_delete<
+        -:  132:      sensor_msgs::msg::RegionOfInterest_<ContainerAllocator>>>
+        -:  133:  using ConstUniquePtrWithDeleter =
+        -:  134:    std::unique_ptr<sensor_msgs::msg::RegionOfInterest_<ContainerAllocator> const, Deleter>;
+        -:  135:  using ConstUniquePtr = ConstUniquePtrWithDeleter<>;
+        -:  136:
+        -:  137:  using WeakPtr =
+        -:  138:    std::weak_ptr<sensor_msgs::msg::RegionOfInterest_<ContainerAllocator>>;
+        -:  139:  using ConstWeakPtr =
+        -:  140:    std::weak_ptr<sensor_msgs::msg::RegionOfInterest_<ContainerAllocator> const>;
+        -:  141:
+        -:  142:  // pointer types similar to ROS 1, use SharedPtr / ConstSharedPtr instead
+        -:  143:  // NOTE: Can't use 'using' here because GNU C++ can't parse attributes properly
+        -:  144:  typedef DEPRECATED__sensor_msgs__msg__RegionOfInterest
+        -:  145:    std::shared_ptr<sensor_msgs::msg::RegionOfInterest_<ContainerAllocator>>
+        -:  146:    Ptr;
+        -:  147:  typedef DEPRECATED__sensor_msgs__msg__RegionOfInterest
+        -:  148:    std::shared_ptr<sensor_msgs::msg::RegionOfInterest_<ContainerAllocator> const>
+        -:  149:    ConstPtr;
+        -:  150:
+        -:  151:  // comparison operators
+        -:  152:  bool operator==(const RegionOfInterest_ & other) const
+        -:  153:  {
+        -:  154:    if (this->x_offset != other.x_offset) {
+        -:  155:      return false;
+        -:  156:    }
+        -:  157:    if (this->y_offset != other.y_offset) {
+        -:  158:      return false;
+        -:  159:    }
+        -:  160:    if (this->height != other.height) {
+        -:  161:      return false;
+        -:  162:    }
+        -:  163:    if (this->width != other.width) {
+        -:  164:      return false;
+        -:  165:    }
+        -:  166:    if (this->do_rectify != other.do_rectify) {
+        -:  167:      return false;
+        -:  168:    }
+        -:  169:    return true;
+        -:  170:  }
+        -:  171:  bool operator!=(const RegionOfInterest_ & other) const
+        -:  172:  {
+        -:  173:    return !this->operator==(other);
+        -:  174:  }
+        -:  175:};  // struct RegionOfInterest_
+        -:  176:
+        -:  177:// alias to use template instance with default allocator
+        -:  178:using RegionOfInterest =
+        -:  179:  sensor_msgs::msg::RegionOfInterest_<std::allocator<void>>;
+        -:  180:
+        -:  181:// constant definitions
+        -:  182:
+        -:  183:}  // namespace msg
+        -:  184:
+        -:  185:}  // namespace sensor_msgs
+        -:  186:
+        -:  187:#endif  // SENSOR_MSGS__MSG__DETAIL__REGION_OF_INTEREST__STRUCT_HPP_

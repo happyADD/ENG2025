@@ -1,0 +1,11 @@
+[0.007s] Invoking command in '/home/dcy/ENG/ENG2025/build/imgprocess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/imgprocess -- -j16 -l16
+[0.034s] [ 20%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/node_run.cpp.o[0m
+[0.034s] [ 40%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o[0m
+[7.750s] [ 60%] [32m[1mLinking CXX executable imgprocess[0m
+[8.239s] /usr/bin/ld: CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o: in function `ImgProcess_node::ImgProcess_node(rclcpp::NodeOptions const&)':
+[8.239s] ImgProcess.cpp:(.text+0x622): undefined reference to `ImgProcess_node::cameraInfoCallback(std::shared_ptr<sensor_msgs::msg::CameraInfo_<std::allocator<void> > const> const&)'
+[8.290s] collect2: error: ld returned 1 exit status
+[8.291s] gmake[2]: *** [CMakeFiles/imgprocess.dir/build.make:291：imgprocess] 错误 1
+[8.291s] gmake[1]: *** [CMakeFiles/Makefile2:137：CMakeFiles/imgprocess.dir/all] 错误 2
+[8.291s] gmake: *** [Makefile:146：all] 错误 2
+[8.293s] Invoked command in '/home/dcy/ENG/ENG2025/build/imgprocess' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/imgprocess -- -j16 -l16

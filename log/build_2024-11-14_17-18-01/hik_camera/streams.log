@@ -1,0 +1,6 @@
+[0.007s] Invoking command in '/home/dcy/ENG/ENG2025/build/hik_camera': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/hik_camera -- -j16 -l16
+[0.008s] [0mCMake Error: The current CMakeCache.txt directory /home/dcy/ENG/ENG2025/build/hik_camera/CMakeCache.txt is different than the directory /home/dcy/ENG2025/rosdemo/build/hik_camera where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt[0m
+[0.013s] [0mCMake Error: The source directory "/home/dcy/ENG2025/rosdemo/src/hik_camera" does not exist.
+[0.013s] Specify --help for usage, or press the help button on the CMake GUI.[0m
+[0.013s] gmake: *** [Makefile:379：cmake_check_build_system] 错误 1
+[0.014s] Invoked command in '/home/dcy/ENG/ENG2025/build/hik_camera' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/hik_camera -- -j16 -l16

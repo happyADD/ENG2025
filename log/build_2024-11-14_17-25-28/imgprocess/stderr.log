@@ -1,0 +1,14 @@
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:[m[K In member function ‘[01m[Kint manager::isSquareAux(int, cv::Point2d, float)[m[K’:
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:403:30:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ksid[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  403 | int manager::isSquareAux([01;35m[Kint sid[m[K, cv::Point2d point, float size)
+      |                          [01;35m[K~~~~^~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:403:47:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpoint[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  403 | int manager::isSquareAux(int sid, [01;35m[Kcv::Point2d point[m[K, float size)
+      |                                   [01;35m[K~~~~~~~~~~~~^~~~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:403:60:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ksize[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  403 | int manager::isSquareAux(int sid, cv::Point2d point, [01;35m[Kfloat size[m[K)
+      |                                                      [01;35m[K~~~~~~^~~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcess.cpp:[m[K In member function ‘[01m[Kvoid ImgProcess_node::cameraInfoCallback(const ConstSharedPtr&)[m[K’:
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcess.cpp:66:76:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[KcameraInfo[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   66 | void ImgProcess_node::cameraInfoCallback([01;35m[Kconst CameraInfo::ConstSharedPtr& cameraInfo[m[K)
+      |                                          [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~[m[K

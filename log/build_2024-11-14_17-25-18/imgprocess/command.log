@@ -1,0 +1,2 @@
+Invoking command in '/home/dcy/ENG/ENG2025/build/imgprocess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG/ENG2025/src/ImgProcess -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG/ENG2025/install/imgprocess
+Invoked command in '/home/dcy/ENG/ENG2025/build/imgprocess' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG/ENG2025/src/ImgProcess -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG/ENG2025/install/imgprocess

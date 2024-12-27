@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite
+  name="ImgProcess.xmllint"
+  tests="5"
+  errors="0"
+  failures="1"
+  time="0.793"
+>
+  <testcase
+    name="package.xml"
+    classname="ImgProcess.xmllint"
+  >
+      <failure message="Diff with 269 lines"><![CDATA[/home/dcy/ENG/ENG2025/src/ImgProcess/package.xml:4: element name: Schemas validity error : Element 'name': [facet 'pattern'] The value 'ImgProcess' is not accepted by the pattern '[a-z](_?[a-z0-9]+)*'.
+/home/dcy/ENG/ENG2025/src/ImgProcess/package.xml fails to validate
+]]></failure>
+  </testcase>
+  <testcase
+    name="cmake-build-debug/test_results/ImgProcess/cppcheck.xunit.xml"
+    classname="ImgProcess.xmllint"/>
+  <testcase
+    name="cmake-build-debug/test_results/ImgProcess/lint_cmake.xunit.xml"
+    classname="ImgProcess.xmllint"/>
+  <testcase
+    name="cmake-build-debug/test_results/ImgProcess/uncrustify.xunit.xml"
+    classname="ImgProcess.xmllint"/>
+  <testcase
+    name="cmake-build-debug/test_results/ImgProcess/xmllint.xunit.xml"
+    classname="ImgProcess.xmllint"/>
+  <system-out>Checked files:
+* package.xml
+* cmake-build-debug/test_results/ImgProcess/cppcheck.xunit.xml
+* cmake-build-debug/test_results/ImgProcess/lint_cmake.xunit.xml
+* cmake-build-debug/test_results/ImgProcess/uncrustify.xunit.xml
+* cmake-build-debug/test_results/ImgProcess/xmllint.xunit.xml</system-out>
+</testsuite>

@@ -1,0 +1,447 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/node_options.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2019 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__NODE_OPTIONS_HPP_
+        -:   16:#define RCLCPP__NODE_OPTIONS_HPP_
+        -:   17:
+        -:   18:#include <memory>
+        -:   19:#include <string>
+        -:   20:#include <vector>
+        -:   21:
+        -:   22:#include "rcl/node_options.h"
+        -:   23:#include "rclcpp/context.hpp"
+        -:   24:#include "rclcpp/contexts/default_context.hpp"
+        -:   25:#include "rclcpp/parameter.hpp"
+        -:   26:#include "rclcpp/publisher_options.hpp"
+        -:   27:#include "rclcpp/qos.hpp"
+        -:   28:#include "rclcpp/visibility_control.hpp"
+        -:   29:
+        -:   30:namespace rclcpp
+        -:   31:{
+        -:   32:
+        -:   33:/// Encapsulation of options for node initialization.
+        -:   34:class NodeOptions
+        -:   35:{
+        -:   36:public:
+        -:   37:  /// Create NodeOptions with default values, optionally specifying the allocator to use.
+        -:   38:  /**
+        -:   39:   * Default values for the node options:
+        -:   40:   *
+        -:   41:   *   - context = rclcpp::contexts::get_global_default_context()
+        -:   42:   *   - arguments = {}
+        -:   43:   *   - parameter_overrides = {}
+        -:   44:   *   - use_global_arguments = true
+        -:   45:   *   - enable_rosout = true
+        -:   46:   *   - use_intra_process_comms = false
+        -:   47:   *   - enable_topic_statistics = false
+        -:   48:   *   - start_parameter_services = true
+        -:   49:   *   - start_parameter_event_publisher = true
+        -:   50:   *   - clock_qos = rclcpp::ClockQoS()
+        -:   51:   *   - use_clock_thread = true
+        -:   52:   *   - rosout_qos = rclcpp::RosoutQoS()
+        -:   53:   *   - parameter_event_qos = rclcpp::ParameterEventQoS
+        -:   54:   *     - with history setting and depth from rmw_qos_profile_parameter_events
+        -:   55:   *   - parameter_event_publisher_options = rclcpp::PublisherOptionsBase
+        -:   56:   *   - allow_undeclared_parameters = false
+        -:   57:   *   - automatically_declare_parameters_from_overrides = false
+        -:   58:   *   - allocator = rcl_get_default_allocator()
+        -:   59:   *
+        -:   60:   * \param[in] allocator allocator to use in construction of NodeOptions.
+        -:   61:   */
+        -:   62:  RCLCPP_PUBLIC
+        -:   63:  explicit NodeOptions(rcl_allocator_t allocator = rcl_get_default_allocator());
+        -:   64:
+        -:   65:  /// Destructor.
+        -:   66:  RCLCPP_PUBLIC
+        -:   67:  virtual
+       1*:   68:  ~NodeOptions() = default;
+------------------
+_ZN6rclcpp11NodeOptionsD0Ev:
+function _ZN6rclcpp11NodeOptionsD0Ev called 0 returned 0% blocks executed 0%
+    #####:   68:  ~NodeOptions() = default;
+    %%%%%:   68-block  0
+call    0 never executed
+call    1 never executed
+------------------
+_ZN6rclcpp11NodeOptionsD2Ev:
+function _ZN6rclcpp11NodeOptionsD2Ev called 1 returned 100% blocks executed 100%
+        1:   68:  ~NodeOptions() = default;
+        1:   68-block  0
+call    0 returned 1
+call    1 returned 1
+call    2 returned 1
+call    3 returned 1
+call    4 returned 1
+------------------
+        -:   69:
+        -:   70:  /// Copy constructor.
+        -:   71:  RCLCPP_PUBLIC
+        -:   72:  NodeOptions(const NodeOptions & other);
+        -:   73:
+        -:   74:  /// Assignment operator.
+        -:   75:  RCLCPP_PUBLIC
+        -:   76:  NodeOptions &
+        -:   77:  operator=(const NodeOptions & other);
+        -:   78:
+        -:   79:  /// Return the rcl_node_options used by the node.
+        -:   80:  /**
+        -:   81:   * This data structure is created lazily, on the first call to this function.
+        -:   82:   * Repeated calls will not regenerate it unless one of the input settings
+        -:   83:   * changed, like arguments, use_global_arguments, or the rcl allocator.
+        -:   84:   *
+        -:   85:   * \return a const rcl_node_options_t structure used by the node
+        -:   86:   * \throws exceptions::UnknownROSArgsError if there are unknown ROS arguments
+        -:   87:   */
+        -:   88:  RCLCPP_PUBLIC
+        -:   89:  const rcl_node_options_t *
+        -:   90:  get_rcl_node_options() const;
+        -:   91:
+        -:   92:  /// Return the context to be used by the node.
+        -:   93:  RCLCPP_PUBLIC
+        -:   94:  rclcpp::Context::SharedPtr
+        -:   95:  context() const;
+        -:   96:
+        -:   97:  /// Set the context, return this for parameter idiom.
+        -:   98:  RCLCPP_PUBLIC
+        -:   99:  NodeOptions &
+        -:  100:  context(rclcpp::Context::SharedPtr context);
+        -:  101:
+        -:  102:  /// Return a reference to the list of arguments for the node.
+        -:  103:  RCLCPP_PUBLIC
+        -:  104:  const std::vector<std::string> &
+        -:  105:  arguments() const;
+        -:  106:
+        -:  107:  /// Set the arguments, return this for parameter idiom.
+        -:  108:  /**
+        -:  109:   * These arguments are used to extract remappings used by the node and other
+        -:  110:   * ROS specific settings, as well as user defined non-ROS arguments.
+        -:  111:   *
+        -:  112:   * This will cause the internal rcl_node_options_t struct to be invalidated.
+        -:  113:   */
+        -:  114:  RCLCPP_PUBLIC
+        -:  115:  NodeOptions &
+        -:  116:  arguments(const std::vector<std::string> & arguments);
+        -:  117:
+        -:  118:  /// Return a reference to the list of parameter overrides.
+        -:  119:  RCLCPP_PUBLIC
+        -:  120:  std::vector<rclcpp::Parameter> &
+        -:  121:  parameter_overrides();
+        -:  122:
+        -:  123:  RCLCPP_PUBLIC
+        -:  124:  const std::vector<rclcpp::Parameter> &
+        -:  125:  parameter_overrides() const;
+        -:  126:
+        -:  127:  /// Set the parameters overrides, return this for parameter idiom.
+        -:  128:  /**
+        -:  129:   * These parameter overrides are used to change the initial value
+        -:  130:   * of declared parameters within the node, overriding hard coded default
+        -:  131:   * values if necessary.
+        -:  132:   */
+        -:  133:  RCLCPP_PUBLIC
+        -:  134:  NodeOptions &
+        -:  135:  parameter_overrides(const std::vector<rclcpp::Parameter> & parameter_overrides);
+        -:  136:
+        -:  137:  /// Append a single parameter override, parameter idiom style.
+        -:  138:  template<typename ParameterT>
+        -:  139:  NodeOptions &
+        -:  140:  append_parameter_override(const std::string & name, const ParameterT & value)
+        -:  141:  {
+        -:  142:    this->parameter_overrides().emplace_back(name, rclcpp::ParameterValue(value));
+        -:  143:    return *this;
+        -:  144:  }
+        -:  145:
+        -:  146:  /// Return the use_global_arguments flag.
+        -:  147:  RCLCPP_PUBLIC
+        -:  148:  bool
+        -:  149:  use_global_arguments() const;
+        -:  150:
+        -:  151:  /// Set the use_global_arguments flag, return this for parameter idiom.
+        -:  152:  /**
+        -:  153:   * If true this will cause the node's behavior to be influenced by "global"
+        -:  154:   * arguments, i.e. arguments not targeted at specific nodes, as well as the
+        -:  155:   * arguments targeted at the current node.
+        -:  156:   *
+        -:  157:   * This will cause the internal rcl_node_options_t struct to be invalidated.
+        -:  158:   */
+        -:  159:  RCLCPP_PUBLIC
+        -:  160:  NodeOptions &
+        -:  161:  use_global_arguments(bool use_global_arguments);
+        -:  162:
+        -:  163:  /// Return the enable_rosout flag.
+        -:  164:  RCLCPP_PUBLIC
+        -:  165:  bool
+        -:  166:  enable_rosout() const;
+        -:  167:
+        -:  168:  /// Set the enable_rosout flag, return this for parameter idiom.
+        -:  169:  /**
+        -:  170:   * If false this will cause the node not to use rosout logging.
+        -:  171:   *
+        -:  172:   * Defaults to true for now, as there are still some cases where it is
+        -:  173:   * desirable.
+        -:  174:   */
+        -:  175:  RCLCPP_PUBLIC
+        -:  176:  NodeOptions &
+        -:  177:  enable_rosout(bool enable_rosout);
+        -:  178:
+        -:  179:  /// Return the use_intra_process_comms flag.
+        -:  180:  RCLCPP_PUBLIC
+        -:  181:  bool
+        -:  182:  use_intra_process_comms() const;
+        -:  183:
+        -:  184:  /// Set the use_intra_process_comms flag, return this for parameter idiom.
+        -:  185:  /**
+        -:  186:   * If true, messages on topics which are published and subscribed to within
+        -:  187:   * this context will go through a special intra-process communication code
+        -:  188:   * code path which can avoid serialization and deserialization, unnecessary
+        -:  189:   * copies, and achieve lower latencies in some cases.
+        -:  190:   *
+        -:  191:   * Defaults to false for now, as there are still some cases where it is not
+        -:  192:   * desirable.
+        -:  193:   */
+        -:  194:  RCLCPP_PUBLIC
+        -:  195:  NodeOptions &
+        -:  196:  use_intra_process_comms(bool use_intra_process_comms);
+        -:  197:
+        -:  198:  /// Return the enable_topic_statistics flag.
+        -:  199:  RCLCPP_PUBLIC
+        -:  200:  bool
+        -:  201:  enable_topic_statistics() const;
+        -:  202:
+        -:  203:  /// Set the enable_topic_statistics flag, return this for parameter idiom.
+        -:  204:  /**
+        -:  205:   * If true, topic statistics collection and publication will be enabled
+        -:  206:   * for all subscriptions.
+        -:  207:   * This can be used to override the global topic statistics setting.
+        -:  208:   *
+        -:  209:   * Defaults to false.
+        -:  210:   */
+        -:  211:  RCLCPP_PUBLIC
+        -:  212:  NodeOptions &
+        -:  213:  enable_topic_statistics(bool enable_topic_statistics);
+        -:  214:
+        -:  215:  /// Return the start_parameter_services flag.
+        -:  216:  RCLCPP_PUBLIC
+        -:  217:  bool
+        -:  218:  start_parameter_services() const;
+        -:  219:
+        -:  220:  /// Set the start_parameter_services flag, return this for parameter idiom.
+        -:  221:  /**
+        -:  222:   * If true, ROS services are created to allow external nodes to list, get,
+        -:  223:   * and request to set parameters of this node.
+        -:  224:   *
+        -:  225:   * If false, parameters will still work locally, but will not be accessible
+        -:  226:   * remotely.
+        -:  227:   *
+        -:  228:   * \sa start_parameter_event_publisher()
+        -:  229:   */
+        -:  230:  RCLCPP_PUBLIC
+        -:  231:  NodeOptions &
+        -:  232:  start_parameter_services(bool start_parameter_services);
+        -:  233:
+        -:  234:  /// Return the start_parameter_event_publisher flag.
+        -:  235:  RCLCPP_PUBLIC
+        -:  236:  bool
+        -:  237:  start_parameter_event_publisher() const;
+        -:  238:
+        -:  239:  /// Set the start_parameter_event_publisher flag, return this for parameter idiom.
+        -:  240:  /**
+        -:  241:   * If true, a publisher is created on which an event message is published
+        -:  242:   * each time a parameter's state changes.
+        -:  243:   * This is used for recording and introspection, but is configurable
+        -:  244:   * separately from the other parameter services.
+        -:  245:   */
+        -:  246:  RCLCPP_PUBLIC
+        -:  247:  NodeOptions &
+        -:  248:  start_parameter_event_publisher(bool start_parameter_event_publisher);
+        -:  249:
+        -:  250:  /// Return a reference to the clock QoS.
+        -:  251:  RCLCPP_PUBLIC
+        -:  252:  const rclcpp::QoS &
+        -:  253:  clock_qos() const;
+        -:  254:
+        -:  255:  /// Set the clock QoS.
+        -:  256:  /**
+        -:  257:   * The QoS settings to be used for the publisher on /clock topic, if enabled.
+        -:  258:   */
+        -:  259:  RCLCPP_PUBLIC
+        -:  260:  NodeOptions &
+        -:  261:  clock_qos(const rclcpp::QoS & clock_qos);
+        -:  262:
+        -:  263:
+        -:  264:  /// Return the use_clock_thread flag.
+        -:  265:  RCLCPP_PUBLIC
+        -:  266:  bool
+        -:  267:  use_clock_thread() const;
+        -:  268:
+        -:  269:  /// Set the use_clock_thread flag, return this for parameter idiom.
+        -:  270:  /**
+        -:  271:   * If true, a dedicated thread will be used to subscribe to "/clock" topic.
+        -:  272:   */
+        -:  273:  RCLCPP_PUBLIC
+        -:  274:  NodeOptions &
+        -:  275:  use_clock_thread(bool use_clock_thread);
+        -:  276:
+        -:  277:  /// Return a reference to the parameter_event_qos QoS.
+        -:  278:  RCLCPP_PUBLIC
+        -:  279:  const rclcpp::QoS &
+        -:  280:  parameter_event_qos() const;
+        -:  281:
+        -:  282:  /// Set the parameter_event_qos QoS, return this for parameter idiom.
+        -:  283:  /**
+        -:  284:   * The QoS settings to be used for the parameter event publisher, if enabled.
+        -:  285:   */
+        -:  286:  RCLCPP_PUBLIC
+        -:  287:  NodeOptions &
+        -:  288:  parameter_event_qos(const rclcpp::QoS & parameter_event_qos);
+        -:  289:
+        -:  290:  /// Return a reference to the rosout QoS.
+        -:  291:  RCLCPP_PUBLIC
+        -:  292:  const rclcpp::QoS &
+        -:  293:  rosout_qos() const;
+        -:  294:
+        -:  295:  /// Set the rosout QoS.
+        -:  296:  /**
+        -:  297:   * The QoS settings to be used for the publisher on /rosout topic, if enabled.
+        -:  298:   */
+        -:  299:  RCLCPP_PUBLIC
+        -:  300:  NodeOptions &
+        -:  301:  rosout_qos(const rclcpp::QoS & rosout_qos);
+        -:  302:
+        -:  303:  /// Return a reference to the parameter_event_publisher_options.
+        -:  304:  RCLCPP_PUBLIC
+        -:  305:  const rclcpp::PublisherOptionsBase &
+        -:  306:  parameter_event_publisher_options() const;
+        -:  307:
+        -:  308:  /// Set the parameter_event_publisher_options, return this for parameter idiom.
+        -:  309:  /**
+        -:  310:   * The QoS settings to be used for the parameter event publisher, if enabled.
+        -:  311:   *
+        -:  312:   * \todo(wjwwood): make this take/store an instance of
+        -:  313:   *   rclcpp::PublisherOptionsWithAllocator<Allocator>, but to do that requires
+        -:  314:   *   NodeOptions to also be templated based on the Allocator type.
+        -:  315:   */
+        -:  316:  RCLCPP_PUBLIC
+        -:  317:  NodeOptions &
+        -:  318:  parameter_event_publisher_options(
+        -:  319:    const rclcpp::PublisherOptionsBase & parameter_event_publisher_options);
+        -:  320:
+        -:  321:  /// Return the allow_undeclared_parameters flag.
+        -:  322:  RCLCPP_PUBLIC
+        -:  323:  bool
+        -:  324:  allow_undeclared_parameters() const;
+        -:  325:
+        -:  326:  /// Set the allow_undeclared_parameters, return this for parameter idiom.
+        -:  327:  /**
+        -:  328:   * If true, allow any parameter name to be set on the node without first
+        -:  329:   * being declared.
+        -:  330:   * Otherwise, setting an undeclared parameter will raise an exception.
+        -:  331:   *
+        -:  332:   * This option being true does not affect parameter_overrides, as the first
+        -:  333:   * set action will implicitly declare the parameter and therefore consider
+        -:  334:   * any parameter overrides.
+        -:  335:   */
+        -:  336:  RCLCPP_PUBLIC
+        -:  337:  NodeOptions &
+        -:  338:  allow_undeclared_parameters(bool allow_undeclared_parameters);
+        -:  339:
+        -:  340:  /// Return the automatically_declare_parameters_from_overrides flag.
+        -:  341:  RCLCPP_PUBLIC
+        -:  342:  bool
+        -:  343:  automatically_declare_parameters_from_overrides() const;
+        -:  344:
+        -:  345:  /// Set the automatically_declare_parameters_from_overrides, return this.
+        -:  346:  /**
+        -:  347:   * If true, automatically iterate through the node's parameter overrides and
+        -:  348:   * implicitly declare any that have not already been declared.
+        -:  349:   * Otherwise, parameters passed to the node's parameter_overrides, and/or the
+        -:  350:   * global arguments (e.g. parameter overrides from a YAML file), which are
+        -:  351:   * not explicitly declared will not appear on the node at all, even if
+        -:  352:   * `allow_undeclared_parameters` is true.
+        -:  353:   * Parameter declaration from overrides is done in the node's base constructor,
+        -:  354:   * so the user must take care to check if the parameter is already (e.g.
+        -:  355:   * automatically) declared before declaring it themselves.
+        -:  356:   * Already declared parameters will not be re-declared, and parameters
+        -:  357:   * declared in this way will use the default constructed ParameterDescriptor.
+        -:  358:   */
+        -:  359:  RCLCPP_PUBLIC
+        -:  360:  NodeOptions &
+        -:  361:  automatically_declare_parameters_from_overrides(
+        -:  362:    bool automatically_declare_parameters_from_overrides);
+        -:  363:
+        -:  364:  /// Return the rcl_allocator_t to be used.
+        -:  365:  RCLCPP_PUBLIC
+        -:  366:  const rcl_allocator_t &
+        -:  367:  allocator() const;
+        -:  368:
+        -:  369:  /// Set the rcl_allocator_t to be used, may cause deallocation of existing rcl_node_options_t.
+        -:  370:  /**
+        -:  371:   * This will cause the internal rcl_node_options_t struct to be invalidated.
+        -:  372:   */
+        -:  373:  RCLCPP_PUBLIC
+        -:  374:  NodeOptions &
+        -:  375:  allocator(rcl_allocator_t allocator);
+        -:  376:
+        -:  377:private:
+        -:  378:  // This is mutable to allow for a const accessor which lazily creates the node options instance.
+        -:  379:  /// Underlying rcl_node_options structure.
+        -:  380:  mutable std::unique_ptr<rcl_node_options_t, void (*)(rcl_node_options_t *)> node_options_;
+        -:  381:
+        -:  382:  // IMPORTANT: if any of these default values are changed, please update the
+        -:  383:  // documentation in this class.
+        -:  384:
+        -:  385:  rclcpp::Context::SharedPtr context_ {
+        -:  386:    rclcpp::contexts::get_global_default_context()};
+        -:  387:
+        -:  388:  std::vector<std::string> arguments_ {};
+        -:  389:
+        -:  390:  std::vector<rclcpp::Parameter> parameter_overrides_ {};
+        -:  391:
+        -:  392:  bool use_global_arguments_ {true};
+        -:  393:
+        -:  394:  bool enable_rosout_ {true};
+        -:  395:
+        -:  396:  bool use_intra_process_comms_ {false};
+        -:  397:
+        -:  398:  bool enable_topic_statistics_ {false};
+        -:  399:
+        -:  400:  bool start_parameter_services_ {true};
+        -:  401:
+        -:  402:  bool start_parameter_event_publisher_ {true};
+        -:  403:
+        -:  404:  rclcpp::QoS clock_qos_ = rclcpp::ClockQoS();
+        -:  405:
+        -:  406:  bool use_clock_thread_ {true};
+        -:  407:
+        -:  408:  rclcpp::QoS parameter_event_qos_ = rclcpp::ParameterEventsQoS(
+        -:  409:    rclcpp::QoSInitialization::from_rmw(rmw_qos_profile_parameter_events)
+        -:  410:  );
+        -:  411:
+        -:  412:  rclcpp::QoS rosout_qos_ = rclcpp::RosoutQoS();
+        -:  413:
+        -:  414:  rclcpp::PublisherOptionsBase parameter_event_publisher_options_ = rclcpp::PublisherOptionsBase();
+        -:  415:
+        -:  416:  bool allow_undeclared_parameters_ {false};
+        -:  417:
+        -:  418:  bool automatically_declare_parameters_from_overrides_ {false};
+        -:  419:
+        -:  420:  rcl_allocator_t allocator_ {rcl_get_default_allocator()};
+        -:  421:};
+        -:  422:
+        -:  423:}  // namespace rclcpp
+        -:  424:
+        -:  425:#endif  // RCLCPP__NODE_OPTIONS_HPP_

@@ -1,0 +1,9 @@
+[ 20%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/node_run.cpp.o[0m
+[ 40%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o[0m
+[ 60%] [32m[1mLinking CXX executable imgprocess[0m
+/usr/bin/ld: CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o: in function `ImgProcess_node::ImgProcess_node(rclcpp::NodeOptions const&)':
+ImgProcess.cpp:(.text+0x622): undefined reference to `ImgProcess_node::cameraInfoCallback(std::shared_ptr<sensor_msgs::msg::CameraInfo_<std::allocator<void> > const> const&)'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/imgprocess.dir/build.make:291：imgprocess] 错误 1
+gmake[1]: *** [CMakeFiles/Makefile2:137：CMakeFiles/imgprocess.dir/all] 错误 2
+gmake: *** [Makefile:146：all] 错误 2

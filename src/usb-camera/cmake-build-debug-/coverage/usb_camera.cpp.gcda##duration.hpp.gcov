@@ -1,0 +1,172 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/duration.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2017 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__DURATION_HPP_
+        -:   16:#define RCLCPP__DURATION_HPP_
+        -:   17:
+        -:   18:#include <chrono>
+        -:   19:
+        -:   20:#include "builtin_interfaces/msg/duration.hpp"
+        -:   21:#include "rcl/time.h"
+        -:   22:#include "rclcpp/visibility_control.hpp"
+        -:   23:
+        -:   24:namespace rclcpp
+        -:   25:{
+        -:   26:class RCLCPP_PUBLIC Duration
+        -:   27:{
+        -:   28:public:
+        -:   29:  /// Duration constructor.
+        -:   30:  /**
+        -:   31:   * Initializes the time values for seconds and nanoseconds individually.
+        -:   32:   * Large values for nsecs are wrapped automatically with the remainder added to secs.
+        -:   33:   * Both inputs must be integers.
+        -:   34:   * Seconds can be negative.
+        -:   35:   *
+        -:   36:   * \param seconds time in seconds
+        -:   37:   * \param nanoseconds time in nanoseconds
+        -:   38:   */
+        -:   39:  Duration(int32_t seconds, uint32_t nanoseconds);
+        -:   40:
+        -:   41:  /// Construct duration from the specified std::chrono::nanoseconds.
+        -:   42:  explicit Duration(std::chrono::nanoseconds nanoseconds);
+        -:   43:
+        -:   44:  // This constructor matches any std::chrono value other than nanoseconds
+        -:   45:  // intentionally not using explicit to create a conversion constructor
+        -:   46:  template<class Rep, class Period>
+        -:   47:  // cppcheck-suppress noExplicitConstructor
+        -:   48:  Duration(const std::chrono::duration<Rep, Period> & duration)  // NOLINT(runtime/explicit)
+        -:   49:  : Duration(std::chrono::duration_cast<std::chrono::nanoseconds>(duration))
+        -:   50:  {}
+        -:   51:
+        -:   52:  // cppcheck-suppress noExplicitConstructor
+        -:   53:  Duration(const builtin_interfaces::msg::Duration & duration_msg);  // NOLINT(runtime/explicit)
+        -:   54:
+        -:   55:  /// Time constructor
+        -:   56:  /**
+        -:   57:   * \param duration rcl_duration_t structure to copy.
+        -:   58:   */
+        -:   59:  explicit Duration(const rcl_duration_t & duration);
+        -:   60:
+        -:   61:  Duration(const Duration & rhs);
+        -:   62:
+      68*:   63:  virtual ~Duration() = default;
+------------------
+_ZN6rclcpp8DurationD0Ev:
+function _ZN6rclcpp8DurationD0Ev called 0 returned 0% blocks executed 0%
+    #####:   63:  virtual ~Duration() = default;
+    %%%%%:   63-block  0
+call    0 never executed
+call    1 never executed
+------------------
+_ZN6rclcpp8DurationD2Ev:
+function _ZN6rclcpp8DurationD2Ev called 68 returned 100% blocks executed 100%
+       68:   63:  virtual ~Duration() = default;
+------------------
+        -:   64:
+        -:   65:  operator builtin_interfaces::msg::Duration() const;
+        -:   66:
+        -:   67:  // cppcheck-suppress operatorEq // this is a false positive from cppcheck
+        -:   68:  Duration &
+        -:   69:  operator=(const Duration & rhs);
+        -:   70:
+        -:   71:  Duration &
+        -:   72:  operator=(const builtin_interfaces::msg::Duration & duration_msg);
+        -:   73:
+        -:   74:  bool
+        -:   75:  operator==(const rclcpp::Duration & rhs) const;
+        -:   76:
+        -:   77:  bool
+        -:   78:  operator!=(const rclcpp::Duration & rhs) const;
+        -:   79:
+        -:   80:  bool
+        -:   81:  operator<(const rclcpp::Duration & rhs) const;
+        -:   82:
+        -:   83:  bool
+        -:   84:  operator<=(const rclcpp::Duration & rhs) const;
+        -:   85:
+        -:   86:  bool
+        -:   87:  operator>=(const rclcpp::Duration & rhs) const;
+        -:   88:
+        -:   89:  bool
+        -:   90:  operator>(const rclcpp::Duration & rhs) const;
+        -:   91:
+        -:   92:  Duration
+        -:   93:  operator+(const rclcpp::Duration & rhs) const;
+        -:   94:
+        -:   95:  Duration
+        -:   96:  operator-(const rclcpp::Duration & rhs) const;
+        -:   97:
+        -:   98:  /// Get the maximum representable value.
+        -:   99:  /**
+        -:  100:   * \return the maximum representable value
+        -:  101:   */
+        -:  102:  static
+        -:  103:  Duration
+        -:  104:  max();
+        -:  105:
+        -:  106:  Duration
+        -:  107:  operator*(double scale) const;
+        -:  108:
+        -:  109:  /// Get duration in nanosecods
+        -:  110:  /**
+        -:  111:   * \return the duration in nanoseconds as a rcl_duration_value_t.
+        -:  112:   */
+        -:  113:  rcl_duration_value_t
+        -:  114:  nanoseconds() const;
+        -:  115:
+        -:  116:  /// Get duration in seconds
+        -:  117:  /**
+        -:  118:   * \warning Depending on sizeof(double) there could be significant precision loss.
+        -:  119:   *   When an exact time is required use nanoseconds() instead.
+        -:  120:   * \return the duration in seconds as a floating point number.
+        -:  121:   */
+        -:  122:  double
+        -:  123:  seconds() const;
+        -:  124:
+        -:  125:  /// Create a duration object from a floating point number representing seconds
+        -:  126:  static Duration
+        -:  127:  from_seconds(double seconds);
+        -:  128:
+        -:  129:  /// Create a duration object from an integer number representing nanoseconds
+        -:  130:  static Duration
+        -:  131:  from_nanoseconds(rcl_duration_value_t nanoseconds);
+        -:  132:
+        -:  133:  static Duration
+        -:  134:  from_rmw_time(rmw_time_t duration);
+        -:  135:
+        -:  136:  /// Convert Duration into a std::chrono::Duration.
+        -:  137:  template<class DurationT>
+        -:  138:  DurationT
+        -:  139:  to_chrono() const
+        -:  140:  {
+        -:  141:    return std::chrono::duration_cast<DurationT>(std::chrono::nanoseconds(this->nanoseconds()));
+        -:  142:  }
+        -:  143:
+        -:  144:  /// Convert Duration into rmw_time_t.
+        -:  145:  rmw_time_t
+        -:  146:  to_rmw_time() const;
+        -:  147:
+        -:  148:private:
+        -:  149:  rcl_duration_t rcl_duration_;
+        -:  150:
+        -:  151:  Duration() = default;
+        -:  152:};
+        -:  153:
+        -:  154:}  // namespace rclcpp
+        -:  155:
+        -:  156:#endif  // RCLCPP__DURATION_HPP_

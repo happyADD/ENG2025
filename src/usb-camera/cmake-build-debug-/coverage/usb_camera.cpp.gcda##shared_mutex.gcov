@@ -1,0 +1,912 @@
+        -:    0:Source:/usr/include/c++/11/shared_mutex
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// <shared_mutex> -*- C++ -*-
+        -:    2:
+        -:    3:// Copyright (C) 2013-2021 Free Software Foundation, Inc.
+        -:    4://
+        -:    5:// This file is part of the GNU ISO C++ Library.  This library is free
+        -:    6:// software; you can redistribute it and/or modify it under the
+        -:    7:// terms of the GNU General Public License as published by the
+        -:    8:// Free Software Foundation; either version 3, or (at your option)
+        -:    9:// any later version.
+        -:   10:
+        -:   11:// This library is distributed in the hope that it will be useful,
+        -:   12:// but WITHOUT ANY WARRANTY; without even the implied warranty of
+        -:   13:// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        -:   14:// GNU General Public License for more details.
+        -:   15:
+        -:   16:// Under Section 7 of GPL version 3, you are granted additional
+        -:   17:// permissions described in the GCC Runtime Library Exception, version
+        -:   18:// 3.1, as published by the Free Software Foundation.
+        -:   19:
+        -:   20:// You should have received a copy of the GNU General Public License and
+        -:   21:// a copy of the GCC Runtime Library Exception along with this program;
+        -:   22:// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+        -:   23:// <http://www.gnu.org/licenses/>.
+        -:   24:
+        -:   25:/** @file include/shared_mutex
+        -:   26: *  This is a Standard C++ Library header.
+        -:   27: */
+        -:   28:
+        -:   29:#ifndef _GLIBCXX_SHARED_MUTEX
+        -:   30:#define _GLIBCXX_SHARED_MUTEX 1
+        -:   31:
+        -:   32:#pragma GCC system_header
+        -:   33:
+        -:   34:#if __cplusplus >= 201402L
+        -:   35:
+        -:   36:#include <chrono>
+        -:   37:#include <bits/functexcept.h>
+        -:   38:#include <bits/move.h>        // move, __exchange
+        -:   39:#include <bits/std_mutex.h>   // defer_lock_t
+        -:   40:
+        -:   41:#if ! (_GLIBCXX_USE_PTHREAD_RWLOCK_T && _GTHREAD_USE_MUTEX_TIMEDLOCK)
+        -:   42:# include <condition_variable>
+        -:   43:#endif
+        -:   44:
+        -:   45:namespace std _GLIBCXX_VISIBILITY(default)
+        -:   46:{
+        -:   47:_GLIBCXX_BEGIN_NAMESPACE_VERSION
+        -:   48:
+        -:   49:  /**
+        -:   50:   * @addtogroup mutexes
+        -:   51:   * @{
+        -:   52:   */
+        -:   53:
+        -:   54:#ifdef _GLIBCXX_HAS_GTHREADS
+        -:   55:
+        -:   56:#if __cplusplus >= 201703L
+        -:   57:#define __cpp_lib_shared_mutex 201505L
+        -:   58:  class shared_mutex;
+        -:   59:#endif
+        -:   60:
+        -:   61:#define __cpp_lib_shared_timed_mutex 201402L
+        -:   62:  class shared_timed_mutex;
+        -:   63:
+        -:   64:  /// @cond undocumented
+        -:   65:
+        -:   66:#if _GLIBCXX_USE_PTHREAD_RWLOCK_T
+        -:   67:#ifdef __gthrw
+        -:   68:#define _GLIBCXX_GTHRW(name) \
+        -:   69:  __gthrw(pthread_ ## name); \
+        -:   70:  static inline int \
+        -:   71:  __glibcxx_ ## name (pthread_rwlock_t *__rwlock) \
+        -:   72:  { \
+        -:   73:    if (__gthread_active_p ()) \
+        -:   74:      return __gthrw_(pthread_ ## name) (__rwlock); \
+        -:   75:    else \
+        -:   76:      return 0; \
+        -:   77:  }
+function _ZStL23__glibcxx_rwlock_rdlockP16pthread_rwlock_t called 0 returned 0% blocks executed 0%
+    #####:   78:  _GLIBCXX_GTHRW(rwlock_rdlock)
+    %%%%%:   78-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:   78-block  1
+call    3 never executed
+    %%%%%:   78-block  2
+        -:   79:  _GLIBCXX_GTHRW(rwlock_tryrdlock)
+        -:   80:  _GLIBCXX_GTHRW(rwlock_wrlock)
+        -:   81:  _GLIBCXX_GTHRW(rwlock_trywrlock)
+function _ZStL23__glibcxx_rwlock_unlockP16pthread_rwlock_t called 0 returned 0% blocks executed 0%
+    #####:   82:  _GLIBCXX_GTHRW(rwlock_unlock)
+    %%%%%:   82-block  0
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    %%%%%:   82-block  1
+call    3 never executed
+    %%%%%:   82-block  2
+        -:   83:# ifndef PTHREAD_RWLOCK_INITIALIZER
+        -:   84:  _GLIBCXX_GTHRW(rwlock_destroy)
+        -:   85:  __gthrw(pthread_rwlock_init);
+        -:   86:  static inline int
+        -:   87:  __glibcxx_rwlock_init (pthread_rwlock_t *__rwlock)
+        -:   88:  {
+        -:   89:    if (__gthread_active_p ())
+        -:   90:      return __gthrw_(pthread_rwlock_init) (__rwlock, NULL);
+        -:   91:    else
+        -:   92:      return 0;
+        -:   93:  }
+        -:   94:# endif
+        -:   95:# if _GTHREAD_USE_MUTEX_TIMEDLOCK
+        -:   96:   __gthrw(pthread_rwlock_timedrdlock);
+        -:   97:  static inline int
+        -:   98:  __glibcxx_rwlock_timedrdlock (pthread_rwlock_t *__rwlock,
+        -:   99:				const timespec *__ts)
+        -:  100:  {
+        -:  101:    if (__gthread_active_p ())
+        -:  102:      return __gthrw_(pthread_rwlock_timedrdlock) (__rwlock, __ts);
+        -:  103:    else
+        -:  104:      return 0;
+        -:  105:  }
+        -:  106:   __gthrw(pthread_rwlock_timedwrlock);
+        -:  107:  static inline int
+        -:  108:  __glibcxx_rwlock_timedwrlock (pthread_rwlock_t *__rwlock,
+        -:  109:				const timespec *__ts)
+        -:  110:  {
+        -:  111:    if (__gthread_active_p ())
+        -:  112:      return __gthrw_(pthread_rwlock_timedwrlock) (__rwlock, __ts);
+        -:  113:    else
+        -:  114:      return 0;
+        -:  115:  }
+        -:  116:# endif
+        -:  117:#else
+        -:  118:  static inline int
+        -:  119:  __glibcxx_rwlock_rdlock (pthread_rwlock_t *__rwlock)
+        -:  120:  { return pthread_rwlock_rdlock (__rwlock); }
+        -:  121:  static inline int
+        -:  122:  __glibcxx_rwlock_tryrdlock (pthread_rwlock_t *__rwlock)
+        -:  123:  { return pthread_rwlock_tryrdlock (__rwlock); }
+        -:  124:  static inline int
+        -:  125:  __glibcxx_rwlock_wrlock (pthread_rwlock_t *__rwlock)
+        -:  126:  { return pthread_rwlock_wrlock (__rwlock); }
+        -:  127:  static inline int
+        -:  128:  __glibcxx_rwlock_trywrlock (pthread_rwlock_t *__rwlock)
+        -:  129:  { return pthread_rwlock_trywrlock (__rwlock); }
+        -:  130:  static inline int
+        -:  131:  __glibcxx_rwlock_unlock (pthread_rwlock_t *__rwlock)
+        -:  132:  { return pthread_rwlock_unlock (__rwlock); }
+        -:  133:  static inline int
+        -:  134:  __glibcxx_rwlock_destroy(pthread_rwlock_t *__rwlock)
+        -:  135:  { return pthread_rwlock_destroy (__rwlock); }
+        -:  136:  static inline int
+        -:  137:  __glibcxx_rwlock_init(pthread_rwlock_t *__rwlock)
+        -:  138:  { return pthread_rwlock_init (__rwlock, NULL); }
+        -:  139:# if _GTHREAD_USE_MUTEX_TIMEDLOCK
+        -:  140:  static inline int
+        -:  141:  __glibcxx_rwlock_timedrdlock (pthread_rwlock_t *__rwlock,
+        -:  142:				const timespec *__ts)
+        -:  143:  { return pthread_rwlock_timedrdlock (__rwlock, __ts); }
+        -:  144:  static inline int
+        -:  145:  __glibcxx_rwlock_timedwrlock (pthread_rwlock_t *__rwlock,
+        -:  146:				const timespec *__ts)
+        -:  147:  { return pthread_rwlock_timedwrlock (__rwlock, __ts); }
+        -:  148:# endif
+        -:  149:#endif
+        -:  150:
+        -:  151:  /// A shared mutex type implemented using pthread_rwlock_t.
+        -:  152:  class __shared_mutex_pthread
+        -:  153:  {
+        -:  154:    friend class shared_timed_mutex;
+        -:  155:
+        -:  156:#ifdef PTHREAD_RWLOCK_INITIALIZER
+        -:  157:    pthread_rwlock_t	_M_rwlock = PTHREAD_RWLOCK_INITIALIZER;
+        -:  158:
+        -:  159:  public:
+        -:  160:    __shared_mutex_pthread() = default;
+        -:  161:    ~__shared_mutex_pthread() = default;
+        -:  162:#else
+        -:  163:    pthread_rwlock_t	_M_rwlock;
+        -:  164:
+        -:  165:  public:
+        -:  166:    __shared_mutex_pthread()
+        -:  167:    {
+        -:  168:      int __ret = __glibcxx_rwlock_init(&_M_rwlock);
+        -:  169:      if (__ret == ENOMEM)
+        -:  170:	__throw_bad_alloc();
+        -:  171:      else if (__ret == EAGAIN)
+        -:  172:	__throw_system_error(int(errc::resource_unavailable_try_again));
+        -:  173:      else if (__ret == EPERM)
+        -:  174:	__throw_system_error(int(errc::operation_not_permitted));
+        -:  175:      // Errors not handled: EBUSY, EINVAL
+        -:  176:      __glibcxx_assert(__ret == 0);
+        -:  177:    }
+        -:  178:
+        -:  179:    ~__shared_mutex_pthread()
+        -:  180:    {
+        -:  181:      int __ret __attribute((__unused__)) = __glibcxx_rwlock_destroy(&_M_rwlock);
+        -:  182:      // Errors not handled: EBUSY, EINVAL
+        -:  183:      __glibcxx_assert(__ret == 0);
+        -:  184:    }
+        -:  185:#endif
+        -:  186:
+        -:  187:    __shared_mutex_pthread(const __shared_mutex_pthread&) = delete;
+        -:  188:    __shared_mutex_pthread& operator=(const __shared_mutex_pthread&) = delete;
+        -:  189:
+        -:  190:    void
+        -:  191:    lock()
+        -:  192:    {
+        -:  193:      int __ret = __glibcxx_rwlock_wrlock(&_M_rwlock);
+        -:  194:      if (__ret == EDEADLK)
+        -:  195:	__throw_system_error(int(errc::resource_deadlock_would_occur));
+        -:  196:      // Errors not handled: EINVAL
+        -:  197:      __glibcxx_assert(__ret == 0);
+        -:  198:    }
+        -:  199:
+        -:  200:    bool
+        -:  201:    try_lock()
+        -:  202:    {
+        -:  203:      int __ret = __glibcxx_rwlock_trywrlock(&_M_rwlock);
+        -:  204:      if (__ret == EBUSY) return false;
+        -:  205:      // Errors not handled: EINVAL
+        -:  206:      __glibcxx_assert(__ret == 0);
+        -:  207:      return true;
+        -:  208:    }
+        -:  209:
+        -:  210:    void
+function _ZNSt22__shared_mutex_pthread6unlockEv called 0 returned 0% blocks executed 0%
+    #####:  211:    unlock()
+        -:  212:    {
+    #####:  213:      int __ret __attribute((__unused__)) = __glibcxx_rwlock_unlock(&_M_rwlock);
+    %%%%%:  213-block  0
+call    0 never executed
+        -:  214:      // Errors not handled: EPERM, EBUSY, EINVAL
+        -:  215:      __glibcxx_assert(__ret == 0);
+    #####:  216:    }
+        -:  217:
+        -:  218:    // Shared ownership
+        -:  219:
+        -:  220:    void
+function _ZNSt22__shared_mutex_pthread11lock_sharedEv called 0 returned 0% blocks executed 0%
+    #####:  221:    lock_shared()
+        -:  222:    {
+        -:  223:      int __ret;
+        -:  224:      // We retry if we exceeded the maximum number of read locks supported by
+        -:  225:      // the POSIX implementation; this can result in busy-waiting, but this
+        -:  226:      // is okay based on the current specification of forward progress
+        -:  227:      // guarantees by the standard.
+        -:  228:      do
+    #####:  229:	__ret = __glibcxx_rwlock_rdlock(&_M_rwlock);
+    %%%%%:  229-block  0
+call    0 never executed
+    #####:  230:      while (__ret == EAGAIN);
+branch  0 never executed
+branch  1 never executed
+    #####:  231:      if (__ret == EDEADLK)
+    %%%%%:  231-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  232:	__throw_system_error(int(errc::resource_deadlock_would_occur));
+    %%%%%:  232-block  0
+call    0 never executed
+        -:  233:      // Errors not handled: EINVAL
+        -:  234:      __glibcxx_assert(__ret == 0);
+    #####:  235:    }
+        -:  236:
+        -:  237:    bool
+        -:  238:    try_lock_shared()
+        -:  239:    {
+        -:  240:      int __ret = __glibcxx_rwlock_tryrdlock(&_M_rwlock);
+        -:  241:      // If the maximum number of read locks has been exceeded, we just fail
+        -:  242:      // to acquire the lock.  Unlike for lock(), we are not allowed to throw
+        -:  243:      // an exception.
+        -:  244:      if (__ret == EBUSY || __ret == EAGAIN) return false;
+        -:  245:      // Errors not handled: EINVAL
+        -:  246:      __glibcxx_assert(__ret == 0);
+        -:  247:      return true;
+        -:  248:    }
+        -:  249:
+        -:  250:    void
+function _ZNSt22__shared_mutex_pthread13unlock_sharedEv called 0 returned 0% blocks executed 0%
+    #####:  251:    unlock_shared()
+        -:  252:    {
+    #####:  253:      unlock();
+    %%%%%:  253-block  0
+call    0 never executed
+    #####:  254:    }
+        -:  255:
+        -:  256:    void* native_handle() { return &_M_rwlock; }
+        -:  257:  };
+        -:  258:#endif
+        -:  259:
+        -:  260:#if ! (_GLIBCXX_USE_PTHREAD_RWLOCK_T && _GTHREAD_USE_MUTEX_TIMEDLOCK)
+        -:  261:  /// A shared mutex type implemented using std::condition_variable.
+        -:  262:  class __shared_mutex_cv
+        -:  263:  {
+        -:  264:    friend class shared_timed_mutex;
+        -:  265:
+        -:  266:    // Based on Howard Hinnant's reference implementation from N2406.
+        -:  267:
+        -:  268:    // The high bit of _M_state is the write-entered flag which is set to
+        -:  269:    // indicate a writer has taken the lock or is queuing to take the lock.
+        -:  270:    // The remaining bits are the count of reader locks.
+        -:  271:    //
+        -:  272:    // To take a reader lock, block on gate1 while the write-entered flag is
+        -:  273:    // set or the maximum number of reader locks is held, then increment the
+        -:  274:    // reader lock count.
+        -:  275:    // To release, decrement the count, then if the write-entered flag is set
+        -:  276:    // and the count is zero then signal gate2 to wake a queued writer,
+        -:  277:    // otherwise if the maximum number of reader locks was held signal gate1
+        -:  278:    // to wake a reader.
+        -:  279:    //
+        -:  280:    // To take a writer lock, block on gate1 while the write-entered flag is
+        -:  281:    // set, then set the write-entered flag to start queueing, then block on
+        -:  282:    // gate2 while the number of reader locks is non-zero.
+        -:  283:    // To release, unset the write-entered flag and signal gate1 to wake all
+        -:  284:    // blocked readers and writers.
+        -:  285:    //
+        -:  286:    // This means that when no reader locks are held readers and writers get
+        -:  287:    // equal priority. When one or more reader locks is held a writer gets
+        -:  288:    // priority and no more reader locks can be taken while the writer is
+        -:  289:    // queued.
+        -:  290:
+        -:  291:    // Only locked when accessing _M_state or waiting on condition variables.
+        -:  292:    mutex		_M_mut;
+        -:  293:    // Used to block while write-entered is set or reader count at maximum.
+        -:  294:    condition_variable	_M_gate1;
+        -:  295:    // Used to block queued writers while reader count is non-zero.
+        -:  296:    condition_variable	_M_gate2;
+        -:  297:    // The write-entered flag and reader count.
+        -:  298:    unsigned		_M_state;
+        -:  299:
+        -:  300:    static constexpr unsigned _S_write_entered
+        -:  301:      = 1U << (sizeof(unsigned)*__CHAR_BIT__ - 1);
+        -:  302:    static constexpr unsigned _S_max_readers = ~_S_write_entered;
+        -:  303:
+        -:  304:    // Test whether the write-entered flag is set. _M_mut must be locked.
+        -:  305:    bool _M_write_entered() const { return _M_state & _S_write_entered; }
+        -:  306:
+        -:  307:    // The number of reader locks currently held. _M_mut must be locked.
+        -:  308:    unsigned _M_readers() const { return _M_state & _S_max_readers; }
+        -:  309:
+        -:  310:  public:
+        -:  311:    __shared_mutex_cv() : _M_state(0) {}
+        -:  312:
+        -:  313:    ~__shared_mutex_cv()
+        -:  314:    {
+        -:  315:      __glibcxx_assert( _M_state == 0 );
+        -:  316:    }
+        -:  317:
+        -:  318:    __shared_mutex_cv(const __shared_mutex_cv&) = delete;
+        -:  319:    __shared_mutex_cv& operator=(const __shared_mutex_cv&) = delete;
+        -:  320:
+        -:  321:    // Exclusive ownership
+        -:  322:
+        -:  323:    void
+        -:  324:    lock()
+        -:  325:    {
+        -:  326:      unique_lock<mutex> __lk(_M_mut);
+        -:  327:      // Wait until we can set the write-entered flag.
+        -:  328:      _M_gate1.wait(__lk, [=]{ return !_M_write_entered(); });
+        -:  329:      _M_state |= _S_write_entered;
+        -:  330:      // Then wait until there are no more readers.
+        -:  331:      _M_gate2.wait(__lk, [=]{ return _M_readers() == 0; });
+        -:  332:    }
+        -:  333:
+        -:  334:    bool
+        -:  335:    try_lock()
+        -:  336:    {
+        -:  337:      unique_lock<mutex> __lk(_M_mut, try_to_lock);
+        -:  338:      if (__lk.owns_lock() && _M_state == 0)
+        -:  339:	{
+        -:  340:	  _M_state = _S_write_entered;
+        -:  341:	  return true;
+        -:  342:	}
+        -:  343:      return false;
+        -:  344:    }
+        -:  345:
+        -:  346:    void
+        -:  347:    unlock()
+        -:  348:    {
+        -:  349:      lock_guard<mutex> __lk(_M_mut);
+        -:  350:      __glibcxx_assert( _M_write_entered() );
+        -:  351:      _M_state = 0;
+        -:  352:      // call notify_all() while mutex is held so that another thread can't
+        -:  353:      // lock and unlock the mutex then destroy *this before we make the call.
+        -:  354:      _M_gate1.notify_all();
+        -:  355:    }
+        -:  356:
+        -:  357:    // Shared ownership
+        -:  358:
+        -:  359:    void
+        -:  360:    lock_shared()
+        -:  361:    {
+        -:  362:      unique_lock<mutex> __lk(_M_mut);
+        -:  363:      _M_gate1.wait(__lk, [=]{ return _M_state < _S_max_readers; });
+        -:  364:      ++_M_state;
+        -:  365:    }
+        -:  366:
+        -:  367:    bool
+        -:  368:    try_lock_shared()
+        -:  369:    {
+        -:  370:      unique_lock<mutex> __lk(_M_mut, try_to_lock);
+        -:  371:      if (!__lk.owns_lock())
+        -:  372:	return false;
+        -:  373:      if (_M_state < _S_max_readers)
+        -:  374:	{
+        -:  375:	  ++_M_state;
+        -:  376:	  return true;
+        -:  377:	}
+        -:  378:      return false;
+        -:  379:    }
+        -:  380:
+        -:  381:    void
+        -:  382:    unlock_shared()
+        -:  383:    {
+        -:  384:      lock_guard<mutex> __lk(_M_mut);
+        -:  385:      __glibcxx_assert( _M_readers() > 0 );
+        -:  386:      auto __prev = _M_state--;
+        -:  387:      if (_M_write_entered())
+        -:  388:	{
+        -:  389:	  // Wake the queued writer if there are no more readers.
+        -:  390:	  if (_M_readers() == 0)
+        -:  391:	    _M_gate2.notify_one();
+        -:  392:	  // No need to notify gate1 because we give priority to the queued
+        -:  393:	  // writer, and that writer will eventually notify gate1 after it
+        -:  394:	  // clears the write-entered flag.
+        -:  395:	}
+        -:  396:      else
+        -:  397:	{
+        -:  398:	  // Wake any thread that was blocked on reader overflow.
+        -:  399:	  if (__prev == _S_max_readers)
+        -:  400:	    _M_gate1.notify_one();
+        -:  401:	}
+        -:  402:    }
+        -:  403:  };
+        -:  404:#endif
+        -:  405:  /// @endcond
+        -:  406:
+        -:  407:#if __cplusplus >= 201703L
+        -:  408:  /// The standard shared mutex type.
+        -:  409:  class shared_mutex
+        -:  410:  {
+        -:  411:  public:
+        -:  412:    shared_mutex() = default;
+        -:  413:    ~shared_mutex() = default;
+        -:  414:
+        -:  415:    shared_mutex(const shared_mutex&) = delete;
+        -:  416:    shared_mutex& operator=(const shared_mutex&) = delete;
+        -:  417:
+        -:  418:    // Exclusive ownership
+        -:  419:
+        -:  420:    void lock() { _M_impl.lock(); }
+        -:  421:    bool try_lock() { return _M_impl.try_lock(); }
+        -:  422:    void unlock() { _M_impl.unlock(); }
+        -:  423:
+        -:  424:    // Shared ownership
+        -:  425:
+        -:  426:    void lock_shared() { _M_impl.lock_shared(); }
+        -:  427:    bool try_lock_shared() { return _M_impl.try_lock_shared(); }
+        -:  428:    void unlock_shared() { _M_impl.unlock_shared(); }
+        -:  429:
+        -:  430:#if _GLIBCXX_USE_PTHREAD_RWLOCK_T
+        -:  431:    typedef void* native_handle_type;
+        -:  432:    native_handle_type native_handle() { return _M_impl.native_handle(); }
+        -:  433:
+        -:  434:  private:
+        -:  435:    __shared_mutex_pthread _M_impl;
+        -:  436:#else
+        -:  437:  private:
+        -:  438:    __shared_mutex_cv _M_impl;
+        -:  439:#endif
+        -:  440:  };
+        -:  441:#endif // C++17
+        -:  442:
+        -:  443:  /// @cond undocumented
+        -:  444:#if _GLIBCXX_USE_PTHREAD_RWLOCK_T && _GTHREAD_USE_MUTEX_TIMEDLOCK
+        -:  445:  using __shared_timed_mutex_base = __shared_mutex_pthread;
+        -:  446:#else
+        -:  447:  using __shared_timed_mutex_base = __shared_mutex_cv;
+        -:  448:#endif
+        -:  449:  /// @endcond
+        -:  450:
+        -:  451:  /// The standard shared timed mutex type.
+        -:  452:  class shared_timed_mutex
+        -:  453:  : private __shared_timed_mutex_base
+        -:  454:  {
+        -:  455:    using _Base = __shared_timed_mutex_base;
+        -:  456:
+        -:  457:    // Must use the same clock as condition_variable for __shared_mutex_cv.
+        -:  458:#ifdef _GLIBCXX_USE_PTHREAD_RWLOCK_CLOCKLOCK
+        -:  459:    using __clock_t = chrono::steady_clock;
+        -:  460:#else
+        -:  461:    using __clock_t = chrono::system_clock;
+        -:  462:#endif
+        -:  463:
+        -:  464:  public:
+        -:  465:    shared_timed_mutex() = default;
+        -:  466:    ~shared_timed_mutex() = default;
+        -:  467:
+        -:  468:    shared_timed_mutex(const shared_timed_mutex&) = delete;
+        -:  469:    shared_timed_mutex& operator=(const shared_timed_mutex&) = delete;
+        -:  470:
+        -:  471:    // Exclusive ownership
+        -:  472:
+        -:  473:    void lock() { _Base::lock(); }
+        -:  474:    bool try_lock() { return _Base::try_lock(); }
+        -:  475:    void unlock() { _Base::unlock(); }
+        -:  476:
+        -:  477:    template<typename _Rep, typename _Period>
+        -:  478:      bool
+        -:  479:      try_lock_for(const chrono::duration<_Rep, _Period>& __rtime)
+        -:  480:      {
+        -:  481:	auto __rt = chrono::duration_cast<__clock_t::duration>(__rtime);
+        -:  482:	if (ratio_greater<__clock_t::period, _Period>())
+        -:  483:	  ++__rt;
+        -:  484:	return try_lock_until(__clock_t::now() + __rt);
+        -:  485:      }
+        -:  486:
+        -:  487:    // Shared ownership
+        -:  488:
+function _ZNSt18shared_timed_mutex11lock_sharedEv called 0 returned 0% blocks executed 0%
+    #####:  489:    void lock_shared() { _Base::lock_shared(); }
+    %%%%%:  489-block  0
+call    0 never executed
+        -:  490:    bool try_lock_shared() { return _Base::try_lock_shared(); }
+function _ZNSt18shared_timed_mutex13unlock_sharedEv called 0 returned 0% blocks executed 0%
+    #####:  491:    void unlock_shared() { _Base::unlock_shared(); }
+    %%%%%:  491-block  0
+call    0 never executed
+        -:  492:
+        -:  493:    template<typename _Rep, typename _Period>
+        -:  494:      bool
+        -:  495:      try_lock_shared_for(const chrono::duration<_Rep, _Period>& __rtime)
+        -:  496:      {
+        -:  497:	auto __rt = chrono::duration_cast<__clock_t::duration>(__rtime);
+        -:  498:	if (ratio_greater<__clock_t::period, _Period>())
+        -:  499:	  ++__rt;
+        -:  500:	return try_lock_shared_until(__clock_t::now() + __rt);
+        -:  501:      }
+        -:  502:
+        -:  503:#if _GLIBCXX_USE_PTHREAD_RWLOCK_T && _GTHREAD_USE_MUTEX_TIMEDLOCK
+        -:  504:
+        -:  505:    // Exclusive ownership
+        -:  506:
+        -:  507:    template<typename _Duration>
+        -:  508:      bool
+        -:  509:      try_lock_until(const chrono::time_point<chrono::system_clock,
+        -:  510:		     _Duration>& __atime)
+        -:  511:      {
+        -:  512:	auto __s = chrono::time_point_cast<chrono::seconds>(__atime);
+        -:  513:	auto __ns = chrono::duration_cast<chrono::nanoseconds>(__atime - __s);
+        -:  514:
+        -:  515:	__gthread_time_t __ts =
+        -:  516:	  {
+        -:  517:	    static_cast<std::time_t>(__s.time_since_epoch().count()),
+        -:  518:	    static_cast<long>(__ns.count())
+        -:  519:	  };
+        -:  520:
+        -:  521:	int __ret = __glibcxx_rwlock_timedwrlock(&_M_rwlock, &__ts);
+        -:  522:	// On self-deadlock, we just fail to acquire the lock.  Technically,
+        -:  523:	// the program violated the precondition.
+        -:  524:	if (__ret == ETIMEDOUT || __ret == EDEADLK)
+        -:  525:	  return false;
+        -:  526:	// Errors not handled: EINVAL
+        -:  527:	__glibcxx_assert(__ret == 0);
+        -:  528:	return true;
+        -:  529:      }
+        -:  530:
+        -:  531:#ifdef _GLIBCXX_USE_PTHREAD_RWLOCK_CLOCKLOCK
+        -:  532:    template<typename _Duration>
+        -:  533:      bool
+        -:  534:      try_lock_until(const chrono::time_point<chrono::steady_clock,
+        -:  535:		   _Duration>& __atime)
+        -:  536:      {
+        -:  537:	auto __s = chrono::time_point_cast<chrono::seconds>(__atime);
+        -:  538:	auto __ns = chrono::duration_cast<chrono::nanoseconds>(__atime - __s);
+        -:  539:
+        -:  540:	__gthread_time_t __ts =
+        -:  541:	  {
+        -:  542:	    static_cast<std::time_t>(__s.time_since_epoch().count()),
+        -:  543:	    static_cast<long>(__ns.count())
+        -:  544:	  };
+        -:  545:
+        -:  546:	int __ret = pthread_rwlock_clockwrlock(&_M_rwlock, CLOCK_MONOTONIC,
+        -:  547:					       &__ts);
+        -:  548:	// On self-deadlock, we just fail to acquire the lock.  Technically,
+        -:  549:	// the program violated the precondition.
+        -:  550:	if (__ret == ETIMEDOUT || __ret == EDEADLK)
+        -:  551:	  return false;
+        -:  552:	// Errors not handled: EINVAL
+        -:  553:	__glibcxx_assert(__ret == 0);
+        -:  554:	return true;
+        -:  555:      }
+        -:  556:#endif
+        -:  557:
+        -:  558:    template<typename _Clock, typename _Duration>
+        -:  559:      bool
+        -:  560:      try_lock_until(const chrono::time_point<_Clock, _Duration>& __atime)
+        -:  561:      {
+        -:  562:#if __cplusplus > 201703L
+        -:  563:	static_assert(chrono::is_clock_v<_Clock>);
+        -:  564:#endif
+        -:  565:	// The user-supplied clock may not tick at the same rate as
+        -:  566:	// steady_clock, so we must loop in order to guarantee that
+        -:  567:	// the timeout has expired before returning false.
+        -:  568:	typename _Clock::time_point __now = _Clock::now();
+        -:  569:	do {
+        -:  570:	    auto __rtime = __atime - __now;
+        -:  571:	    if (try_lock_for(__rtime))
+        -:  572:	      return true;
+        -:  573:	    __now = _Clock::now();
+        -:  574:	} while (__atime > __now);
+        -:  575:	return false;
+        -:  576:      }
+        -:  577:
+        -:  578:    // Shared ownership
+        -:  579:
+        -:  580:    template<typename _Duration>
+        -:  581:      bool
+        -:  582:      try_lock_shared_until(const chrono::time_point<chrono::system_clock,
+        -:  583:			    _Duration>& __atime)
+        -:  584:      {
+        -:  585:	auto __s = chrono::time_point_cast<chrono::seconds>(__atime);
+        -:  586:	auto __ns = chrono::duration_cast<chrono::nanoseconds>(__atime - __s);
+        -:  587:
+        -:  588:	__gthread_time_t __ts =
+        -:  589:	  {
+        -:  590:	    static_cast<std::time_t>(__s.time_since_epoch().count()),
+        -:  591:	    static_cast<long>(__ns.count())
+        -:  592:	  };
+        -:  593:
+        -:  594:	int __ret;
+        -:  595:	// Unlike for lock(), we are not allowed to throw an exception so if
+        -:  596:	// the maximum number of read locks has been exceeded, or we would
+        -:  597:	// deadlock, we just try to acquire the lock again (and will time out
+        -:  598:	// eventually).
+        -:  599:	// In cases where we would exceed the maximum number of read locks
+        -:  600:	// throughout the whole time until the timeout, we will fail to
+        -:  601:	// acquire the lock even if it would be logically free; however, this
+        -:  602:	// is allowed by the standard, and we made a "strong effort"
+        -:  603:	// (see C++14 30.4.1.4p26).
+        -:  604:	// For cases where the implementation detects a deadlock we
+        -:  605:	// intentionally block and timeout so that an early return isn't
+        -:  606:	// mistaken for a spurious failure, which might help users realise
+        -:  607:	// there is a deadlock.
+        -:  608:	do
+        -:  609:	  __ret = __glibcxx_rwlock_timedrdlock(&_M_rwlock, &__ts);
+        -:  610:	while (__ret == EAGAIN || __ret == EDEADLK);
+        -:  611:	if (__ret == ETIMEDOUT)
+        -:  612:	  return false;
+        -:  613:	// Errors not handled: EINVAL
+        -:  614:	__glibcxx_assert(__ret == 0);
+        -:  615:	return true;
+        -:  616:      }
+        -:  617:
+        -:  618:#ifdef _GLIBCXX_USE_PTHREAD_RWLOCK_CLOCKLOCK
+        -:  619:    template<typename _Duration>
+        -:  620:      bool
+        -:  621:      try_lock_shared_until(const chrono::time_point<chrono::steady_clock,
+        -:  622:			    _Duration>& __atime)
+        -:  623:      {
+        -:  624:	auto __s = chrono::time_point_cast<chrono::seconds>(__atime);
+        -:  625:	auto __ns = chrono::duration_cast<chrono::nanoseconds>(__atime - __s);
+        -:  626:
+        -:  627:	__gthread_time_t __ts =
+        -:  628:	  {
+        -:  629:	    static_cast<std::time_t>(__s.time_since_epoch().count()),
+        -:  630:	    static_cast<long>(__ns.count())
+        -:  631:	  };
+        -:  632:
+        -:  633:	int __ret = pthread_rwlock_clockrdlock(&_M_rwlock, CLOCK_MONOTONIC,
+        -:  634:					       &__ts);
+        -:  635:	// On self-deadlock, we just fail to acquire the lock.  Technically,
+        -:  636:	// the program violated the precondition.
+        -:  637:	if (__ret == ETIMEDOUT || __ret == EDEADLK)
+        -:  638:	  return false;
+        -:  639:	// Errors not handled: EINVAL
+        -:  640:	__glibcxx_assert(__ret == 0);
+        -:  641:	return true;
+        -:  642:      }
+        -:  643:#endif
+        -:  644:
+        -:  645:    template<typename _Clock, typename _Duration>
+        -:  646:      bool
+        -:  647:      try_lock_shared_until(const chrono::time_point<_Clock,
+        -:  648:						     _Duration>& __atime)
+        -:  649:      {
+        -:  650:#if __cplusplus > 201703L
+        -:  651:	static_assert(chrono::is_clock_v<_Clock>);
+        -:  652:#endif
+        -:  653:	// The user-supplied clock may not tick at the same rate as
+        -:  654:	// steady_clock, so we must loop in order to guarantee that
+        -:  655:	// the timeout has expired before returning false.
+        -:  656:	typename _Clock::time_point __now = _Clock::now();
+        -:  657:	do {
+        -:  658:	    auto __rtime = __atime - __now;
+        -:  659:	    if (try_lock_shared_for(__rtime))
+        -:  660:	      return true;
+        -:  661:	    __now = _Clock::now();
+        -:  662:	} while (__atime > __now);
+        -:  663:	return false;
+        -:  664:      }
+        -:  665:
+        -:  666:#else // ! (_GLIBCXX_USE_PTHREAD_RWLOCK_T && _GTHREAD_USE_MUTEX_TIMEDLOCK)
+        -:  667:
+        -:  668:    // Exclusive ownership
+        -:  669:
+        -:  670:    template<typename _Clock, typename _Duration>
+        -:  671:      bool
+        -:  672:      try_lock_until(const chrono::time_point<_Clock, _Duration>& __abs_time)
+        -:  673:      {
+        -:  674:	unique_lock<mutex> __lk(_M_mut);
+        -:  675:	if (!_M_gate1.wait_until(__lk, __abs_time,
+        -:  676:				 [=]{ return !_M_write_entered(); }))
+        -:  677:	  {
+        -:  678:	    return false;
+        -:  679:	  }
+        -:  680:	_M_state |= _S_write_entered;
+        -:  681:	if (!_M_gate2.wait_until(__lk, __abs_time,
+        -:  682:				 [=]{ return _M_readers() == 0; }))
+        -:  683:	  {
+        -:  684:	    _M_state ^= _S_write_entered;
+        -:  685:	    // Wake all threads blocked while the write-entered flag was set.
+        -:  686:	    _M_gate1.notify_all();
+        -:  687:	    return false;
+        -:  688:	  }
+        -:  689:	return true;
+        -:  690:      }
+        -:  691:
+        -:  692:    // Shared ownership
+        -:  693:
+        -:  694:    template <typename _Clock, typename _Duration>
+        -:  695:      bool
+        -:  696:      try_lock_shared_until(const chrono::time_point<_Clock,
+        -:  697:						     _Duration>& __abs_time)
+        -:  698:      {
+        -:  699:	unique_lock<mutex> __lk(_M_mut);
+        -:  700:	if (!_M_gate1.wait_until(__lk, __abs_time,
+        -:  701:				 [=]{ return _M_state < _S_max_readers; }))
+        -:  702:	  {
+        -:  703:	    return false;
+        -:  704:	  }
+        -:  705:	++_M_state;
+        -:  706:	return true;
+        -:  707:      }
+        -:  708:
+        -:  709:#endif // _GLIBCXX_USE_PTHREAD_RWLOCK_T && _GTHREAD_USE_MUTEX_TIMEDLOCK
+        -:  710:  };
+        -:  711:#endif // _GLIBCXX_HAS_GTHREADS
+        -:  712:
+        -:  713:  /// shared_lock
+        -:  714:  template<typename _Mutex>
+        -:  715:    class shared_lock
+        -:  716:    {
+        -:  717:    public:
+        -:  718:      typedef _Mutex mutex_type;
+        -:  719:
+        -:  720:      // Shared locking
+        -:  721:
+        -:  722:      shared_lock() noexcept : _M_pm(nullptr), _M_owns(false) { }
+        -:  723:
+        -:  724:      explicit
+function _ZNSt11shared_lockISt18shared_timed_mutexEC2ERS0_ called 0 returned 0% blocks executed 0%
+    #####:  725:      shared_lock(mutex_type& __m)
+    #####:  726:      : _M_pm(std::__addressof(__m)), _M_owns(true)
+    %%%%%:  726-block  0
+call    0 never executed
+    #####:  727:      { __m.lock_shared(); }
+call    0 never executed
+        -:  728:
+        -:  729:      shared_lock(mutex_type& __m, defer_lock_t) noexcept
+        -:  730:      : _M_pm(std::__addressof(__m)), _M_owns(false) { }
+        -:  731:
+        -:  732:      shared_lock(mutex_type& __m, try_to_lock_t)
+        -:  733:      : _M_pm(std::__addressof(__m)), _M_owns(__m.try_lock_shared()) { }
+        -:  734:
+        -:  735:      shared_lock(mutex_type& __m, adopt_lock_t)
+        -:  736:      : _M_pm(std::__addressof(__m)), _M_owns(true) { }
+        -:  737:
+        -:  738:      template<typename _Clock, typename _Duration>
+        -:  739:	shared_lock(mutex_type& __m,
+        -:  740:		    const chrono::time_point<_Clock, _Duration>& __abs_time)
+        -:  741:      : _M_pm(std::__addressof(__m)),
+        -:  742:	_M_owns(__m.try_lock_shared_until(__abs_time)) { }
+        -:  743:
+        -:  744:      template<typename _Rep, typename _Period>
+        -:  745:	shared_lock(mutex_type& __m,
+        -:  746:		    const chrono::duration<_Rep, _Period>& __rel_time)
+        -:  747:      : _M_pm(std::__addressof(__m)),
+        -:  748:	_M_owns(__m.try_lock_shared_for(__rel_time)) { }
+        -:  749:
+function _ZNSt11shared_lockISt18shared_timed_mutexED2Ev called 0 returned 0% blocks executed 0%
+    #####:  750:      ~shared_lock()
+        -:  751:      {
+    #####:  752:	if (_M_owns)
+    %%%%%:  752-block  0
+branch  0 never executed
+branch  1 never executed
+    #####:  753:	  _M_pm->unlock_shared();
+    %%%%%:  753-block  0
+call    0 never executed
+    #####:  754:      }
+        -:  755:
+        -:  756:      shared_lock(shared_lock const&) = delete;
+        -:  757:      shared_lock& operator=(shared_lock const&) = delete;
+        -:  758:
+        -:  759:      shared_lock(shared_lock&& __sl) noexcept : shared_lock()
+        -:  760:      { swap(__sl); }
+        -:  761:
+        -:  762:      shared_lock&
+        -:  763:      operator=(shared_lock&& __sl) noexcept
+        -:  764:      {
+        -:  765:	shared_lock(std::move(__sl)).swap(*this);
+        -:  766:	return *this;
+        -:  767:      }
+        -:  768:
+        -:  769:      void
+        -:  770:      lock()
+        -:  771:      {
+        -:  772:	_M_lockable();
+        -:  773:	_M_pm->lock_shared();
+        -:  774:	_M_owns = true;
+        -:  775:      }
+        -:  776:
+        -:  777:      bool
+        -:  778:      try_lock()
+        -:  779:      {
+        -:  780:	_M_lockable();
+        -:  781:	return _M_owns = _M_pm->try_lock_shared();
+        -:  782:      }
+        -:  783:
+        -:  784:      template<typename _Rep, typename _Period>
+        -:  785:	bool
+        -:  786:	try_lock_for(const chrono::duration<_Rep, _Period>& __rel_time)
+        -:  787:	{
+        -:  788:	  _M_lockable();
+        -:  789:	  return _M_owns = _M_pm->try_lock_shared_for(__rel_time);
+        -:  790:	}
+        -:  791:
+        -:  792:      template<typename _Clock, typename _Duration>
+        -:  793:	bool
+        -:  794:	try_lock_until(const chrono::time_point<_Clock, _Duration>& __abs_time)
+        -:  795:	{
+        -:  796:	  _M_lockable();
+        -:  797:	  return _M_owns = _M_pm->try_lock_shared_until(__abs_time);
+        -:  798:	}
+        -:  799:
+        -:  800:      void
+        -:  801:      unlock()
+        -:  802:      {
+        -:  803:	if (!_M_owns)
+        -:  804:	  __throw_system_error(int(errc::resource_deadlock_would_occur));
+        -:  805:	_M_pm->unlock_shared();
+        -:  806:	_M_owns = false;
+        -:  807:      }
+        -:  808:
+        -:  809:      // Setters
+        -:  810:
+        -:  811:      void
+        -:  812:      swap(shared_lock& __u) noexcept
+        -:  813:      {
+        -:  814:	std::swap(_M_pm, __u._M_pm);
+        -:  815:	std::swap(_M_owns, __u._M_owns);
+        -:  816:      }
+        -:  817:
+        -:  818:      mutex_type*
+        -:  819:      release() noexcept
+        -:  820:      {
+        -:  821:	_M_owns = false;
+        -:  822:	return std::__exchange(_M_pm, nullptr);
+        -:  823:      }
+        -:  824:
+        -:  825:      // Getters
+        -:  826:
+        -:  827:      bool owns_lock() const noexcept { return _M_owns; }
+        -:  828:
+        -:  829:      explicit operator bool() const noexcept { return _M_owns; }
+        -:  830:
+        -:  831:      mutex_type* mutex() const noexcept { return _M_pm; }
+        -:  832:
+        -:  833:    private:
+        -:  834:      void
+        -:  835:      _M_lockable() const
+        -:  836:      {
+        -:  837:	if (_M_pm == nullptr)
+        -:  838:	  __throw_system_error(int(errc::operation_not_permitted));
+        -:  839:	if (_M_owns)
+        -:  840:	  __throw_system_error(int(errc::resource_deadlock_would_occur));
+        -:  841:      }
+        -:  842:
+        -:  843:      mutex_type*	_M_pm;
+        -:  844:      bool		_M_owns;
+        -:  845:    };
+        -:  846:
+        -:  847:  /// Swap specialization for shared_lock
+        -:  848:  /// @relates shared_mutex
+        -:  849:  template<typename _Mutex>
+        -:  850:    void
+        -:  851:    swap(shared_lock<_Mutex>& __x, shared_lock<_Mutex>& __y) noexcept
+        -:  852:    { __x.swap(__y); }
+        -:  853:
+        -:  854:  /// @} group mutexes
+        -:  855:_GLIBCXX_END_NAMESPACE_VERSION
+        -:  856:} // namespace
+        -:  857:
+        -:  858:#endif // C++14
+        -:  859:
+        -:  860:#endif // _GLIBCXX_SHARED_MUTEX

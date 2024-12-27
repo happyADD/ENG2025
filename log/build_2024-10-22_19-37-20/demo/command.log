@@ -1,0 +1,6 @@
+Invoking command in '/home/dcy/ENG2025/rosdemo/build/demo': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG2025/rosdemo/src/demo -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG2025/rosdemo/install/demo
+Invoked command in '/home/dcy/ENG2025/rosdemo/build/demo' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake /home/dcy/ENG2025/rosdemo/src/demo -DCMAKE_INSTALL_PREFIX=/home/dcy/ENG2025/rosdemo/install/demo
+Invoking command in '/home/dcy/ENG2025/rosdemo/build/demo': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG2025/rosdemo/build/demo -- -j16 -l16
+Invoked command in '/home/dcy/ENG2025/rosdemo/build/demo' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG2025/rosdemo/build/demo -- -j16 -l16
+Invoking command in '/home/dcy/ENG2025/rosdemo/build/demo': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG2025/rosdemo/build/demo
+Invoked command in '/home/dcy/ENG2025/rosdemo/build/demo' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG2025/rosdemo/build/demo

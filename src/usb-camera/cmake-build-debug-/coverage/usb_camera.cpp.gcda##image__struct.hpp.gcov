@@ -1,0 +1,243 @@
+        -:    0:Source:/opt/ros/humble/include/sensor_msgs/sensor_msgs/msg/detail/image__struct.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// generated from rosidl_generator_cpp/resource/idl__struct.hpp.em
+        -:    2:// with input from sensor_msgs:msg/Image.idl
+        -:    3:// generated code does not contain a copyright notice
+        -:    4:
+        -:    5:#ifndef SENSOR_MSGS__MSG__DETAIL__IMAGE__STRUCT_HPP_
+        -:    6:#define SENSOR_MSGS__MSG__DETAIL__IMAGE__STRUCT_HPP_
+        -:    7:
+        -:    8:#include <algorithm>
+        -:    9:#include <array>
+        -:   10:#include <memory>
+        -:   11:#include <string>
+        -:   12:#include <vector>
+        -:   13:
+        -:   14:#include "rosidl_runtime_cpp/bounded_vector.hpp"
+        -:   15:#include "rosidl_runtime_cpp/message_initialization.hpp"
+        -:   16:
+        -:   17:
+        -:   18:// Include directives for member types
+        -:   19:// Member 'header'
+        -:   20:#include "std_msgs/msg/detail/header__struct.hpp"
+        -:   21:
+        -:   22:#ifndef _WIN32
+        -:   23:# define DEPRECATED__sensor_msgs__msg__Image __attribute__((deprecated))
+        -:   24:#else
+        -:   25:# define DEPRECATED__sensor_msgs__msg__Image __declspec(deprecated)
+        -:   26:#endif
+        -:   27:
+        -:   28:namespace sensor_msgs
+        -:   29:{
+        -:   30:
+        -:   31:namespace msg
+        -:   32:{
+        -:   33:
+        -:   34:// message struct
+        -:   35:template<class ContainerAllocator>
+        -:   36:struct Image_
+        -:   37:{
+        -:   38:  using Type = Image_<ContainerAllocator>;
+        -:   39:
+function _ZN11sensor_msgs3msg6Image_ISaIvEEC2EN18rosidl_runtime_cpp21MessageInitializationE called 34 returned 100% blocks executed 57%
+       34:   40:  explicit Image_(rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
+       34:   41:  : header(_init)
+       34:   41-block  0
+call    0 returned 34
+call    1 returned 34
+call    2 returned 34
+        -:   42:  {
+      34*:   43:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+branch  0 taken 0 (fallthrough)
+branch  1 taken 34
+    %%%%%:   43-block  0
+branch  2 never executed
+branch  3 never executed
+        -:   44:      rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
+        -:   45:    {
+       34:   46:      this->height = 0ul;
+       34:   47:      this->width = 0ul;
+       34:   48:      this->encoding = "";
+       34:   48-block  0
+call    0 returned 34
+branch  1 taken 34 (fallthrough)
+branch  2 taken 0 (throw)
+       34:   49:      this->is_bigendian = 0;
+       34:   50:      this->step = 0ul;
+       34:   50-block  0
+        -:   51:    }
+       34:   52:  }
+       34:   52-block  0
+    $$$$$:   52-block  1
+call    0 never executed
+    $$$$$:   52-block  2
+call    1 never executed
+    $$$$$:   52-block  3
+call    2 never executed
+        -:   53:
+        -:   54:  explicit Image_(const ContainerAllocator & _alloc, rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
+        -:   55:  : header(_alloc, _init),
+        -:   56:    encoding(_alloc)
+        -:   57:  {
+        -:   58:    if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
+        -:   59:      rosidl_runtime_cpp::MessageInitialization::ZERO == _init)
+        -:   60:    {
+        -:   61:      this->height = 0ul;
+        -:   62:      this->width = 0ul;
+        -:   63:      this->encoding = "";
+        -:   64:      this->is_bigendian = 0;
+        -:   65:      this->step = 0ul;
+        -:   66:    }
+        -:   67:  }
+        -:   68:
+        -:   69:  // field types and members
+        -:   70:  using _header_type =
+        -:   71:    std_msgs::msg::Header_<ContainerAllocator>;
+        -:   72:  _header_type header;
+        -:   73:  using _height_type =
+        -:   74:    uint32_t;
+        -:   75:  _height_type height;
+        -:   76:  using _width_type =
+        -:   77:    uint32_t;
+        -:   78:  _width_type width;
+        -:   79:  using _encoding_type =
+        -:   80:    std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>;
+        -:   81:  _encoding_type encoding;
+        -:   82:  using _is_bigendian_type =
+        -:   83:    uint8_t;
+        -:   84:  _is_bigendian_type is_bigendian;
+        -:   85:  using _step_type =
+        -:   86:    uint32_t;
+        -:   87:  _step_type step;
+        -:   88:  using _data_type =
+        -:   89:    std::vector<uint8_t, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<uint8_t>>;
+        -:   90:  _data_type data;
+        -:   91:
+        -:   92:  // setters for named parameter idiom
+        -:   93:  Type & set__header(
+        -:   94:    const std_msgs::msg::Header_<ContainerAllocator> & _arg)
+        -:   95:  {
+        -:   96:    this->header = _arg;
+        -:   97:    return *this;
+        -:   98:  }
+        -:   99:  Type & set__height(
+        -:  100:    const uint32_t & _arg)
+        -:  101:  {
+        -:  102:    this->height = _arg;
+        -:  103:    return *this;
+        -:  104:  }
+        -:  105:  Type & set__width(
+        -:  106:    const uint32_t & _arg)
+        -:  107:  {
+        -:  108:    this->width = _arg;
+        -:  109:    return *this;
+        -:  110:  }
+        -:  111:  Type & set__encoding(
+        -:  112:    const std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> & _arg)
+        -:  113:  {
+        -:  114:    this->encoding = _arg;
+        -:  115:    return *this;
+        -:  116:  }
+        -:  117:  Type & set__is_bigendian(
+        -:  118:    const uint8_t & _arg)
+        -:  119:  {
+        -:  120:    this->is_bigendian = _arg;
+        -:  121:    return *this;
+        -:  122:  }
+        -:  123:  Type & set__step(
+        -:  124:    const uint32_t & _arg)
+        -:  125:  {
+        -:  126:    this->step = _arg;
+        -:  127:    return *this;
+        -:  128:  }
+        -:  129:  Type & set__data(
+        -:  130:    const std::vector<uint8_t, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<uint8_t>> & _arg)
+        -:  131:  {
+        -:  132:    this->data = _arg;
+        -:  133:    return *this;
+        -:  134:  }
+        -:  135:
+        -:  136:  // constant declarations
+        -:  137:
+        -:  138:  // pointer types
+        -:  139:  using RawPtr =
+        -:  140:    sensor_msgs::msg::Image_<ContainerAllocator> *;
+        -:  141:  using ConstRawPtr =
+        -:  142:    const sensor_msgs::msg::Image_<ContainerAllocator> *;
+        -:  143:  using SharedPtr =
+        -:  144:    std::shared_ptr<sensor_msgs::msg::Image_<ContainerAllocator>>;
+        -:  145:  using ConstSharedPtr =
+        -:  146:    std::shared_ptr<sensor_msgs::msg::Image_<ContainerAllocator> const>;
+        -:  147:
+        -:  148:  template<typename Deleter = std::default_delete<
+        -:  149:      sensor_msgs::msg::Image_<ContainerAllocator>>>
+        -:  150:  using UniquePtrWithDeleter =
+        -:  151:    std::unique_ptr<sensor_msgs::msg::Image_<ContainerAllocator>, Deleter>;
+        -:  152:
+        -:  153:  using UniquePtr = UniquePtrWithDeleter<>;
+        -:  154:
+        -:  155:  template<typename Deleter = std::default_delete<
+        -:  156:      sensor_msgs::msg::Image_<ContainerAllocator>>>
+        -:  157:  using ConstUniquePtrWithDeleter =
+        -:  158:    std::unique_ptr<sensor_msgs::msg::Image_<ContainerAllocator> const, Deleter>;
+        -:  159:  using ConstUniquePtr = ConstUniquePtrWithDeleter<>;
+        -:  160:
+        -:  161:  using WeakPtr =
+        -:  162:    std::weak_ptr<sensor_msgs::msg::Image_<ContainerAllocator>>;
+        -:  163:  using ConstWeakPtr =
+        -:  164:    std::weak_ptr<sensor_msgs::msg::Image_<ContainerAllocator> const>;
+        -:  165:
+        -:  166:  // pointer types similar to ROS 1, use SharedPtr / ConstSharedPtr instead
+        -:  167:  // NOTE: Can't use 'using' here because GNU C++ can't parse attributes properly
+        -:  168:  typedef DEPRECATED__sensor_msgs__msg__Image
+        -:  169:    std::shared_ptr<sensor_msgs::msg::Image_<ContainerAllocator>>
+        -:  170:    Ptr;
+        -:  171:  typedef DEPRECATED__sensor_msgs__msg__Image
+        -:  172:    std::shared_ptr<sensor_msgs::msg::Image_<ContainerAllocator> const>
+        -:  173:    ConstPtr;
+        -:  174:
+        -:  175:  // comparison operators
+        -:  176:  bool operator==(const Image_ & other) const
+        -:  177:  {
+        -:  178:    if (this->header != other.header) {
+        -:  179:      return false;
+        -:  180:    }
+        -:  181:    if (this->height != other.height) {
+        -:  182:      return false;
+        -:  183:    }
+        -:  184:    if (this->width != other.width) {
+        -:  185:      return false;
+        -:  186:    }
+        -:  187:    if (this->encoding != other.encoding) {
+        -:  188:      return false;
+        -:  189:    }
+        -:  190:    if (this->is_bigendian != other.is_bigendian) {
+        -:  191:      return false;
+        -:  192:    }
+        -:  193:    if (this->step != other.step) {
+        -:  194:      return false;
+        -:  195:    }
+        -:  196:    if (this->data != other.data) {
+        -:  197:      return false;
+        -:  198:    }
+        -:  199:    return true;
+        -:  200:  }
+        -:  201:  bool operator!=(const Image_ & other) const
+        -:  202:  {
+        -:  203:    return !this->operator==(other);
+        -:  204:  }
+        -:  205:};  // struct Image_
+        -:  206:
+        -:  207:// alias to use template instance with default allocator
+        -:  208:using Image =
+        -:  209:  sensor_msgs::msg::Image_<std::allocator<void>>;
+        -:  210:
+        -:  211:// constant definitions
+        -:  212:
+        -:  213:}  // namespace msg
+        -:  214:
+        -:  215:}  // namespace sensor_msgs
+        -:  216:
+        -:  217:#endif  // SENSOR_MSGS__MSG__DETAIL__IMAGE__STRUCT_HPP_

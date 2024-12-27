@@ -1,0 +1,4 @@
+source;share/ImgProcess/local_setup.bash
+source;share/ImgProcess/local_setup.dsv
+source;share/ImgProcess/local_setup.sh
+source;share/ImgProcess/local_setup.zsh

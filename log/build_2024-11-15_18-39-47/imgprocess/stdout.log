@@ -1,0 +1,30 @@
+[ 20%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcessFuction/graphic.cpp.o[0m
+[ 40%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o[0m
+[ 60%] [32m[1mLinking CXX executable imgprocess[0m
+[100%] Built target imgprocess
+-- Install configuration: ""
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/utils.h
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/graphic.h
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/config.h
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcess.h
+-- Installing: /home/dcy/ENG/ENG2025/install/imgprocess/lib/imgprocess/imgprocess
+-- Set runtime path of "/home/dcy/ENG/ENG2025/install/imgprocess/lib/imgprocess/imgprocess" to ""
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/package_run_dependencies/imgprocess
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/parent_prefix_path/imgprocess
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/ament_prefix_path.sh
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/ament_prefix_path.dsv
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/path.sh
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/path.dsv
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.bash
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.sh
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.zsh
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.dsv
+-- Installing: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/package.dsv
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/packages/imgprocess
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/imgprocessConfig.cmake
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/imgprocessConfig-version.cmake
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/package.xml

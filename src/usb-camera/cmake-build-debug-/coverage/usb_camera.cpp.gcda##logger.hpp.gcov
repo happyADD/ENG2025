@@ -1,0 +1,194 @@
+        -:    0:Source:/opt/ros/humble/include/rclcpp/rclcpp/logger.hpp
+        -:    0:Graph:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcno
+        -:    0:Data:/home/dcy/ENG/ENG2025/src/usb-camera/cmake-build-debug-/CMakeFiles/usb_camera.dir/src/usb_camera.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2017 Open Source Robotics Foundation, Inc.
+        -:    2://
+        -:    3:// Licensed under the Apache License, Version 2.0 (the "License");
+        -:    4:// you may not use this file except in compliance with the License.
+        -:    5:// You may obtain a copy of the License at
+        -:    6://
+        -:    7://     http://www.apache.org/licenses/LICENSE-2.0
+        -:    8://
+        -:    9:// Unless required by applicable law or agreed to in writing, software
+        -:   10:// distributed under the License is distributed on an "AS IS" BASIS,
+        -:   11:// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        -:   12:// See the License for the specific language governing permissions and
+        -:   13:// limitations under the License.
+        -:   14:
+        -:   15:#ifndef RCLCPP__LOGGER_HPP_
+        -:   16:#define RCLCPP__LOGGER_HPP_
+        -:   17:
+        -:   18:#include <memory>
+        -:   19:#include <string>
+        -:   20:
+        -:   21:#include "rclcpp/visibility_control.hpp"
+        -:   22:
+        -:   23:#include "rcl/node.h"
+        -:   24:#include "rcutils/logging.h"
+        -:   25:#include "rcpputils/filesystem_helper.hpp"
+        -:   26:
+        -:   27:/**
+        -:   28: * \def RCLCPP_LOGGING_ENABLED
+        -:   29: * When this define evaluates to true (default), logger factory functions will
+        -:   30: * behave normally.
+        -:   31: * When false, logger factory functions will create dummy loggers to avoid
+        -:   32: * computational expense in manipulating objects.
+        -:   33: * This should be used in combination with `RCLCPP_LOG_MIN_SEVERITY` to compile
+        -:   34: * out logging macros.
+        -:   35: */
+        -:   36:// TODO(dhood): determine this automatically from `RCLCPP_LOG_MIN_SEVERITY`
+        -:   37:#ifndef RCLCPP_LOGGING_ENABLED
+        -:   38:#define RCLCPP_LOGGING_ENABLED 1
+        -:   39:#endif
+        -:   40:
+        -:   41:namespace rclcpp
+        -:   42:{
+        -:   43:
+        -:   44:// Forward declaration is used for friend statement.
+        -:   45:namespace node_interfaces
+        -:   46:{
+        -:   47:class NodeLogging;
+        -:   48:}
+        -:   49:
+        -:   50:class Logger;
+        -:   51:
+        -:   52:/// Return a named logger.
+        -:   53:/**
+        -:   54: * The returned logger's name will include any naming conventions, such as a
+        -:   55: * name prefix.
+        -:   56: * Currently there are no such naming conventions but they may be introduced in
+        -:   57: * the future.
+        -:   58: *
+        -:   59: * \param[in] name the name of the logger
+        -:   60: * \return a logger with the fully-qualified name including naming conventions, or
+        -:   61: * \return a dummy logger if logging is disabled.
+        -:   62: */
+        -:   63:RCLCPP_PUBLIC
+        -:   64:Logger
+        -:   65:get_logger(const std::string & name);
+        -:   66:
+        -:   67:/// Return a named logger using an rcl_node_t.
+        -:   68:/**
+        -:   69: * This is a convenience function that does error checking and returns the node
+        -:   70: * logger name, or "rclcpp" if it is unable to get the node name.
+        -:   71: *
+        -:   72: * \param[in] node the rcl node from which to get the logger name
+        -:   73: * \return a logger based on the node name, or "rclcpp" if there's an error
+        -:   74: */
+        -:   75:RCLCPP_PUBLIC
+        -:   76:Logger
+        -:   77:get_node_logger(const rcl_node_t * node);
+        -:   78:
+        -:   79:/// Get the current logging directory.
+        -:   80:/**
+        -:   81: * For more details of how the logging directory is determined,
+        -:   82: * see rcl_logging_get_logging_directory().
+        -:   83: *
+        -:   84: * \returns the logging directory being used.
+        -:   85: * \throws rclcpp::exceptions::RCLError if an unexpected error occurs.
+        -:   86: */
+        -:   87:RCLCPP_PUBLIC
+        -:   88:rcpputils::fs::path
+        -:   89:get_logging_directory();
+        -:   90:
+        -:   91:class Logger
+        -:   92:{
+        -:   93:public:
+        -:   94:  /// An enum for the type of logger level.
+        -:   95:  enum class Level
+        -:   96:  {
+        -:   97:    Unset = RCUTILS_LOG_SEVERITY_UNSET,  ///< The unset log level
+        -:   98:    Debug = RCUTILS_LOG_SEVERITY_DEBUG,  ///< The debug log level
+        -:   99:    Info = RCUTILS_LOG_SEVERITY_INFO,    ///< The info log level
+        -:  100:    Warn = RCUTILS_LOG_SEVERITY_WARN,    ///< The warn log level
+        -:  101:    Error = RCUTILS_LOG_SEVERITY_ERROR,  ///< The error log level
+        -:  102:    Fatal = RCUTILS_LOG_SEVERITY_FATAL,  ///< The fatal log level
+        -:  103:  };
+        -:  104:
+        -:  105:private:
+        -:  106:  friend Logger rclcpp::get_logger(const std::string & name);
+        -:  107:  friend ::rclcpp::node_interfaces::NodeLogging;
+        -:  108:
+        -:  109:  /// Constructor of a dummy logger.
+        -:  110:  /**
+        -:  111:   * This is used when logging is disabled: see `RCLCPP_LOGGING_ENABLED`.
+        -:  112:   * This cannot be called directly, see `rclcpp::get_logger` instead.
+        -:  113:   */
+        -:  114:  Logger()
+        -:  115:  : name_(nullptr) {}
+        -:  116:
+        -:  117:  /// Constructor of a named logger.
+        -:  118:  /**
+        -:  119:   * This cannot be called directly, see `rclcpp::get_logger` instead.
+        -:  120:   */
+        -:  121:  explicit Logger(const std::string & name)
+        -:  122:  : name_(new std::string(name)) {}
+        -:  123:
+        -:  124:  std::shared_ptr<const std::string> name_;
+        -:  125:
+        -:  126:public:
+        -:  127:  RCLCPP_PUBLIC
+        -:  128:  Logger(const Logger &) = default;
+        -:  129:
+        -:  130:  /// Get the name of this logger.
+        -:  131:  /**
+        -:  132:   * \return the full name of the logger including any prefixes, or
+        -:  133:   * \return `nullptr` if this logger is invalid (e.g. because logging is
+        -:  134:   *   disabled).
+        -:  135:   */
+        -:  136:  RCLCPP_PUBLIC
+        -:  137:  const char *
+function _ZNK6rclcpp6Logger8get_nameEv called 136 returned 100% blocks executed 83%
+      136:  138:  get_name() const
+        -:  139:  {
+      136:  140:    if (!name_) {
+      136:  140-block  0
+call    0 returned 136
+branch  1 taken 0 (fallthrough)
+branch  2 taken 136
+    #####:  141:      return nullptr;
+    %%%%%:  141-block  0
+        -:  142:    }
+      136:  143:    return name_->c_str();
+      136:  143-block  0
+call    0 returned 136
+call    1 returned 136
+        -:  144:  }
+        -:  145:
+        -:  146:  /// Return a logger that is a descendant of this logger.
+        -:  147:  /**
+        -:  148:   * The child logger's full name will include any hierarchy conventions that
+        -:  149:   * indicate it is a descendant of this logger.
+        -:  150:   * For example, ```get_logger('abc').get_child('def')``` will return a logger
+        -:  151:   * with name `abc.def`.
+        -:  152:   *
+        -:  153:   * \param[in] suffix the child logger's suffix
+        -:  154:   * \return a logger with the fully-qualified name including the suffix, or
+        -:  155:   * \return a dummy logger if this logger is invalid (e.g. because logging is
+        -:  156:   *   disabled).
+        -:  157:   */
+        -:  158:  RCLCPP_PUBLIC
+        -:  159:  Logger
+        -:  160:  get_child(const std::string & suffix)
+        -:  161:  {
+        -:  162:    if (!name_) {
+        -:  163:      return Logger();
+        -:  164:    }
+        -:  165:    return Logger(*name_ + "." + suffix);
+        -:  166:  }
+        -:  167:
+        -:  168:  /// Set level for current logger.
+        -:  169:  /**
+        -:  170:   * \param[in] level the logger's level
+        -:  171:   * \throws rclcpp::exceptions::RCLInvalidArgument if level is invalid.
+        -:  172:   * \throws rclcpp::exceptions::RCLError if other error happens.
+        -:  173:   */
+        -:  174:  RCLCPP_PUBLIC
+        -:  175:  void
+        -:  176:  set_level(Level level);
+        -:  177:};
+        -:  178:
+        -:  179:}  // namespace rclcpp
+        -:  180:
+        -:  181:#endif  // RCLCPP__LOGGER_HPP_

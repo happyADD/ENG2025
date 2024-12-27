@@ -1,0 +1,57 @@
+[ 20%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcessFuction/graphic.cpp.o[0m
+[ 40%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o[0m
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:[m[K In member function ‘[01m[Kint manager::calculateEdges()[m[K’:
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:342:23:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<triangle>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+  342 |     for (int i = 0; [01;35m[Ki < triangles.size() - 1[m[K; i++)
+      |                     [01;35m[K~~^~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:344:31:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<triangle>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+  344 |         for (int j = i + 1; [01;35m[Kj < triangles.size()[m[K; j++)
+      |                             [01;35m[K~~^~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:[m[K In member function ‘[01m[Kint manager::calculateSquares()[m[K’:
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:362:23:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<edge>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+  362 |     for (int i = 0; [01;35m[Ki < edges.size() - 1[m[K; i++)
+      |                     [01;35m[K~~^~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:364:31:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<edge>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+  364 |         for (int j = i + 1; [01;35m[Kj < edges.size()[m[K; j++)
+      |                             [01;35m[K~~^~~~~~~~~~~~~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:370:35:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<edge>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+  370 |                 for (int k = 0; [01;35m[Kk < edges.size()[m[K; k++)
+      |                                 [01;35m[K~~^~~~~~~~~~~~~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:[m[K In member function ‘[01m[Kint manager::isSquareAux(int, cv::Point2d, float)[m[K’:
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:407:30:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ksid[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  407 | int manager::isSquareAux([01;35m[Kint sid[m[K, cv::Point2d point, float size)
+      |                          [01;35m[K~~~~^~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:407:47:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpoint[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  407 | int manager::isSquareAux(int sid, [01;35m[Kcv::Point2d point[m[K, float size)
+      |                                   [01;35m[K~~~~~~~~~~~~^~~~~[m[K
+[01m[K/home/dcy/ENG/ENG2025/src/ImgProcess/src/ImgProcessFuction/graphic.cpp:407:60:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ksize[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  407 | int manager::isSquareAux(int sid, cv::Point2d point, [01;35m[Kfloat size[m[K)
+      |                                                      [01;35m[K~~~~~~^~~~[m[K
+[ 60%] [32m[1mLinking CXX executable imgprocess[0m
+[100%] Built target imgprocess
+-- Install configuration: ""
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/utils.h
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/graphic.h
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcessFuction/config.h
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/include/ImgProcess.h
+-- Installing: /home/dcy/ENG/ENG2025/install/imgprocess/lib/imgprocess/imgprocess
+-- Set runtime path of "/home/dcy/ENG/ENG2025/install/imgprocess/lib/imgprocess/imgprocess" to ""
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/package_run_dependencies/imgprocess
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/parent_prefix_path/imgprocess
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/ament_prefix_path.sh
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/ament_prefix_path.dsv
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/path.sh
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/environment/path.dsv
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.bash
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.sh
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.zsh
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/local_setup.dsv
+-- Installing: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/package.dsv
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/ament_index/resource_index/packages/imgprocess
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/imgprocessConfig.cmake
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/cmake/imgprocessConfig-version.cmake
+-- Up-to-date: /home/dcy/ENG/ENG2025/install/imgprocess/share/imgprocess/package.xml

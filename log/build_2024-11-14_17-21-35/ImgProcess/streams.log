@@ -1,0 +1,9 @@
+[0.008s] Invoking command in '/home/dcy/ENG/ENG2025/build/ImgProcess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/ImgProcess -- -j16 -l16
+[0.030s] [ 20%] [32m[1mLinking CXX executable ImgProcess[0m
+[0.299s] /usr/bin/ld: CMakeFiles/ImgProcess.dir/src/ImgProcess.cpp.o: in function `ImgProcess_node::imageCallback(std::unique_ptr<sensor_msgs::msg::Image_<std::allocator<void> >, std::default_delete<sensor_msgs::msg::Image_<std::allocator<void> > > >)':
+[0.299s] ImgProcess.cpp:(.text+0xebe): undefined reference to `cv::imshow(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, cv::_InputArray const&)'
+[0.340s] collect2: error: ld returned 1 exit status
+[0.341s] gmake[2]: *** [CMakeFiles/ImgProcess.dir/build.make:238：ImgProcess] 错误 1
+[0.341s] gmake[1]: *** [CMakeFiles/Makefile2:137：CMakeFiles/ImgProcess.dir/all] 错误 2
+[0.342s] gmake: *** [Makefile:146：all] 错误 2
+[0.343s] Invoked command in '/home/dcy/ENG/ENG2025/build/ImgProcess' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/ImgProcess -- -j16 -l16

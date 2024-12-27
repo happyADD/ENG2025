@@ -1,0 +1,8 @@
+[0.008s] Invoking command in '/home/dcy/ENG/ENG2025/build/imgprocess': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/imgprocess -- -j16 -l16
+[0.054s] [ 20%] [32mBuilding CXX object CMakeFiles/imgprocess.dir/src/ImgProcess.cpp.o[0m
+[7.334s] [ 40%] [32m[1mLinking CXX executable imgprocess[0m
+[7.715s] gmake[2]: *** 正在删除文件“imgprocess”
+[7.715s] gmake[2]: *** [CMakeFiles/imgprocess.dir/build.make:291: imgprocess] 中断
+[7.715s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/imgprocess.dir/all] 中断
+[7.715s] gmake: *** [Makefile:146: all] 中断
+[7.720s] Invoked command in '/home/dcy/ENG/ENG2025/build/imgprocess' returned '-2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/build/imgprocess -- -j16 -l16

@@ -1,0 +1,37 @@
+[0.008s] Invoking command in '/home/dcy/ENG2025/rosdemo/build/demo': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG2025/rosdemo/build/demo -- -j16 -l16
+[0.032s] [ 33%] [32mBuilding CXX object CMakeFiles/demo_node.dir/src/demo_node.cpp.o[0m
+[1.355s] [01m[K/home/dcy/ENG2025/rosdemo/src/demo/src/demo_node.cpp:[m[K In member function ‘[01m[Kvoid demo_node::imageCallback(sensor_msgs::msg::Image_<std::allocator<void> >::UniquePtr)[m[K’:
+[1.355s] [01m[K/home/dcy/ENG2025/rosdemo/src/demo/src/demo_node.cpp:24:51:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[KrosImage[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[1.355s]    24 | void demo_node::imageCallback([01;35m[KRosImage::UniquePtr rosImage[m[K)
+[1.356s]       |                               [01;35m[K~~~~~~~~~~~~~~~~~~~~^~~~~~~~[m[K
+[1.356s] [01m[K/home/dcy/ENG2025/rosdemo/src/demo/src/demo_node.cpp:[m[K In member function ‘[01m[Kvoid demo_node::cameraInfoCallback(const ConstSharedPtr&)[m[K’:
+[1.356s] [01m[K/home/dcy/ENG2025/rosdemo/src/demo/src/demo_node.cpp:29:70:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[KcameraInfo[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[1.356s]    29 | void demo_node::cameraInfoCallback([01;35m[Kconst CameraInfo::ConstSharedPtr& cameraInfo[m[K)
+[1.356s]       |                                    [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~[m[K
+[5.628s] [ 66%] [32m[1mLinking CXX executable demo_node[0m
+[5.904s] [100%] Built target demo_node
+[5.909s] Invoked command in '/home/dcy/ENG2025/rosdemo/build/demo' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG2025/rosdemo/build/demo -- -j16 -l16
+[5.935s] Invoking command in '/home/dcy/ENG2025/rosdemo/build/demo': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG2025/rosdemo/build/demo
+[5.938s] -- Install configuration: ""
+[5.938s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/include
+[5.938s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/include/demo
+[5.938s] -- Installing: /home/dcy/ENG2025/rosdemo/install/demo/lib/demo/demo_node
+[5.943s] -- Set runtime path of "/home/dcy/ENG2025/rosdemo/install/demo/lib/demo/demo_node" to ""
+[5.943s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/ament_index/resource_index/package_run_dependencies/demo
+[5.943s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/ament_index/resource_index/parent_prefix_path/demo
+[5.943s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/environment/ament_prefix_path.sh
+[5.943s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/environment/ament_prefix_path.dsv
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/environment/path.sh
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/environment/path.dsv
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/local_setup.bash
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/local_setup.sh
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/local_setup.zsh
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/local_setup.dsv
+[5.944s] -- Installing: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/package.dsv
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/ament_index/resource_index/packages/demo
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/cmake/ament_cmake_export_dependencies-extras.cmake
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/cmake/ament_cmake_export_include_directories-extras.cmake
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/cmake/demoConfig.cmake
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/cmake/demoConfig-version.cmake
+[5.944s] -- Up-to-date: /home/dcy/ENG2025/rosdemo/install/demo/share/demo/package.xml
+[5.945s] Invoked command in '/home/dcy/ENG2025/rosdemo/build/demo' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/local/bin/cmake --install /home/dcy/ENG2025/rosdemo/build/demo
