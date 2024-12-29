@@ -16,6 +16,6 @@
 -- Added test 'uncrustify' to check C / C++ code style
 -- Configured uncrustify additional arguments: 
 -- Added test 'xmllint' to check XML markup files
--- Configuring done (0.7s)
+-- Configuring done (0.5s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/dcy/ENG/ENG2025/src/ImgProcess/cmake-build-debug

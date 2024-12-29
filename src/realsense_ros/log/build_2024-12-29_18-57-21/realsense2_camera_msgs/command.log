@@ -1,0 +1,2 @@
+Invoking command in '/home/dcy/ENG/ENG2025/src/realsense_ros/build/realsense2_camera_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/src/realsense_ros/build/realsense2_camera_msgs -- -j16 -l16
+Invoked command in '/home/dcy/ENG/ENG2025/src/realsense_ros/build/realsense2_camera_msgs' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/local/bin/cmake --build /home/dcy/ENG/ENG2025/src/realsense_ros/build/realsense2_camera_msgs -- -j16 -l16
